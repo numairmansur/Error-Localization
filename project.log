@@ -1,11 +1,11 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2014.9.22)  18 JUN 2016 18:18
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2016.3.10)  19 JUN 2016 14:28
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
 **project.tex
 (./project.tex
 LaTeX2e <2011/06/27>
-Babel <3.9h> and hyphenation patterns for 78 languages loaded.
+Babel <3.9h> and hyphenation patterns for 4 languages loaded.
 (/usr/share/texlive/texmf-dist/tex/latex/base/article.cls
 Document Class: article 2007/10/19 v1.4h Standard LaTeX document class
 (/usr/share/texlive/texmf-dist/tex/latex/base/size10.clo
@@ -285,21 +285,70 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <8> on input line 9.
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <6> on input line 9.
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7> on input line 23.
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 23.
 
+Underfull \hbox (badness 10000) in paragraph at lines 11--28
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 11--28
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 11--28
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 11--28
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 11--28
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 11--28
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 11--28
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 11--28
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 11--28
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 11--28
+
+ []
+
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <7> on input line 33.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <5> on input line 33.
 [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] [2] (./project.aux) ) 
 Here is how much of TeX's memory you used:
- 621 strings out of 493304
- 7317 string characters out of 6139871
- 60473 words of memory out of 5000000
- 4128 multiletter control sequences out of 15000+600000
+ 621 strings out of 494985
+ 7317 string characters out of 6180356
+ 57336 words of memory out of 5000000
+ 3886 multiletter control sequences out of 15000+600000
  8403 words of font info for 30 fonts, out of 8000000 for 9000
- 957 hyphenation exceptions out of 8191
+ 36 hyphenation exceptions out of 8191
  23i,6n,17p,361b,187s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr
 /share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share
@@ -315,7 +364,7 @@ cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.p
 fb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></us
 r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/shar
 e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on project.pdf (2 pages, 138838 bytes).
+Output written on project.pdf (2 pages, 140262 bytes).
 PDF statistics:
  67 PDF objects out of 1000 (max. 8388607)
  48 compressed objects within 1 object stream

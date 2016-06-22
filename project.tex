@@ -2,6 +2,7 @@
 \usepackage{blindtext}
 \usepackage{listings}
 \usepackage{color}
+\usepackage{amsmath}
 \usepackage{graphicx}
 \definecolor{codegreen}{rgb}{0,0.6,0}
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
@@ -42,14 +43,15 @@ Fault Localization encompasses the task of identification of the program stateme
 There can be many notions of relevancy. During my master’s laboratory, i worked with two, which we called Flow-Sensitive and non Flow-Sensitive relevancy criterion. Both of these types will be explained in detail, but we found out that for the same error, statements that are relevant with respect to one relevancy criteria might not be relevant at all with respect to the other one.But first we need a basic formal definition to "relevancy", that is, what does it mean that a statement is relevant for an error.
 \subsection{Relevancy}
 In a program with a set of statements $ST$, let $\pi$ be a sequence of statements from $ST$ whose execution produced an error. By error, we mean that there is an assertion condition $\phi$ that is violated if we execute $\pi$. It is possible that $\phi$ will not be violated in all cases. It will only be violated if we start the execution of $\pi$ from a specific state. Infact, there is a whole set of states, which we call Error-Precondition $EP$, such that if we start the execution of $\pi$ from a state $\psi \in  EP$, we will always violate $\phi$.\\
-A set of statements $REL \in \pi$ are called relevant, if removing all the statements in $REL$ from $\pi$ will give us a new path $\pi'$ and if we now execute $\pi'$ , starting from a state which is in $EP$, the assertion condition $\phi$ is not violated any more.
+A set of statements $REL \in {P}(\pi)$ is called relevant iff $REL$ is a set which have a minimum size in ${P}(\pi)$ and the following property holds:
+\\ "If all the statements in $REL$ from $\pi$ are removed to get a new path $\pi'$ and if we now execute $\pi'$ , starting from a state which is in $EP$, the assertion condition $\phi$ is not violated any more. i.e $ \vee  \psi \in EP$, the execution of  $\pi'$  will not violate $\phi$". 
 \\
-i.e $ \vee  \psi \in EP$, the execution of  $\pi'$  will not violate $\phi$.
-\begin{figure}[h!]
-  \includegraphics[width=\linewidth]{test.jpg}
-  \caption{relevancy examples}
-  \label{fig:boat1}
-\end{figure}
+{\tiny [[[$REL$ must also represent a trace that is actually feasible [Define feasible trace here !] ]]].}
+%\begin{figure}[h!]
+%  \includegraphics[width=\linewidth]{test.jpg}
+%  \caption{relevancy examples}
+%  \label{fig:boat1}
+%\end{figure}
 \\
 \\
 \\
@@ -58,6 +60,26 @@ i.e $ \vee  \psi \in EP$, the execution of  $\pi'$  will not violate $\phi$.
 \\
 \\
 Consider the code below:
+\begin{lstlisting}
+
+foo()
+{
+	x := 1;
+	x--;
+	x++;
+	assert(x==0);
+}
+
+\end{lstlisting}
+In the above example:\\
+$\psi = True$            \\
+$\pi = \{ x=1, x--, x++\} $\\    
+$\phi \Rightarrow assume(x==0) $   
+$${P}(\pi) =\{\{x=1\}, \{x--\},\{x++\}, \{x=1,x--\},\{x=1,x++\},\{x--,x++\},\{x=1,x--,x++\}\}$$
+$Rel =\{x++\}$ because if the statement in $REL$ is removed from $\pi$ to get a new path $\pi' =\{x=1, x--\}$ then the assertion condition $\phi$ is not violated any more after the execution of $\pi'$.
+\\
+\\
+Consider another example:
 \begin{lstlisting}
 
 foo()
@@ -74,10 +96,10 @@ foo()
 
 \end{lstlisting}
 In this example: \\
-$\pi \Rightarrow \{ x=1; y=1; y=2; x=0 \} $\\
-$\phi \Rightarrow assume[x==1]$\\
-$REL \Rightarrow \{y=2, x=0 \}$ \\
-$\pi’ \Rightarrow \{x=1; y=1\}$
+$\pi = \{ x=1; y=1; y=2; x=0 \} $\\
+$\phi = assume[x==1]$\\
+$REL = \{ x=0 \}$ \\
+$\pi’ = \{x=1, y=1, y=2\}$
 
 
 \section{Goals}

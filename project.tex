@@ -1,101 +1,119 @@
 \documentclass{article}
 \usepackage{blindtext}
+\usepackage{listings}
+\usepackage{color}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+ 
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+\lstset{style=mystyle}
 \usepackage[utf8]{inputenc}
 
-\title{Fault Localization}
+\title{Fault Localization \& Relevance Analysis }
 \author{Numair Mansur}
 
 \begin{document}
 \maketitle
-\section{Abstract}
+\section{Introduction}
 The most time consuming part in a programmer’s routine is to spend time on debugging and to determine the cause of the error and what statements are actually responsible for the error. This is called \textbf{“Fault Localization”} . 
 \\
-Fault Localization encompasses the task of identification of the program statements that are \textbf{relevant}  for the error trace and determining the variables whose values should be tracked in order to understand the cause of the error [1]. We need to formally define what does it mean that a statement is relevant for an error.
-
+Fault Localization encompasses the task of identification of the program statements that are \textbf{relevant}  for the error trace and determining the variables whose values should be tracked in order to understand the cause of the error. 
+\\
+There can be many notions of relevancy.During my master’s laboratory, i worked with two, which we called Flow-Sensitive and non Flow-Sensitive relevancy criterion. Both of these types will be explained in detail, but we found out that for the same error, statements that are relevant with respect to one relevancy criteria might not be relevant at all with respect to the other one.But first we need a basic formal definition to "relevancy", that is, what does it mean that a statement is relevant for an error.
+\subsection{Relevancy}
+Let $P$ be a program with a set of statements $ST$. Let $(\psi, \pi , \phi)$ be an error trace, where $\pi$ is a sequence of statements from $ST$ whose execution produced an error. By error, we mean that there is an assertion condition $\phi$ that is violated if we execute $\pi$. It is possible that $\phi$ will not be violated in all cases. It will only be violated if we start the execution of $\pi$ from a specific state. Infact, there is a whole set of states, which we call Error-Precondition $EP$, such that if we start the execution of $\pi$ from a state $\psi \in  EP$, we will always violate $\phi$.\\
+A set of statements $REL \in \pi$ are called relevant, if removing all the statements in $REL$ from $\pi$ will give us a new path $\pi'$ and if we now execute $\pi'$ , starting from a state which is in $EP$, the assertion condition $\phi$ is not violated any more.
+\\
+i.e $ \vee  \psi \in EP$, the execution of  $\pi'$  will not violate $\phi$.
 \\
 \\
 \\
 \\
 \\
-\\
-\\
-\\
-\\
-\\
-\\
-In order to add vertical space you have to use ``vspace''; for example, 
-you could add an inch of space by typing \verb|\vspace{1in}|, like this:
-\vspace{1in}
+Consider the code below:
+\begin{lstlisting}
 
-To get three lines of space you would type \verb|\vspace{3pc}|
-(``pc'' stands for ``pica'', a font-relative size), like this:
-\vspace{3pc}
+foo()
+{
+	x := 1;
+	y := 1;
+	y := 2;
+	If ( y == 2 )
+	{
+		x := 0;
+	}
+	assert(x==1);
+}
 
-Notice that \LaTeX\ commands are always preceeded by a backslash.  
-Some commands, like \verb|\vspace|, take arguments (here, a length) in
-curly brackets.  
-
-The second important thing to notice about \LaTeX\ is that you type 
-in various ``environments''...so far we've just been typing regular 
-text (except for a few inescapable usages of \verb|\verb| and the
-centered, smallcaps, large title).  There are basically two ways that 
-you can enter and/or exit an environment;
-\vspace{1pc}
-
-\centerline{this is the first way...}
-
-\begin{center}
-this is the second way.
-\end{center}
-
-\noindent Actually there is one more way, used above; for example, 
-{\sc this way}.  The way that you get in and out of environment varies
-depending on which kind of environment you want; for example, you use 
-\verb|\underline| ``outside'', but \verb|\it| ``inside''; 
-notice \underline{this} versus {\it this}.
-
-The real power of \LaTeX\ (for us) is in the math environment. You 
-push and pop out of the math environment by typing \verb|$|. For 
-example, $2x^3 - 1 = 5$ is typed between dollar signs as
-\verb|$2x^3 - 1 = 5$|. Perhaps a more interesting example is
-$\lim_{N \to \infty} \sum_{k=1}^N f(t_k) \Delta t$.
-
-You can get a fancier, display-style math 
-environment by enclosing your equation with double dollar signs.  
-This will center your equation, and display sub- and super-scripts in 
-a more readable fashion:
-
-$$\lim_{N \to \infty} \sum_{k=1}^N f(t_k) \Delta t.$$
-
-If you don't want your equation to be centered, but you want the nice 
-indicies and all that, you can use \verb|\displaystyle| and get your 
-formula ``in-line''; using our example this is 
-$\displaystyle \lim_{N \to \infty} \sum_{k=1}^N f(t_k) \Delta t.$  Of 
-course this can screw up your line spacing a little bit.
-
-There are many more things to know about \LaTeX\ and we can't 
-possibly talk about them all here.
-You can use \LaTeX\ to get tables, commutative diagrams, figures, 
-aligned equations, cross-references, labels, matrices, and all manner 
-of strange things into your documents.  You can control margins, 
-spacing, alignment, {\it et cetera} to higher degrees of accuracy than 
-the human eye can percieve.  You can waste entire days typesetting 
-documents to be ``just so''.  In short, \LaTeX\ rules.
-
-The best way to learn \LaTeX\ is by example. Get yourself a bunch
-of .tex files, see what kind of output they produce, and figure out how
-to modify them to do what you want.  There are many template and 
-sample files on the department \LaTeX\ page and in real life in the 
-big binder that should be in the computer lab somewhere.  Good luck!
+\end{lstlisting}
+In this example: \\
+$\pi \Rightarrow \{ x=1; y=1; y=2; x=0 \} $\\
+$\phi \Rightarrow assume[x==1]$\\
+$REL \Rightarrow \{y=2, x=0 \}$ \\
+$\pi’ \Rightarrow \{x=1; y=1\}$
 
 
+\section{Goals}
+During my Master Praktikum, I worked on a fault localization algorithm that find relevant statements in an error with respect to two error relevance criterion namely Flow Sensitive and Non-Flow Sensitive relevance criterion.I want to formalize these two notions of error relevance.There are also two sub categories in a relevance criteria which also need a formal definition. \\(1) Unsatisfiable core\\ (2) Non-deterministic input (havoc). \\
+\\We also discovered during my Praktikum that we may be able to perform a security analysis via our fault localization algorithm and distinguish two kinds of bugs called Security and non-Security bugs. I want to formalize what it means that a bug is a security bug and use the algorithm to precisely find them. I expect some modifications in our algorithm so that it can correctly classify an error as a security/non-security error.\\
+I also want to make a mechanism to verify that what we are computing is correct that includes verifying the result of our fault localization algorithm and security bug analysis.\\
+Currently we are doing the analysis only on the error trace (or counter example), i also want investigate how we can broaden our perspective from an error trace to a whole program. This may also give us some new definitions for relevance for example, statements that are directly responsible, statements that cause the execution of the directly responsible statements. As an example, consider the code below:\\
+\begin{lstlisting}
 
+foo()
+{
+	int z;
+	int x;
+	if(x==0)
+	{
+		if(z==0)
+		{
+			y := 1;
+		}
+		else
+		{
+			while(true)
+			{
+				
+			}
+		}		
+		assert(false);
+	}	
+}
 
-
-
-
-
-
+\end{lstlisting}
+The error trace is
+$$ assume(x==0); assume(z==0); y=1; assume(true) $$
+and our algorithm shows that none of the statements is relevant. But if we look at the program from a broader perspective then an error trace, we will notice that the value of  $z$ is relevant because if $z \neq 0$ then we would be stuck in a never ending loop and would not be able to reach the error.  
+So we cannot say that $assume(z=0)$ is irrelevant for the error.
+\section{Approach}
+Following are the major steps (in order) that i plan to complete in the master project. It is possible that each of these steps also might have further sub-steps.\\
+\begin{itemize}
+\item Formal definitions of relevance, flow sensitive faults, non-flow sensitive faults.
+\item Formal definition of Security bugs.
+\item Modification of our fault localization algorithm to also identify security/non-security bugs.
+\item Verification of the results.
+\item Broader analysis of the program from just from an error trace.
+\end{itemize}
 
 
 \end{document}

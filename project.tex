@@ -40,7 +40,60 @@ The most time consuming part in a programmer’s routine is to spend time on deb
 Fault Localization encompasses the task of identification of the program statements that are \textbf{relevant}  for the error trace and determining the variables whose values should be tracked in order to understand the cause of the error. 
 \\
 There can be many notions of relevancy. During my master’s laboratory, i worked with two, which we called Flow-Sensitive and non Flow-Sensitive relevancy criterion. Both of these types will be explained in detail, but we found out that for the same error, statements that are relevant with respect to one relevancy criteria might not be relevant at all with respect to the other one.But first we need a basic formal definition to "relevancy", that is, what does it mean that a statement is relevant for an error.
-\subsection{Relevancy}
+
+\section{Goals/Approach}
+\subsection{Formalizations}
+During my Master Praktikum, I worked on a fault localization algorithm that find relevant statements in an error with respect to two error relevance criterion namely Flow Sensitive and Non-Flow Sensitive relevance criterion. I want to formalize these two notions of error relevance. There are also two sub categories in a relevance criteria which also need a formal definition.\\ 
+\\(1) Predetermined input (which we called the UC case) 
+\\ (2) Non-deterministic input (havoc).\\
+\\Another very important task in this step would be to formalize our fault localization algorithm.
+\subsection{Security Bugs}
+We also discovered during my Praktikum that we may be able to perform a security analysis via our fault localization algorithm and distinguish two kinds of bugs called Security and non-Security bugs. I want to formalize what it means that a bug is a security bug and use the algorithm to precisely find them. I expect some modifications in our algorithm so that it can correctly classify an error as a security/non-security error. Following steps are expected to complete this task: \\
+1) Analyse examples containing security bugs. \\
+2) Formalize the definition of a security bug that satisfies all the examples. \\
+3) Verify if the formal definition fits correctly with the examples. \\
+4) Modify our fault localization algorithm so that it models the definition correctly.
+\subsection{Verification of the results}
+I also want to make a mechanism to verify that what we are computing is correct that includes verifying the result of our fault localization algorithm and security bug analysis. For this task i plan to separately implement checks and compare it with our algorithms.
+\subsection{Broader analysis of the program}
+Currently we are doing the analysis only on the error trace (or counter example), i also want investigate how we can broaden our perspective from an error trace to a whole program. This may also give us some new definitions for relevance for example, statements that are directly responsible, statements that cause the execution of the directly responsible statements. As an example, consider the code below:\\
+\begin{lstlisting}
+
+foo()
+{
+	int z;
+	int x;
+	if(x==0)
+	{
+		if(z==0)
+		{
+			y := 1;
+		}
+		else
+		{
+			while(true)
+			{
+				
+			}
+		}		
+		assert(false);
+	}	
+}
+
+\end{lstlisting}
+$\pi$ in this example is:
+$$ assume(x==0); assume(z==0); y=1) $$
+and our algorithm shows that none of the statements is relevant. But if we look at the program from a broader perspective then an error trace, we will notice that the value of  $z$ is relevant because if $z \neq 0$ then we would be stuck in a never ending loop and would not be able to reach the error.  
+So we cannot say that $assume(z=0)$ is irrelevant for the error.
+\section{Time Frame}
+This is a very rough estimate but i plan to give one month to each task, but it is also possible to give a lower amount of time to one task and give that extra time to the other task.\\
+Step 1: End of August.\\
+Step 2: End of August.\\
+Step 3: End of September.\\
+Step 4: End of October.
+\newpage
+\section{Formalization of Relevancy Criterion}
+\subsection{Error Relevancy}
 In a program containing a set of statements $ST$, let $\pi \in ST$ be a sequence of statements. Let $\phi$ be an assertion condition, such that if $\pi$ is executed, the assertion condition $\phi$ is violated. We call this an error. It is possible that $\phi$ will not be violated after all possible executions of $\pi$. It will only be violated if we start the execution of $\pi$ from a specific state which belongs to a set of states, which we call Error-Precondition $EP$.\\
 A set of statements $REL \in {P}(\pi)$ is called relevant iff $REL$ is a set which have a minimum size in ${P}(\pi)$ and the following property holds:
 \\ "If all the assignments in $REL$ from $\pi$ are replaced with a havoc statement to get a new path $\pi'$ and if we now execute $\pi'$ , starting from a state which is in $EP$, it is not guaranteed that the assertion condition $\phi$ is violated any more. i.e $ \forall  \psi \in EP$, the execution of  $\pi'$  is not guaranteed to violate $\phi$". 
@@ -96,58 +149,8 @@ $\pi = \{ x=1; y=1; y=2; x=0 \} $\\
 $\phi = assume[x==1]$\\
 $REL = \{ x=0 \}$ \\
 $\pi’ = \{x=1, y=1, y=2, havoc(x)\}$
-\newpage
 
-\section{Goals/Approach}
-\subsection{Formalizations}
-During my Master Praktikum, I worked on a fault localization algorithm that find relevant statements in an error with respect to two error relevance criterion namely Flow Sensitive and Non-Flow Sensitive relevance criterion. I want to formalize these two notions of error relevance. There are also two sub categories in a relevance criteria which also need a formal definition.\\ 
-\\(1) Predetermined input (which we called the UC case) 
-\\ (2) Non-deterministic input (havoc).\\
-\\Another very important task in this step would be to formalize our fault localization algorithm.
-\subsection{Security Bugs}
-We also discovered during my Praktikum that we may be able to perform a security analysis via our fault localization algorithm and distinguish two kinds of bugs called Security and non-Security bugs. I want to formalize what it means that a bug is a security bug and use the algorithm to precisely find them. I expect some modifications in our algorithm so that it can correctly classify an error as a security/non-security error. Following steps are expected to complete this task: \\
-1) Analyse examples containing security bugs. \\
-2) Formalize the definition of a security bug that satisfies all the examples. \\
-3) Verify if the formal definition fits correctly with the examples. \\
-4) Modify our fault localization algorithm so that it models the definition correctly.
-\subsection{Verification of the results}
-I also want to make a mechanism to verify that what we are computing is correct that includes verifying the result of our fault localization algorithm and security bug analysis. For this task i plan to separately implement checks and compare it with our algorithms.
-\subsection{Broader analysis of the program}
-Currently we are doing the analysis only on the error trace (or counter example), i also want investigate how we can broaden our perspective from an error trace to a whole program. This may also give us some new definitions for relevance for example, statements that are directly responsible, statements that cause the execution of the directly responsible statements. As an example, consider the code below:\\
-\begin{lstlisting}
-
-foo()
-{
-	int z;
-	int x;
-	if(x==0)
-	{
-		if(z==0)
-		{
-			y := 1;
-		}
-		else
-		{
-			while(true)
-			{
-				
-			}
-		}		
-		assert(false);
-	}	
-}
-
-\end{lstlisting}
-$\pi$ in this example is:
-$$ assume(x==0); assume(z==0); y=1) $$
-and our algorithm shows that none of the statements is relevant. But if we look at the program from a broader perspective then an error trace, we will notice that the value of  $z$ is relevant because if $z \neq 0$ then we would be stuck in a never ending loop and would not be able to reach the error.  
-So we cannot say that $assume(z=0)$ is irrelevant for the error.
-\section{Time Frame}
-This is a very rough estimate but i plan to give one month to each task, but it is also possible to give a lower amount of time to one task and give that extra time to the other task.\\
-Step 1: End of August.\\
-Step 2: End of August.\\
-Step 3: End of September.\\
-Step 4: End of October.
-
+\subsection{Non-Flow Sensitive Relevance Criterion }
+ ADD the definition of non-flow sensitive relevance criterion form the notes.
 
 \end{document}

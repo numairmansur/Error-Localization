@@ -29,8 +29,7 @@
 }
 \lstset{style=mystyle}
 \usepackage[utf8]{inputenc}
-
-\title{Fault Localization \& Relevance Analysis }
+\title{Fault Localization \& Relevance Analysis \\ {\tiny (For the latest version: http://numairmansur.github.io/Error-Localization/project.pdf)}}
 \author{Numair Mansur}
 
 \begin{document}
@@ -99,16 +98,20 @@ $REL = \{ x=0 \}$ \\
 $\pi’ = \{x=1, y=1, y=2, havoc(x)\}$
 \newpage
 
-\section{Goals}
+\section{Goals/Approach}
 \subsection{Formalizations}
 During my Master Praktikum, I worked on a fault localization algorithm that find relevant statements in an error with respect to two error relevance criterion namely Flow Sensitive and Non-Flow Sensitive relevance criterion. I want to formalize these two notions of error relevance. There are also two sub categories in a relevance criteria which also need a formal definition.\\ 
 \\(1) Predetermined input (which we called the UC case) 
 \\ (2) Non-deterministic input (havoc).\\
 \\Another very important task in this step would be to formalize our fault localization algorithm.
 \subsection{Security Bugs}
-We also discovered during my Praktikum that we may be able to perform a security analysis via our fault localization algorithm and distinguish two kinds of bugs called Security and non-Security bugs. I want to formalize what it means that a bug is a security bug and use the algorithm to precisely find them. I expect some modifications in our algorithm so that it can correctly classify an error as a security/non-security error.
+We also discovered during my Praktikum that we may be able to perform a security analysis via our fault localization algorithm and distinguish two kinds of bugs called Security and non-Security bugs. I want to formalize what it means that a bug is a security bug and use the algorithm to precisely find them. I expect some modifications in our algorithm so that it can correctly classify an error as a security/non-security error. Following steps are expected to complete this task: \\
+1) Analyse examples containing security bugs. \\
+2) Formalize the definition of a security bug that satisfies all the examples. \\
+3) Verify if the formal definition fits correctly with the examples. \\
+4) Modify our fault localization algorithm so that it models the definition correctly.
 \subsection{Verification of the results}
-I also want to make a mechanism to verify that what we are computing is correct that includes verifying the result of our fault localization algorithm and security bug analysis.
+I also want to make a mechanism to verify that what we are computing is correct that includes verifying the result of our fault localization algorithm and security bug analysis. For this task i plan to separately implement checks and compare it with our algorithms.
 \subsection{Broader analysis of the program}
 Currently we are doing the analysis only on the error trace (or counter example), i also want investigate how we can broaden our perspective from an error trace to a whole program. This may also give us some new definitions for relevance for example, statements that are directly responsible, statements that cause the execution of the directly responsible statements. As an example, consider the code below:\\
 \begin{lstlisting}
@@ -141,10 +144,10 @@ and our algorithm shows that none of the statements is relevant. But if we look 
 So we cannot say that $assume(z=0)$ is irrelevant for the error.
 \section{Time Frame}
 This is a very rough estimate but i plan to give one month to each task, but it is also possible to give a lower amount of time to one task and give that extra time to the other task.\\
-Step 1:  31-July +/- 10 days\\
-Step 2: 28-August +/- 10 days\\
-Step 3: 30-September +/- 10 days\\
-Step 4: 30-October +/- 10 days.
+Step 1: End of August.\\
+Step 2: End of August.\\
+Step 3: End of September.\\
+Step 4: End of October.
 
 
 \end{document}

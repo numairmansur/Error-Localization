@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2016.3.10)  31 JUL 2016 17:58
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2016.3.10)  31 JUL 2016 18:23
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -518,22 +518,27 @@ Underfull \hbox (badness 10000) in paragraph at lines 127--132
 LaTeX Warning: Command \textquoteright invalid in math mode on input line 151.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 154--162
+Underfull \hbox (badness 10000) in paragraph at lines 154--165
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 154--162
+Underfull \hbox (badness 10000) in paragraph at lines 154--165
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 154--162
+Underfull \hbox (badness 10000) in paragraph at lines 154--165
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 154--162
+Underfull \hbox (badness 10000) in paragraph at lines 154--165
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 154--165
 
  []
 
@@ -559,7 +564,7 @@ e1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/publi
 c/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsf
 onts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm
 /cmsy8.pfb>
-Output written on project.pdf (5 pages, 158573 bytes).
+Output written on project.pdf (5 pages, 158913 bytes).
 PDF statistics:
  72 PDF objects out of 1000 (max. 8388607)
  51 compressed objects within 1 object stream

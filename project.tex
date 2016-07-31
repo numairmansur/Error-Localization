@@ -150,7 +150,13 @@ $\phi = assume[x==1]$\\
 $REL = \{ x=0 \}$ \\
 $\pi’ = \{x=1, y=1, y=2, havoc(x)\}$
 
-\subsection{Non-Flow Sensitive Relevance Criterion }
- ADD the definition of non-flow sensitive relevance criterion form the notes.
-
+\subsection{Non-Flow Sensitive Relevance criteria }
+ Let $\pi$ be an error trace of length $n$, $WP()$ the weakest pre-condition operator, $\pi[i]$ the $i^{th}$ statement of $\pi$ and $\pi[i,j]$ be the sub-trace $\pi[i] . . . \pi[j-1]$.\\
+ \\
+ Lets call $\phi$ a post-condition and $\phi = \neg WP(False, \pi[i+1,n])$.\\
+ Lets call $\Psi$ a pre-condition and $\Psi = \neg WP(False, \pi[i,n])$.\\
+ Where $n$ is the length of the error trace.\\
+ \\
+ A statement $\pi[i]$ in an error trace $\pi$ is relevant with respect to the non-flow sensitive criteria $(*)$ if the conjunction of the the three formulas is unsatisfiable and $\pi[i]$ is in the unsatisfiable core.\\
+\\
 \end{document}

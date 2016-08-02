@@ -153,14 +153,22 @@ $\pi’ = \{x=1, y=1, y=2, havoc(x)\}$
 \subsection{Non-Flow Sensitive Relevance criteria }
  Let $\pi$ be an error trace of length $n$, $WP()$ the weakest pre-condition operator, $\pi[i]$ the $i^{th}$ statement of $\pi$ and $\pi[i,j]$ be the sub-trace $\pi[i] . . . \pi[j-1]$.\\
  \\
- Lets call $\phi$ a post-condition and $\phi =  WP(False, \pi[i+1,n])$.\\
- Lets call $\Psi$ a pre-condition and $\Psi = \neg WP(False, \pi[i,n])$.\\
- Where $n$ is the length of the error trace.\\
-\\ AAD something about the hoare triple. saying somehting like that a statement is relevant if we feed these formulas in the hoare triple then 
-the result is unsatisfiable (should we call it unsatisfiable or a valid hoare triple ???) and the the statement is in unSatisfiable core. But first i have to understand what is a hoare triple. then i have to look
-at the code that what exactly are we feeding.\\
-\\ Do we even need to mention the hoare triple checker. Because it is just how we check the unsatisfiability of the triple formula. We can just talk about the unsatisfiabilty of the triple formula and not the hoare triple checker thing which is just an implementation detail.  \\
- \\
- A statement $\pi[i]$ in an error trace $\pi$ is relevant with respect to the non-flow sensitive criteria $(*)$ if the conjunction of the the three formulas $(\Psi,\pi[i],\phi) $ is unsatisfiable and $\pi[i]$ is in the unsatisfiable core.\\
-\\
+ Let $\phi$ be a post-condition and $\phi =  WP(False, \pi[i+1,n])$.\\
+ Let $\Psi$ be pre-condition and $\Psi = \neg WP(False, \pi[i,n])$.\\
+ Where $n$ is the length of the error trace.
+A statement $\pi[i]$ in an error trace $\pi$ is relevant with respect to the non-flow sensitive criteria $(*)$ if the conjunction of the the three formulas $(\Psi,\pi[i],\neg \phi) $ is unsatisfiable and $\pi[i]$ is in the unsatisfiable core.\\
+$\pi[i]$ is considered relevant with respect to non-flow sensitive criteria $(@)$ if  $(\Psi,\pi[i],\neg \phi) $ is satisfiable. (In this case, $\pi[i]$ is a non-deterministic input statement $(Havoc)$).\\
+For example consider the following code:\\
+For this code we will get this error trace:
+\begin{lstlisting}
+y := 0;
+z := 0;
+assume (y == 0);
+x := 1;
+assume (z == 0);
+z := 1;
+assume !(x == 0);
+\end{lstlisting}
+
+\subsection{Flow Sensitive Relevance criteria }
 \end{document}

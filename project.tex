@@ -158,8 +158,34 @@ $\pi’ = \{x=1, y=1, y=2, havoc(x)\}$
  Where $n$ is the length of the error trace.
 A statement $\pi[i]$ in an error trace $\pi$ is relevant with respect to the non-flow sensitive criteria $(*)$ if the conjunction of the the three formulas $(\Psi,\pi[i],\neg \phi) $ is unsatisfiable and $\pi[i]$ is in the unsatisfiable core.\\
 $\pi[i]$ is considered relevant with respect to non-flow sensitive criteria $(@)$ if  $(\Psi,\pi[i],\neg \phi) $ is satisfiable. (In this case, $\pi[i]$ is a non-deterministic input statement $(Havoc)$).\\
-For example consider the following code:\\
-For this code we will get this error trace:
+For example consider the following code:
+\begin{lstlisting}
+foo()
+{
+  var y: int;
+  var x: int;
+  var z: int;
+  
+  y := 0;
+  z := 0;
+  if(y==0) 
+  {
+    x := 1;
+    if(z==0)
+    {
+      z := 1;
+    }
+  }
+  else 
+  {
+    y := 2;
+    y := 3;
+    y := 4;
+  }
+  assert(x == 0);
+}
+\end{lstlisting}
+For the above code we will get the following error trace:
 \begin{lstlisting}
 y := 0;
 z := 0;

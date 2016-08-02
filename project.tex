@@ -156,8 +156,8 @@ $\pi’ = \{x=1, y=1, y=2, havoc(x)\}$
  Let $\phi$ be a post-condition and $\phi =  WP(False, \pi[i+1,n])$.\\
  Let $\Psi$ be pre-condition and $\Psi = \neg WP(False, \pi[i,n])$.\\
  Where $n$ is the length of the error trace.
-A statement $\pi[i]$ in an error trace $\pi$ is relevant with respect to the non-flow sensitive criteria $(*)$ if the conjunction of the the three formulas $(\Psi,\pi[i],\neg \phi) $ is unsatisfiable and $\pi[i]$ is in the unsatisfiable core.\\
-$\pi[i]$ is considered relevant with respect to non-flow sensitive criteria $(@)$ if  $(\Psi,\pi[i],\neg \phi) $ is satisfiable. (In this case, $\pi[i]$ is a non-deterministic input statement $(Havoc)$).\\
+A statement $\pi[i]$ in an error trace $\pi$ is relevant with respect to the non-flow sensitive criteria $(*)$ if the conjunction of the the three formulas $(\psi,\pi[i],\neg \phi) $ is unsatisfiable and $\pi[i]$ is in the unsatisfiable core.\\
+$\pi[i]$ is considered relevant with respect to non-flow sensitive criteria $(@)$ if  $(\psi,\pi[i],\neg \phi) $ is satisfiable. (In this case, $\pi[i]$ is a non-deterministic input statement $(Havoc)$).\\
 For example consider the following code:
 \begin{lstlisting}
 foo()
@@ -195,6 +195,13 @@ assume (z == 0);
 z := 1;
 assume !(x == 0);
 \end{lstlisting}
+In the above trace, for $i=4$,\\
+\\
+$\psi = \neg WP(False, \pi[4,7]) \Longrightarrow z=0$\\
+$\pi[4] \Longrightarrow x=1$\\
+$\phi =  WP(False, \pi[5,7]) \Longrightarrow x=0 \vee \neg(z=0)$\\
+\\
+The formula $(\psi,\pi[4],\neg \phi)$ is unsatisfiable and $\pi[4]$ is in the unsatisfiable core. Hence $\pi[4]$ is relevant with respect to Non-Flow Sensitive relevance criterion.
 
 \subsection{Flow Sensitive Relevance criteria }
 \end{document}

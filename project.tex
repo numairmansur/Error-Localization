@@ -187,10 +187,10 @@ foo()
 \end{lstlisting}
 For the above code we will get the following error trace:
 \begin{lstlisting}
-y := 0;
-z := 0;
+y := 0; [*]
+z := 0; [*]
 assume (y == 0);
-x := 1;
+x := 1; [*]
 assume (z == 0);
 z := 1;
 assume !(x == 0);
@@ -201,7 +201,19 @@ $\psi = \neg WP(False, \pi[4,7]) \Longrightarrow z=0$\\
 $\pi[4] \Longrightarrow x=1$\\
 $\phi =  WP(False, \pi[5,7]) \Longrightarrow x=0 \vee \neg(z=0)$\\
 \\
-The formula $(\psi,\pi[4],\neg \phi)$ is unsatisfiable and $\pi[4]$ is in the unsatisfiable core. Hence $\pi[4]$ is relevant with respect to Non-Flow Sensitive relevance criterion.
+The formula $(\psi,\pi[4],\neg \phi)$ is unsatisfiable and $\pi[4]$ is in the unsatisfiable core. Hence $\pi[4]$ is relevant with respect to Non-Flow Sensitive relevance criterion and we therefore label it with a $[*]$.
 
 \subsection{Flow Sensitive Relevance criteria }
+The definition of relevancy is actually similar to the non-flow sensitive case. The only thing different is that now we take branches in the trace into account. The relevancy of a branch is also now calculated and if a branch is relevant, it effects the WP().\\
+Now we also have to take into account the relevancy of branches in the trace. The relevancy of branch $\pi[i,j]$ can still be calculated in the same way as a relevancy of statement in an error trace $\pi[i]$.\\
+Ofcourse we need a transition formula for the branch. We will not use a conjunctions (as in the original paper). Instead we will use something called a "Markhor Formula".
+\\
+\\
+\\
+We check if the branch is relevant or not. If it is relevant then we go into the branch and then check for the relevant statmetnts. It might be possible that some statmetns might be relevant if we see them in the context of the whole program and dont take branches into account. But now here we take the branch into account, check if the branch is relevant or not. IF IT IS RELEVANT then and only then we go into the branch and check for the relevant statements. That is the ONLY FUNCTIONAL DIFFERENCE between flow sensitive and non-flow senesitive analysis. \\
+The magic happens when we have to determine how we calculate the relevancy of the branch. We calculate the MARKHOR FORMULA of the branch and check if that Markhor formula is un-satisfiable along with the PRE-CONDTION and POST. 
+\subsubsection{Markhor Formula}
+Check the exact form of Markhor formula from the code.
+  
+
 \end{document}

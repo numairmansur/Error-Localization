@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2016.3.10)  4 AUG 2016 11:07
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2016.3.10)  4 AUG 2016 14:20
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -518,46 +518,26 @@ Underfull \hbox (badness 10000) in paragraph at lines 127--132
 LaTeX Warning: Command \textquoteright invalid in math mode on input line 151.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 154--162
+Underfull \hbox (badness 10000) in paragraph at lines 159--167
 
  []
 
 [5]
-Underfull \hbox (badness 10000) in paragraph at lines 198--205
+Underfull \hbox (badness 10000) in paragraph at lines 203--210
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 198--205
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 207--223
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 207--223
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 207--223
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 207--223
+Underfull \hbox (badness 10000) in paragraph at lines 203--210
 
  []
 
 [6] [7] (./project.aux) ) 
 Here is how much of TeX's memory you used:
- 4135 strings out of 494985
- 54737 string characters out of 6180356
- 160545 words of memory out of 5000000
- 7303 multiletter control sequences out of 15000+600000
+ 4136 strings out of 494985
+ 54754 string characters out of 6180356
+ 149548 words of memory out of 5000000
+ 7304 multiletter control sequences out of 15000+600000
  9023 words of font info for 33 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
  37i,6n,32p,580b,1584s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -574,7 +554,7 @@ st/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/share/texlive/texmf-dist/fonts
 ublic/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/
 amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfont
 s/cm/cmsy8.pfb>
-Output written on project.pdf (7 pages, 169982 bytes).
+Output written on project.pdf (7 pages, 169757 bytes).
 PDF statistics:
  80 PDF objects out of 1000 (max. 8388607)
  57 compressed objects within 1 object stream

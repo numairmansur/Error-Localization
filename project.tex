@@ -35,11 +35,15 @@
 \begin{document}
 \maketitle
 \section{Introduction}
-The most time consuming part in a programmer’s routine is to spend time on debugging and to determine the cause of the error and what statements are actually responsible for the error. This is called \textbf{“Fault Localization”} . 
+The most tedious task in a programmer’s routine is to spend time on debugging and to determine the cause of the error. Debugging can be made much more simpler if we can determine automatically what program segments are actually responsible for the error. This is called \textbf{“Fault Localization”}.
 \\
-Fault Localization encompasses the task of identification of the program statements that are \textbf{relevant}  for the error trace and determining the variables whose values should be tracked in order to understand the cause of the error. 
+Fault Localization encompasses the task of identification of the program statements that are \textbf{relevant} for the error trace and determining the variables whose values should be tracked in order to understand the cause of the error. 
 \\
-There can be many notions of relevancy. During my master’s laboratory, i worked with two, which we called Flow-Sensitive and non Flow-Sensitive relevancy criterion. Both of these types will be explained in detail, but we found out that for the same error, statements that are relevant with respect to one relevancy criteria might not be relevant at all with respect to the other one.But first we need a basic formal definition to "relevancy", that is, what does it mean that a statement is relevant for an error.
+There can be many notions of error relevancy. During my master praktikum, I worked with and developed algorithm for two relevancy criterion, which we called Flow-Sensitive and non Flow-Sensitive error relevancy. A part of this project will be to formalize these two new types of error relevancy. But first we need a basic formal definition to "relevancy", that is, what does it mean that a statement is relevant for an error. Surprisingly enough, I was unable to find a formal and a generally accepted definition of error relevancy in the literature. But this also makes sense because relevancy is really an abstract and a hard thing to define, let alone formally. Therefore, another aim of this project is to try to give a formal definition to error relevancy.
+\subsection{Relevant Work}
+In the paper Flow-Sensitive Fault Localization \cite{faultlocalization}, the authors take into account the flow of the program while determining the statements that are relevant for the error. They do it by a new flow-sensitive encoding of error traces into trace formulas. After which, by identifying the irrelevant portions of the new trace formula, we can isolate the possible cause of the error.The result of a flow-sensitive fault localization not only explains why the error occurred, but also justifies why the statements leading to the error were executed\cite{faultlocalization}.\\
+Error invariants paper..\\
+Explaining inconsistent code paper .. \\
 
 \section{Goals/Approach}
 \subsection{Formalizations}
@@ -212,9 +216,11 @@ The formula $(\psi,\pi[4],\neg \phi)$ is unsatisfiable and $\pi[4]$ is in the un
 The definition of relevancy is actually similar to the non-flow sensitive case. The only thing different is that now we take branches in the trace into account. If there is a branch in the error trace, the relevancy of the statements inside the error trace will only be calculated if the branch as a whole is relevant to the error. We see that we can get slightly different results from the Non-Flow Sensitive case because it is possible that a statement might be relevant with respect to non-flow sensitive case but it lies inside a branch which is not relevant. \\
 When we say that a branch $\pi[i,j]$ must be relevant to the error, we mean that the branch is reduced to a transition formula which we call a $"Markhor Formula"$ and it's relevancy is calculated in the same way as we did for a statement in the non-flow sensitive case (by checking if the conjunction of $(\psi, \pi[i],\neg \phi)$ is unsatisfiable and the statement is in the unsatisfiable core).
 \subsubsection{Markhor Formula}
-...
+
 
 \begin{thebibliography}{9}
+\bibitem{faultlocalization} 
+J. Christ, E. Ermis, M. Schaf, and T. Wies.Flow-sensitive fault localization. In VMCAI, volume 7737, pages 189–208, Berlin, Heidelberg, 2013. Springer
 \bibitem{errorinvariants} 
 E.Ermis, M. Schaf, and T. Wies. Error Invariants. In FM’12, pages 338–353. Springer, 2012.
 \end{thebibliography}

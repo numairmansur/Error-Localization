@@ -13,6 +13,50 @@ Ofcourse we need a transition formula for the branch which we call a $"Markhor$ 
 \\
 We check if the branch is relevant or not. If it is relevant then we go into the branch and then check for the relevant statmetnts. It might be possible that some statmetns might be relevant if we see them in the context of the whole program and dont take branches into account. But now here we take the branch into account, check if the branch is relevant or not. IF IT IS RELEVANT then and only then we go into the branch and check for the relevant statements. That is the ONLY FUNCTIONAL DIFFERENCE between flow sensitive and non-flow senesitive analysis. \\
 The magic happens when we have to determine how we calculate the relevancy of the branch. We calculate the MARKHOR FORMULA of the branch and check if that Markhor formula is un-satisfiable along with the PRE-CONDTION and POST. 
+
 ------MARKHOR FORMULA-----
-Check the exact form of Markhor formula from the code. 
+
+Check the exact form of Markhor formula from the code
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2016.3.10)  4 AUG 2016 14:20
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2016.3.10)  5 AUG 2016 13:14
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -465,35 +465,41 @@ G,.JBIG2,.JB2,.eps]
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
-Underfull \hbox (badness 10000) in paragraph at lines 46--50
+Underfull \hbox (badness 10000) in paragraph at lines 44--47
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 46--50
+Underfull \hbox (badness 10000) in paragraph at lines 50--54
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 50--54
 
  []
 
 [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-Underfull \hbox (badness 10000) in paragraph at lines 59--60
+Underfull \hbox (badness 10000) in paragraph at lines 63--64
 
  []
 
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 63.
-(/usr/share/texlive/texmf-dist/tex/latex/base/omscmr.fd
+[2]
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 67.
+ (/usr/share/texlive/texmf-dist/tex/latex/base/omscmr.fd
 File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <8> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 63.
- [2] [3]
-Underfull \hbox (badness 10000) in paragraph at lines 97--112
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 67.
+ [3]
+Underfull \hbox (badness 10000) in paragraph at lines 101--116
 
  []
 
 
-Overfull \hbox (85.22891pt too wide) detected at line 127
+Overfull \hbox (85.22891pt too wide) detected at line 131
 \OML/cmm/m/it/10 P\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 ^^Y\OT1/cmr/m/n/10 ) = \OMS
 /cmsy/m/n/10 ff\OML/cmm/m/it/10 x \OT1/cmr/m/n/10 = 1\OMS/cmsy/m/n/10 g\OML/cmm
 /m/it/10 ; \OMS/cmsy/m/n/10 f\OML/cmm/m/it/10 x \OMS/cmsy/m/n/10 ^^@ ^^@g\OML/c
@@ -509,38 +515,38 @@ x \OMS/cmsy/m/n/10 ^^@ ^^@\OML/cmm/m/it/10 ; x \OT1/cmr/m/n/10 + +\OMS/cmsy/m/n
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 127--132
+Underfull \hbox (badness 10000) in paragraph at lines 131--136
 
  []
 
 [4]
 
-LaTeX Warning: Command \textquoteright invalid in math mode on input line 151.
+LaTeX Warning: Command \textquoteright invalid in math mode on input line 155.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 159--167
+Underfull \hbox (badness 10000) in paragraph at lines 163--171
 
  []
 
 [5]
-Underfull \hbox (badness 10000) in paragraph at lines 203--210
+Underfull \hbox (badness 10000) in paragraph at lines 207--214
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 203--210
+Underfull \hbox (badness 10000) in paragraph at lines 207--214
 
  []
 
 [6] [7] (./project.aux) ) 
 Here is how much of TeX's memory you used:
- 4136 strings out of 494985
- 54754 string characters out of 6180356
- 149548 words of memory out of 5000000
- 7304 multiletter control sequences out of 15000+600000
+ 4137 strings out of 494985
+ 54773 string characters out of 6180356
+ 149551 words of memory out of 5000000
+ 7305 multiletter control sequences out of 15000+600000
  9023 words of font info for 33 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
- 37i,6n,32p,580b,1584s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 37i,6n,32p,775b,1584s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsf
 onts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/c
 m/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi
@@ -554,7 +560,7 @@ st/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/share/texlive/texmf-dist/fonts
 ublic/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/
 amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfont
 s/cm/cmsy8.pfb>
-Output written on project.pdf (7 pages, 169757 bytes).
+Output written on project.pdf (7 pages, 171532 bytes).
 PDF statistics:
  80 PDF objects out of 1000 (max. 8388607)
  57 compressed objects within 1 object stream

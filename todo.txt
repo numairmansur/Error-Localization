@@ -1,3 +1,11 @@
+---INTRODUCTION-----
+Extend it more a little bit. Write a better motivation to the problem.
+Better describe fault localization.
+
+- -Related work
+Describe the work in error invariants paper and explaining inconsistent code paper.
+
+
 ------- Flow Sensitive Relevance criteria -----------
 \\
 \\  To Do:

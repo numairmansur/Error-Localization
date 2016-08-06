@@ -39,10 +39,10 @@ The most tedious task in a programmer’s routine is to spend time on debugging 
 \\
 Fault Localization encompasses the task of identification of the program statements that are \textbf{relevant} for the error trace and determining the variables whose values should be tracked in order to understand the cause of the error. 
 \\
-There can be many notions of error relevancy. During my master praktikum, I worked with and developed algorithm for two relevancy criterion, which we called Flow-Sensitive and non Flow-Sensitive error relevancy. A part of this project will be to formalize these two new types of error relevancy. But first we need a basic formal definition to "relevancy", that is, what does it mean that a statement is relevant for an error. Surprisingly enough, I was unable to find a formal and a generally accepted definition of error relevancy in the literature. But this also makes sense because relevancy is really an abstract and a hard thing to define, let alone formally. Therefore, another aim of this project is to try to give a formal definition to error relevancy.
+There can be many notions of error relevancy. During my master praktikum, I worked with and developed algorithm for two new relevancy criterion, which we called Flow-Sensitive and non Flow-Sensitive error relevancy. A part of this work will be to formalize these two new types of error relevancy. But first we need a basic formal definition to "relevancy", that is, what does it mean that a statement is relevant for an error. Surprisingly enough, I was unable to find a formal and a generally accepted definition of error relevancy in the literature. But this also makes sense because relevancy is not really a well established concept and is a hard thing to define, let alone formally. Therefore, another aim of this project is to try to give a formal definition to error relevancy.
 \subsection{Relevant Work}
-In the paper Flow-Sensitive Fault Localization \cite{faultlocalization}, the authors take into account the flow of the program while determining the statements that are relevant for the error. They do it by a new flow-sensitive encoding of error traces into trace formulas. After which, by identifying the irrelevant portions of the new trace formula, we can isolate the possible cause of the error.The result of a flow-sensitive fault localization not only explains why the error occurred, but also justifies why the statements leading to the error were executed\cite{faultlocalization}.\\
-Error invariants paper..\\
+In the paper Flow-Sensitive Fault Localization \cite{faultlocalization}, the authors take into account the flow of the program while determining the statements that are relevant for the error. They do it by a new flow-sensitive encoding of error traces into trace formulas. After which, by identifying the irrelevant portions of the new trace formula, we can isolate the possible cause of the error. The result of a flow-sensitive fault localization not only explains why the error occurred, but also justifies why the statements leading to the error were executed\cite{faultlocalization}.\\
+In the Error invariants paper \cite{errorinvariants} .. \\
 Explaining inconsistent code paper .. \\
 
 \section{Goals/Approach}
@@ -50,12 +50,12 @@ Explaining inconsistent code paper .. \\
 During my Master Praktikum, I worked on a fault localization algorithm that find relevant statements in an error with respect to two error relevance criterion namely Flow Sensitive and Non-Flow Sensitive relevance criterion. I want to formalize these two notions of error relevance. There are also two sub categories in a relevance criteria which also need a formal definition.\\ 
 \\(1) Predetermined input (which we called the UC case) 
 \\ (2) Non-deterministic input (havoc).\\
-\\Another very important task in this step would be to formalize our fault localization algorithm.
+\\Another task in this step would be to formalize our already implemented fault localization algorithm .
 \subsection{Security Bugs}
-We also discovered during my Praktikum that we may be able to perform a security analysis via our fault localization algorithm and distinguish two kinds of bugs called Security and non-Security bugs. I want to formalize what it means that a bug is a security bug and use the algorithm to precisely find them. I expect some modifications in our algorithm so that it can correctly classify an error as a security/non-security error. Following steps are expected to complete this task: \\
+We also discovered during my Praktikum that we may be able to perform a security analysis via our fault localization algorithm and distinguish security bugs in a program from all other bugs. I want to formalize what it means that a bug is a security bug and use the algorithm to precisely find them. I expect some modifications in our algorithm so that it can correctly classify an error as a security/non-security error. Following steps are expected to complete this task: \\
 1) Analyse examples containing security bugs. \\
 2) Formalize the definition of a security bug that satisfies all the examples. \\
-3) Verify if the formal definition fits correctly with the examples. \\
+3) Check if the formal definition fits correctly with the examples. \\
 4) Modify our fault localization algorithm so that it models the definition correctly.
 \subsection{Verification of the results}
 I also want to make a mechanism to verify that what we are computing is correct that includes verifying the result of our fault localization algorithm and security bug analysis. For this task i plan to separately implement checks and compare it with our algorithms.
@@ -155,9 +155,33 @@ $REL = \{ x=0 \}$ \\
 $\pi’ = \{x=1, y=1, y=2, havoc(x)\}$
 
 \subsection{Non-Flow Sensitive Relevance criteria }
+\subsubsection{Preliminary definitions}
+Let $ST$ be a set containing all the statements in a program. $\pi \in ST$ is called an Error Trace iff there is an assertion condition $\phi$, which is violated if we execute $\pi$, starting from a state which belongs to a set of states called Error Precondition $EP$. We call the violation of $\pi$ an error.\\
+For some given program statement $S$ and some postcondition $R$ there is a (possibly empty) set of program states such that if execution of $S$ is initiated from one of these states then $S$ is guaranteed to terminate in a state for which $R$ is true. The weakest precondition of $S$ with respect to $R$, normally written $WP (S,R)$ is a predicate that characterizes this set of states.
 \subsubsection{Definition}
-In the paper \textbf{Error Invariants} \cite{errorinvariants}, the authors stated that if a statement which is relevant to the error is removed from the error trace, this can alter the observable error.\\
-One possible definition of relevancy could be that in an error trace $\pi$, an assignment statement $\pi[i]$ is relevant if after replacing that statement with havoc (non-deterministic input), there is no guarantee that we will reach the error.
+One possible definition of relevancy could be that in an error trace $\pi$, an assignment statement $\pi[i]$ is relevant if after replacing that statement with havoc (non-deterministic input), then we can't be certain that the assertion condition $\phi$ will be violated any more.\\
+For example:
+\begin{lstlisting}
+foo()
+{
+	x := 1;
+	y := 2;
+	If ( x == 2 )
+	{
+		y++;
+	}
+	assert(y !=3 );
+}
+\end{lstlisting}
+Error Trace $\pi$ will be:
+\begin{lstlisting}
+x := 1;
+y := 2;
+assume( x==1 )
+y := 3;
+assume( y==3 )
+\end{lstlisting}
+If we replace $y:=3$ by $hacov(y)$, then $y$ can non-deterministically be assigned any value and we can't be certain any more that the assertion condition in the end $\phi = (y!=3)$ will be violated.
 
 \subsubsection{Algorithm}
  Let $\pi$ be an error trace of length $n$, $WP()$ the weakest pre-condition operator, $\pi[i]$ the $i^{th}$ statement of $\pi$ and $\pi[i,j]$ be the sub-trace $\pi[i] . . . \pi[j-1]$.\\
@@ -224,6 +248,4 @@ J. Christ, E. Ermis, M. Schaf, and T. Wies.Flow-sensitive fault localization. In
 \bibitem{errorinvariants} 
 E.Ermis, M. Schaf, and T. Wies. Error Invariants. In FM’12, pages 338–353. Springer, 2012.
 \end{thebibliography}
-  
-
 \end{document}

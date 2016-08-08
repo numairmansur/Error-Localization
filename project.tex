@@ -41,9 +41,9 @@ Fault Localization encompasses the task of identification of the program stateme
 \\
 There can be many notions of error relevancy. During my master praktikum, I worked with and developed algorithm for two new relevancy criterion, which we called Flow-Sensitive and non Flow-Sensitive error relevancy. A part of this work will be to formalize these two new types of error relevancy. But first we need a basic formal definition to "relevancy", that is, what does it mean that a statement is relevant for an error. Surprisingly enough, I was unable to find a formal and a generally accepted definition of error relevancy in the literature. But this also makes sense because relevancy is not really a well established concept and is a hard thing to define, let alone formally. Therefore, another aim of this project is to try to give a formal definition to error relevancy.
 \subsection{Relevant Work}
-In the paper Flow-Sensitive Fault Localization \cite{faultlocalization}, the authors take into account the flow of the program while determining the statements that are relevant for the error. They do it by a new flow-sensitive encoding of error traces into trace formulas. After which, by identifying the irrelevant portions of the new trace formula, we can isolate the possible cause of the error. The result of a flow-sensitive fault localization not only explains why the error occurred, but also justifies why the statements leading to the error were executed\cite{faultlocalization}.\\
-In the Error invariants paper \cite{errorinvariants} .. \\
-Explaining inconsistent code paper .. \\
+In the paper Flow-Sensitive Fault Localization \cite{faultlocalization}, the authors take into account the flow of the program while determining the statements that are relevant for the error. They do it by a new flow-sensitive encoding of error traces into trace formulas. After which, by identifying the irrelevant portions of the new trace formula, we can isolate the possible cause of the error. The result of a flow-sensitive fault localization not only explains why the error occurred, but also justifies why the statements leading to the error were executed \cite{faultlocalization}.\\
+In the Error invariants paper \cite{errorinvariants}, the authors introduce a new concept in which for each position in an error trace they find a formula over program variables that over-approximates the reachable states at the given position while only capturing the states that will still produce the error, if execution of the trace is continued from that position. We can find the relevant statements in the trace with the help of inductive error invariants. Inductive invariants are those error invariants that hold for consecutive positions in an error trace and hence characterize statements in the trace that are irrelevant for the trace \cite{errorinvariants}. \\
+In the paper Explaining inconsistent code \cite{inconsistentcode} the authors use the idea presented in Error Invariants to find and explain inconsisitencies in a program using something called an $"Error Invariant Automaton"$. The error invariant automaton is an abstraction of the input code fragment that only mentions program statements and facts that are relevant for understanding the cause of the inconsistency. \\
 
 \section{Goals/Approach}
 \subsection{Formalizations}
@@ -128,7 +128,7 @@ In the above example:\\
 $\psi = True$            \\
 $\pi = \{ x=1, x--, x++\} $\\    
 $\phi \Rightarrow assume(x==0) $   
-$${P}(\pi) =\{\{x=1\}, \{x--\},\{x++\}, \{x=1,x--\},\{x=1,x++\},\{x--,x++\},\{x=1,x--,x++\}\}$$
+$${P}(\pi) =\{\{x=1\}, \{x--\},\{x++\}, \{x=1,x--\},\{x=1,x++\},\{x--,x++\},$$ $$\{x=1,x--,x++\}\}$$
 $Rel =\{x++\}$ because if the statement in $REL$ is replaced by a havoc statement in $\pi$ to get a new path $\pi' =\{x=1, x--, havoc(x)\}$ then there is no guarantee that the assertion condition $\phi$ is violated any more after the execution of $\pi'$.
 \\
 \\
@@ -195,9 +195,9 @@ For example consider the following code:
 \begin{lstlisting}
 foo()
 {
-  var y: int;
-  var x: int;
-  var z: int;
+  int y;
+  int x;
+  int z;
   
   y := 0;
   z := 0;
@@ -240,46 +240,42 @@ The formula $(\psi,\pi[4],\neg \phi)$ is unsatisfiable and $\pi[4]$ is in the un
 The definition of relevancy is actually similar to the non-flow sensitive case. The only thing different is that now we take branches in the trace into account. If there is a branch in the error trace, the relevancy of the statements inside the error trace will only be calculated if the branch as a whole is relevant to the error. We see that we can get slightly different results from the Non-Flow Sensitive case because it is possible that a statement might be relevant with respect to non-flow sensitive case but it lies inside a branch which is not relevant. \\
 When we say that a branch $\pi[i,j]$ must be relevant to the error, we mean that the branch is reduced to a transition formula which we call a $"Markhor Formula"$ and it's relevancy is calculated in the same way as we did for a statement in the non-flow sensitive case (by checking if the conjunction of $(\psi, \pi[i],\neg \phi)$ is unsatisfiable and the statement is in the unsatisfiable core).
 \subsubsection{Markhor Formula}
-...
-\subsection{Security Errors}
+.\\
+.\\
+.
+\section{Security Errors}
 A very interesting problem that we might be able to solve via our fault localization algorithm is to distinguish security error from all other kinds of errors. \\
-An error is a security error iff\\
-We say that a program has a security bug, if input (user input/network input)
-can trigger that some execution reaches the error.
-
-A definition/criterion that Vadim and I discussed was the following.
-An error is a security error iff 
-
-1 there is some reachable location linput where the program reads input, and
-2. there is some input that continuing from this location we definitely reach
-the error, and
-3. there is some input that continuing from this location we do not reach the
-error.
+According to our current definition an error is a security error iff an input statement (network/user) can cause the program execution to reach the error. Following are the (current) criterion for a security error.\\
+1. There is some reachable location where the program reads input.\\
+2. There is some input value, such that continuing from this location we definitely reach
+the error\\
+3. There is some input that continuing from this location we do not reach the error.
 \\
-Note that condition (3.) states something like the input is relevant for the
-error.
-
-Are we able to extend our relevance analysis in a way that it solves Vadim's
-problem?
-
-My first guess was that problem is easy. Whenever we say that the user input is
-relevant we know that we found a security bug. Unfortunately, my guess was
-wrong. Attached is an example.
-
-Our tool says (correctly) that copyfromuser() is relevant. However, the
-program does not have a security bug (according to our definition). For each
-result of copyfromuser() there is no guarantee that we reach the error since
-the function f() for which no implementation is given may cause that remaining
-statement sequence is blocking.
-
-We may assume that we are able to distinguish functions that provide user
-input (here copyfromuser() ) and functions whose behavior is not defined
-(here f() ). (I think I could implement this relatively soon.)
+From condition 2 and 3 we can deduce that the input is somehow relevant for the error.\\
+For example:
+\begin{lstlisting}
+foo()
+{
+  int y;
+  int x;
+  x := 1;
+  y := user_input();
+  if(y==2) 
+  {
+    y := y+1;
+  }
+  assert(y != 3);
+}
+\end{lstlisting}
+In the above example, the input statement $y := user\_input()$ determines if we reach the error or not. Hence there is a security error in this program.
 
 \begin{thebibliography}{9}
 \bibitem{faultlocalization} 
-J. Christ, E. Ermis, M. Schaf, and T. Wies.Flow-sensitive fault localization. In VMCAI, volume 7737, pages 189–208, Berlin, Heidelberg, 2013. Springer
+J. Christ, E. Ermis, M. Schaf, and T. Wies. Flow-sensitive fault localization. In VMCAI, volume 7737, pages 189–208, Berlin, Heidelberg, 2013. Springer
 \bibitem{errorinvariants} 
 E.Ermis, M. Schaf, and T. Wies. Error Invariants. In FM’12, pages 338–353. Springer, 2012.
+\bibitem{inconsistentcode}
+M. Schaf, D. Schawrtz, T. Wies. Explaining Inconsistent Code. In Joint meeting of the European Software Engineering conference and the Symposium on the Foundations of Software Engineering, ESEC/FSE’13, pages: 521 - 531, Saint Petersburg, Russian Federation. August 18-26,2013  
+
 \end{thebibliography}
 \end{document}

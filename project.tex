@@ -240,7 +240,41 @@ The formula $(\psi,\pi[4],\neg \phi)$ is unsatisfiable and $\pi[4]$ is in the un
 The definition of relevancy is actually similar to the non-flow sensitive case. The only thing different is that now we take branches in the trace into account. If there is a branch in the error trace, the relevancy of the statements inside the error trace will only be calculated if the branch as a whole is relevant to the error. We see that we can get slightly different results from the Non-Flow Sensitive case because it is possible that a statement might be relevant with respect to non-flow sensitive case but it lies inside a branch which is not relevant. \\
 When we say that a branch $\pi[i,j]$ must be relevant to the error, we mean that the branch is reduced to a transition formula which we call a $"Markhor Formula"$ and it's relevancy is calculated in the same way as we did for a statement in the non-flow sensitive case (by checking if the conjunction of $(\psi, \pi[i],\neg \phi)$ is unsatisfiable and the statement is in the unsatisfiable core).
 \subsubsection{Markhor Formula}
+...
+\subsection{Security Errors}
+A very interesting problem that we might be able to solve via our fault localization algorithm is to distinguish security error from all other kinds of errors. \\
+An error is a security error iff\\
+We say that a program has a security bug, if input (user input/network input)
+can trigger that some execution reaches the error.
 
+A definition/criterion that Vadim and I discussed was the following.
+An error is a security error iff 
+
+1 there is some reachable location linput where the program reads input, and
+2. there is some input that continuing from this location we definitely reach
+the error, and
+3. there is some input that continuing from this location we do not reach the
+error.
+\\
+Note that condition (3.) states something like the input is relevant for the
+error.
+
+Are we able to extend our relevance analysis in a way that it solves Vadim's
+problem?
+
+My first guess was that problem is easy. Whenever we say that the user input is
+relevant we know that we found a security bug. Unfortunately, my guess was
+wrong. Attached is an example.
+
+Our tool says (correctly) that copyfromuser() is relevant. However, the
+program does not have a security bug (according to our definition). For each
+result of copyfromuser() there is no guarantee that we reach the error since
+the function f() for which no implementation is given may cause that remaining
+statement sequence is blocking.
+
+We may assume that we are able to distinguish functions that provide user
+input (here copyfromuser() ) and functions whose behavior is not defined
+(here f() ). (I think I could implement this relatively soon.)
 
 \begin{thebibliography}{9}
 \bibitem{faultlocalization} 

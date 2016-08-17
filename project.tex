@@ -199,7 +199,7 @@ assume( x==1 )
 y := 3;
 assume( y==3 )
 \end{lstlisting}
-If we replace $y:=3$ by $hacov(y)$, then $y$ can non-deterministically be assigned any value and we can't be certain any more that the assertion condition in the end $\phi = (y!=3)$ will be violated and we can end up in an error state.
+If we replace $y:=3$ by $hacov(y)$, then $y$ can non-deterministically be assigned any value and we can't be certain any more that the assertion condition in the end $\phi = (y!=3)$ will be violated and we can end up in an a state other then the error state.
 
 \subsubsection{Algorithm}
  Let $\pi$ be an error trace of length $n$, $WP()$ the weakest pre-condition operator, $\pi[i]$ the $i^{th}$ statement of $\pi$ and $\pi[i,j]$ be the sub-trace $\pi[i] . . . \pi[j-1]$.\\

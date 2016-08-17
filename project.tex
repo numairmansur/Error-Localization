@@ -264,6 +264,8 @@ When we say that a branch $\pi[i,j]$ must be relevant to the error, we mean that
 
 \section{Performance Analysis}
 \subsection{Non-Flow Sensitive Fault Localization:}
+I think our algorithm is more effected not by the size of the trace, but the size of the formulas in the trace. That's why, sometimes even for small traces, the non-flow sensitive analysis is fast but it takes very long for flow-sensitive analysis to run, not because  of the size of the trace , but the complexity of the formulas in it. \\
+Therefore there might not be much we can do to increase the performance of non-flow sensitive analysis because there are not many steps involved and the formulas we compute here (wp, pre) are our most basic requirement to compute the relevance of a statement and their calculation cannot be further simplified.
 
 
 \section{Security Errors}

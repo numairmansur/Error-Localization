@@ -161,7 +161,11 @@ $REL = \{ x=0 \}$ \\
 $\pi’ = \{x=1, y=1, y=2, havoc(x)\}$
 
 \subsection{Non-Flow Sensitive Relevance criteria }
-\subsubsection{Preliminary definitions}
+\subsubsection{Preliminary definitions (new ones)}
+Proof based fault localization techniques rely on encoding of an error trace into a so called error trace formula. A \textit{\textbf{trace formula}} is an unsatisfiable logical formula (or is it ? isn't it unsatisfiable together with the post condition).\\
+An error is observable by executing an error trace starting from a state that satisfies an \textbf{\textit{error pre-condition}}.\\
+We will encode the (error?)trace into a so called extended trace formula which consists the error precondition, correctness assertion and the trace formula of the trace. When the extended trace formula is unsatisfiable, we say that the trace in the extended trace formula is an error trace and we say that we are seeing an "error.
+\subsubsection{Preliminary definitions (to be discarded)}
 \textbf{Trace:} We assume a fixed set of statements $\Sigma$. A $trace$ is a sequence of statements, i.e $$ \tau = st_1 ... st_n$$
 where $st_1...st_n \in \Sigma$ and $n \geq 0$ (the sequence is possibly empty). We view a statement $st$ as a letter and a trace $\tau$ as a word over the alphabet $\Sigma$, i.e. $\tau \in \Sigma^*$. Since one calls a set of words a $language$, the set of traces is the language of all words over the alphabet $\Sigma$.
 $${traces} = \Sigma^*$$
@@ -180,6 +184,7 @@ We interpret $A$ as a finite automaton over alphabet $\Sigma$ with intial state 
 Let us assume variable $x$ denotes the tuple of variables involved in statement $ST$. Then, a given Hoare Triple $\{P\} ST \{R\}$ is provable in Hoare Logic for total corectness if and only if the first-order predicate below holds:
 $$\forall x,P \Rightarrow wp(ST,R)$$
 \textbf{Error Pre-condition: }bla bla bla
+
 
 \subsubsection{Definition}
 One possible definition of relevancy could be that in an error trace $\pi$, an assignment statement $\pi[i]$ is relevant if after replacing that statement with havoc (non-deterministic input) we can end up in a state other then the error state.\\

@@ -180,7 +180,7 @@ A trace is called feasible if its trace formula is satisfiable, otherwise we cal
 A program $P = <st,\Phi>$ is safe if for every trace $\pi \in Trace(P)$ whose final statement is a label statement and every execution $\sigma$ of $\pi$, the final state of $\sigma$ satisfies $\Phi(l)$.\\
 If a program is not safe, an error can be witnessed along a trace. The error corresponds to a set of executions that violate the assertion associated with the last label of the trace. We call it correctness assertion as mentioned in the introduction section of this sub-section. \\
 \textbf{Error \& Error Trace: }For an unsafe program $P=<st, \Phi>$ , with a trace $\pi = st_0^a;.....st_{n-2}^a;label\ l$, an error precondition $\Psi$, a state formula $\phi$, such that $\Phi(l)=\phi$, we say that there is an error in the program $P$ if the following conditions hold :\\
-1) $\Psi \wedge TF(\pi)$ is satisfiable\\
+1) $\Psi \wedge TF(\pi)$ is satisfiable \\
 2) $\Psi \wedge TF(\pi) \wedge \phi^{<n>} $ is unsatisfiable\\
 In this case $\pi$ is called an error trace. Hence for an error trace $\pi$, no execution of the trace $\pi$ that starts in a state satisfying the \textbf{\textit{error pre-condition}} $\Psi$ ends in a state satisfying the postcondition $\phi$.
 

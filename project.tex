@@ -95,12 +95,6 @@ $\pi$ in this example is:
 $$ assume(x==0); assume(z==0); y=1) $$
 and our algorithm shows that none of the statements is relevant. But if we look at the program from a broader perspective then an error trace, we will notice that the value of  $z$ is relevant because if $z \neq 0$ then we would be stuck in a never ending loop and would not be able to reach the error.  
 So we cannot say that $assume(z=0)$ is irrelevant for the error.
-\section{Time Frame}
-This is a very rough estimate but i plan to give one month to each task, but it is also possible to give a lower amount of time to one task and give that extra time to the other task.\\
-Step 1: End of August.\\
-Step 2: End of August.\\
-Step 3: End of September.\\
-Step 4: End of October.
 \newpage
 \section{Formalization of Relevancy Criterion}
 \subsection{Error Relevancy}
@@ -168,28 +162,27 @@ An error is observable by executing an error trace starting from a state that sa
 We will encode the (error?)trace into a so called extended trace formula which consists the error precondition, correctness assertion and the trace formula of the trace. When the extended trace formula is unsatisfiable, we say that the trace in the extended trace formula is an error trace and we say that we are seeing an "error".
 
 \subsubsection*{Formal Setting:}
-For a set of variables $X$ we denote by $Expr(X)$ the set of terms built from variables in $X$ and we denote by $Preds(X)$ the set of all quantifier- free formulas with free variables in $X$.\\
-let $X$ be a fixed set of variables which we call "program variables", and let $L$ be a set of labels.\\
+Let $X$ be a fixed set of variables which we call "program variables", and let $L$ be a set of labels. We denote by $Expr(X)$ the set of terms built from variables in $X$ and we denote by $Preds(X)$ the set of all quantifier-free formulas with free variables in $X$.\\
 A \textit{program statement} $st$ is either a conditional choice, a while loop, a sequence of statements, an assignment or a label.
 $$st := if\ \mathbf{cond}\ then\ \mathbf{st}\ else\ \mathbf{st}\ |\ while\ \mathbf{cond}\ do\ \mathbf{st}\ |\ st;st\ |\ x:=e\ |\ label\ l$$
 Labels have no operational meaning. They are only used to uniquely identify certain points during the execution of the program statement.\\
 A program $P=<st,\Phi>$ consists of a program statement $st$, and an assertion map.
 $$\Phi: L \rightarrow Preds(X)$$
 which maps each label $L$ in st to a formula that should hold at the point of execution of $st$ determined by $L$.\\
-We define the semantics of program statements and programs in terms of $atomic statements$ which are defined by the following grammar.
+We define the semantics of program statements and programs in terms of $atomic$ $statements$ which are defined by the following grammar.
 $$st^a  := if\ \mathbf{cond}\ |\ endif\ |\ x:=e\ |\ label\ L\ |\ havoc\ \mathbf{cond}$$
 A trace $\pi$ is a finite sequence of atomic statements. Let $\pi$ be a trace of length $n$.\\
-A program state $s$ is a function that assigns a value $S(x)$ to each program variable $x \in X$. We call formulas $Preds(X)$ state formulas and we write $s \Rightarrow F$ to denote that a state $s$ satisfies a state formula $F$.\\
-The formulas $Preds(X \cup X')$ are called transition formulas. We use transition formulas to represent the semantics of statements in a trace, where the variables $X'$ denote the values of the variables from $X$ in the next state. We write $s,s' \Rightarrow T$ to denote that states $s$ and $s'$ satisfy the transition formula $T$.\\
-An execution of a trace $\pi$ of length $n$ is a sequence of states $s_0....s_n$ such that for all $0 \leq i \leq n$, $s_i,s_{i+1} \Rightarrow T[\pi[i]]$. We denote by $Execs(\pi)$ the set of all executions of $\pi$. The trace formula of $\pi$ is the formula:
+A program state $S$ is a function that assigns a value $S(x)$ to each program variable $x \in X$. Formulas $Preds(X)$ can also be called state formulas and we write $S \Rightarrow F$ to denote that a state $S$ satisfies a state formula $F$.\\
+The formulas $Preds(X \cup X')$ are called transition formulas. We use transition formulas to represent the semantics of atomic statements in a trace, where the variables $X'$ denote the values of the variables from $X$ in the next state. We write $s,s' \Rightarrow T$ to denote that states $s$ and $s'$ satisfy the transition formula $T$.\\
+An execution $\sigma$ of a trace $\pi$ of length $n$ is a sequence of states $s_0....s_n$ such that for all $0 \leq i \leq n$, $s_i,s_{i+1} \Rightarrow T[\pi[i]]$. We denote by $Execs(\pi)$ the set of all executions of $\pi$. The trace formula of $\pi$ is the formula:
 $$TF(\pi) := T[\pi[0]]^{<0>} \wedge ....... \wedge T[\pi[n-1]]^{<n-1>}$$
 A trace is called feasible if its trace formula is satisfiable, otherwise we call it infeasible. \\
 A program $P = <st,\Phi>$ is safe if for every trace $\pi \in Trace(P)$ whose final statement is a label statement and every execution $\sigma$ of $\pi$, the final state of $\sigma$ satisfies $\Phi(l)$.\\
-If a program is not safe, an error can be witnessed along a trace. The error corresponds to a set of executions that violate the assertion associated with the last label of the trace. \\
-\textbf{Error: }For a program $P=<st, \Phi>$ , with a trace $\pi = st_0^a;.....st_{n-2}^a;label\ l$, an error precondition $\Psi$, a state formula $\phi$, such that $\Phi(l)=\phi$, we say that there is an error in the program $P$ if the following conditions hold:\\
+If a program is not safe, an error can be witnessed along a trace. The error corresponds to a set of executions that violate the assertion associated with the last label of the trace. We call it correctness assertion as mentioned in the introduction section of this sub-section. \\
+\textbf{Error \& Error Trace: }For an unsafe program $P=<st, \Phi>$ , with a trace $\pi = st_0^a;.....st_{n-2}^a;label\ l$, an error precondition $\Psi$, a state formula $\phi$, such that $\Phi(l)=\phi$, we say that there is an error in the program $P$ if the following conditions hold :\\
 1) $\Psi \wedge TF(\pi)$ is satisfiable\\
 2) $\Psi \wedge TF(\pi) \wedge \phi^{<n>} $ is unsatisfiable\\
-In this case $\pi$ is called an error trace. Hence for an error trace $\pi$, no execution of the trace $\pi$ that starts in a state satisfying the error pre-condition $\Psi$ ends in a state satisfying the postcondition $\phi$.
+In this case $\pi$ is called an error trace. Hence for an error trace $\pi$, no execution of the trace $\pi$ that starts in a state satisfying the \textbf{\textit{error pre-condition}} $\Psi$ ends in a state satisfying the postcondition $\phi$.
 
 \subsubsection{Preliminary definitions (to be discarded)}
 \textbf{Trace:} We assume a fixed set of statements $\Sigma$. A $trace$ is a sequence of statements, i.e $$ \tau = st_1 ... st_n$$
@@ -345,3 +338,6 @@ https://courses.cs.washington.edu/courses/cse503/06sp/correctness2.pdf
 
 \end{thebibliography}
 \end{document}
+
+
+

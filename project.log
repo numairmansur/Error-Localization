@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2016.3.10)  25 AUG 2016 11:34
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2016.3.10)  25 AUG 2016 20:10
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -493,37 +493,31 @@ File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <8> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 73.
  [3] [4]
-Underfull \hbox (badness 10000) in paragraph at lines 107--122
+Underfull \hbox (badness 10000) in paragraph at lines 101--116
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 137--142
+Underfull \hbox (badness 10000) in paragraph at lines 131--136
 
  []
 
 [5]
 
-LaTeX Warning: Command \textquoteright invalid in math mode on input line 161.
-
-
-Overfull \hbox (46.47014pt too wide) in paragraph at lines 177--180
-\OT1/cmr/m/n/10 We de-fine the se-man-tics of pro-gram state-ments and pro-gram
-s in terms of $\OML/cmm/m/it/10 atomicstatements$
- []
+LaTeX Warning: Command \textquoteright invalid in math mode on input line 155.
 
 [6] [7] [8]
-Underfull \hbox (badness 10000) in paragraph at lines 242--250
+Underfull \hbox (badness 10000) in paragraph at lines 234--242
 
  []
 
 [9]
-Underfull \hbox (badness 10000) in paragraph at lines 286--293
+Underfull \hbox (badness 10000) in paragraph at lines 278--285
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 286--293
+Underfull \hbox (badness 10000) in paragraph at lines 278--285
 
  []
 
@@ -552,7 +546,7 @@ nts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type
 nts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/
 cmsy8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.
 pfb>
-Output written on project.pdf (12 pages, 222908 bytes).
+Output written on project.pdf (12 pages, 222773 bytes).
 PDF statistics:
  107 PDF objects out of 1000 (max. 8388607)
  76 compressed objects within 1 object stream

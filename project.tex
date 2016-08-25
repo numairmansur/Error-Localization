@@ -162,9 +162,31 @@ $\pi’ = \{x=1, y=1, y=2, havoc(x)\}$
 
 \subsection{Non-Flow Sensitive Relevance criteria }
 \subsubsection{Preliminary definitions (new ones)}
-Proof based fault localization techniques rely on encoding of an error trace into a so called error trace formula. A \textit{\textbf{trace formula}} is an unsatisfiable logical formula (or is it ? isn't it unsatisfiable together with the post condition).\\
+\subsubsection*{Introduction:}
+Proof based fault localization techniques rely on encoding of an error trace into a so called error trace formula. A \textit{\textbf{error trace formula}} is an unsatisfiable logical formula (or is it ? isn't it unsatisfiable together with the post condition).\\
 An error is observable by executing an error trace starting from a state that satisfies an \textbf{\textit{error pre-condition}}.\\
-We will encode the (error?)trace into a so called extended trace formula which consists the error precondition, correctness assertion and the trace formula of the trace. When the extended trace formula is unsatisfiable, we say that the trace in the extended trace formula is an error trace and we say that we are seeing an "error.
+We will encode the (error?)trace into a so called extended trace formula which consists the error precondition, correctness assertion and the trace formula of the trace. When the extended trace formula is unsatisfiable, we say that the trace in the extended trace formula is an error trace and we say that we are seeing an "error".
+
+\subsubsection*{Formal Setting:}
+For a set of variables $X$ we denote by $Expr(X)$ the set of terms built from variables in $X$ and we denote by $Preds(X)$ the set of all quantifier- free formulas with free variables in $X$.\\
+let $X$ be a fixed set of variables which we call "program variables", and let $L$ be a set of labels.\\
+A \textit{program statement} $st$ is either a conditional choice, a while loop, a sequence of statements, an assignment or a label.
+$$st := if\ \mathbf{cond}\ then\ \mathbf{st}\ else\ \mathbf{st}\ |\ while\ \mathbf{cond}\ do\ \mathbf{st}\ |\ st;st\ |\ x:=e\ |\ label\ l$$
+Labels have no operational meaning. They are only used to uniquely identify certain points during the execution of the program statement.\\
+A program $P=<st,\Phi>$ consists of a program statement $st$, and an assertion map.
+$$\Phi: L \rightarrow Preds(X)$$
+which maps each label $L$ in st to a formula that should hold at the point of execution of $st$ determined by $L$.\\
+We define the semantics of program statements and programs in terms of $atomic statements$ which are defined by the following grammar.
+$$st^a  := if\ \mathbf{cond}\ |\ endif\ |\ x:=e\ |\ label\ L\ |\ havoc\ \mathbf{cond}$$
+A trace $\pi$ is a finite sequence of atomic statements. Let $\pi$ be a trace of length $n$.\\
+A program state $s$ is a function that assigns a value $S(x)$ to each program variable $x \in X$. We call formulas $Preds(X)$ state formulas and we write $s \Rightarrow F$ to denote that a state $s$ satisfies a state formula $F$.\\
+The formulas $Preds(X \cup X')$ are called transition formulas. We use transition formulas to represent the semantics of statements in a trace, where the variables $X'$ denote the values of the variables from $X$ in the next state. We write $s,s' \Rightarrow T$ to denote that states $s$ and $s'$ satisfy the transition formula $T$.\\
+An execution of a trace $\pi$ of length $n$ is a sequence of states $s_0....s_n$ such that for all $0 \leq i \leq n$, $s_i,s_{i+1} \Rightarrow T[\pi[i]]$. We denote by $Execs(\pi)$ the set of all executions of $\pi$. The trace formula of $\pi$ is the formula:
+$$TF(\pi) := T[\pi[0]]^{<0>} \wedge ....... \wedge T[\pi[n-1]]^{<n-1>}$$
+A trace is called feasible if its trace formula is satisfiable, otherwise we call it infeasible. \\
+A program $P = <st,\Phi>$ is safe if for every trace $\pi \in Trace(P)$ whose final statement is a label statement and every execution $\sigma$ of $\pi$, the final state of $\sigma$ satisfies $\Phi(l)$.\\
+If a program is not safe, an error can be witnessed along a trace. The error corresponds to a set of executions that violate the assertion associated with the last label of the trace. \\
+ 
 \subsubsection{Preliminary definitions (to be discarded)}
 \textbf{Trace:} We assume a fixed set of statements $\Sigma$. A $trace$ is a sequence of statements, i.e $$ \tau = st_1 ... st_n$$
 where $st_1...st_n \in \Sigma$ and $n \geq 0$ (the sequence is possibly empty). We view a statement $st$ as a letter and a trace $\tau$ as a word over the alphabet $\Sigma$, i.e. $\tau \in \Sigma^*$. Since one calls a set of words a $language$, the set of traces is the language of all words over the alphabet $\Sigma$.

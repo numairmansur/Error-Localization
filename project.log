@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2016.3.10)  25 AUG 2016 10:55
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2016.3.10)  25 AUG 2016 11:34
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -512,23 +512,18 @@ Overfull \hbox (46.47014pt too wide) in paragraph at lines 177--180
 s in terms of $\OML/cmm/m/it/10 atomicstatements$
  []
 
-[6]
-Underfull \hbox (badness 10000) in paragraph at lines 185--189
-
- []
-
-[7] [8]
-Underfull \hbox (badness 10000) in paragraph at lines 237--245
+[6] [7] [8]
+Underfull \hbox (badness 10000) in paragraph at lines 242--250
 
  []
 
 [9]
-Underfull \hbox (badness 10000) in paragraph at lines 281--288
+Underfull \hbox (badness 10000) in paragraph at lines 286--293
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 281--288
+Underfull \hbox (badness 10000) in paragraph at lines 286--293
 
  []
 
@@ -536,7 +531,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 281--288
 Here is how much of TeX's memory you used:
  4148 strings out of 494985
  54906 string characters out of 6180356
- 159557 words of memory out of 5000000
+ 153557 words of memory out of 5000000
  7312 multiletter control sequences out of 15000+600000
  10347 words of font info for 37 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
@@ -557,7 +552,7 @@ nts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type
 nts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/
 cmsy8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.
 pfb>
-Output written on project.pdf (12 pages, 222155 bytes).
+Output written on project.pdf (12 pages, 222908 bytes).
 PDF statistics:
  107 PDF objects out of 1000 (max. 8388607)
  76 compressed objects within 1 object stream

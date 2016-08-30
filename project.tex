@@ -202,11 +202,12 @@ We interpret $A$ as a finite automaton over alphabet $\Sigma$ with intial state 
 \textbf{Def 2: }For some given logical predicate $R$, and a program statement $ST$, $wp(R,ST)$ is defined to be the weakest logical predicate that must be true before executing $S$ in order to prove that $R$ is true afterwards. \cite{wpdefinition}.\\
 Let us assume variable $x$ denotes the tuple of variables involved in statement $ST$. Then, a given Hoare Triple $\{P\} ST \{R\}$ is provable in Hoare Logic for total corectness if and only if the first-order predicate below holds:
 $$\forall x,P \Rightarrow wp(ST,R)$$
-\textbf{Error Pre-condition: }bla bla bla
+\textbf{Error Pre-condition: } ...
 
 
 \subsubsection{Definition}
-One possible definition of relevancy could be that in an error trace $\pi$, an assignment statement $\pi[i]$ is relevant if after replacing that statement with havoc (non-deterministic input) we can end up in a state other then the error state.\\
+We say that in a error trace $\pi$, an assignment statement $\pi[i]$ is relevant w.r.t non-flow sensitive relevancy criteria if after replacing that statement in the trace with a havoc statement to get a new trace $\pi'$ , there exists an execution $\sigma'$ in $Execs(\pi')$, such that $\Psi \wedge TF(\pi') \wedge \phi^{<n>} $ is satisfiable.
+\\
 For example:
 \begin{lstlisting}
 foo()
@@ -228,7 +229,7 @@ assume( x==1 )
 y := 3;
 assume( y==3 )
 \end{lstlisting}
-If we replace $y:=3$ by $hacov(y)$, then $y$ can non-deterministically be assigned any value and we can't be certain any more that the assertion condition in the end $\phi = (y!=3)$ will be violated and we can end up in an a state other then the error state.
+If we replace $y:=3$ by $hacov(y)$, then $y$ can non-deterministically be assigned any value and there will be an execution for which condition in the end $\phi = (y!=3)$ will not be violated and the formula $\Psi \wedge TF(\pi') \wedge \phi^{<n>} $ is satisfiable.
 
 \subsubsection{Algorithm}
  Let $\pi$ be an error trace of length $n$, $WP()$ the weakest pre-condition operator, $\pi[i]$ the $i^{th}$ statement of $\pi$ and $\pi[i,j]$ be the sub-trace $\pi[i] . . . \pi[j-1]$.\\

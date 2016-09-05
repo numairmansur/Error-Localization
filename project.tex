@@ -162,20 +162,9 @@ An error is observable by executing an error trace starting from a state that sa
 We will encode the (error?)trace into a so called extended trace formula which consists the error precondition, correctness assertion and the trace formula of the trace. When the extended trace formula is unsatisfiable, we say that the trace in the extended trace formula is an error trace and we say that we are seeing an "error".
 
 \subsubsection*{Formal Setting:}
-Let $X$ be a fixed set of variables which we call "program variables", and let $L$ be a set of labels. We denote by $Expr(X)$ the set of terms built from variables in $X$ and we denote by $Preds(X)$ the set of all quantifier-free formulas with free variables in $X$.\\
-A \textit{program statement} $st$ is either a conditional choice, a while loop, a sequence of statements, an assignment or an error label.
-$$st := if\ \mathbf{cond}\ then\ \mathbf{st}\ else\ \mathbf{st}\ |\ while\ \mathbf{cond}\ do\ \mathbf{st}\ |\ st;st\ |\ x:=e\ |\ label\ error$$
-Error labels have no operational meaning. They are only used to uniquely identify the error states at certain points during the execution of the program statement.\\
-A program $P=<st,\Phi>$ consists of a program statement $st$, and an assertion map.
-$$\Phi: error \rightarrow Preds(X)$$
-which maps each error label $error$ in st to a formula that should not hold at the point of execution of $st$ determined by $error$.\\
-We define the semantics of program statements and programs in terms of $atomic$ $statements$ which are defined by the following grammar.
-$$st^a  := assume(\mathbf{cond})\ |\ x:=e\ |\ label\ error\ |\ havoc\ \mathbf{cond}$$
-A \textbf{\textit{trace}} is a finite sequence of atomic statements. Let $\pi$ be a trace of length $n$.\\
-A program state $S$ is a function that assigns a value $S(x)$ to each program variable $x \in X$. Formulas $Preds(X)$ can also be called state formulas and we write $S \Rightarrow F$ to denote that a state $S$ satisfies a state formula $F$.\\
-The formulas $Preds(X \cup X')$ are called \textbf{\textit{transition formulas}}. We use transition formulas to represent the semantics of atomic statements in a trace, where the variables $X'$ denote the values of the variables from $X$ in the next state.[?? EXPLAIN HOW IS IT REPRESENTING THE SEMANTICS ??] We write $s,s' \Rightarrow T$ to denote that states $s$ and $s'$ satisfy the transition formula $T$.\\
-An \textit{\textbf{execution}} $\sigma$ of a trace $\pi$ of length $n$ is a sequence of states $s_0....s_n$ such that for all $0 \leq i \leq n$, $s_i,s_{i+1} \Rightarrow T[\pi[i]]$. We denote by $Execs(\pi)$ the set of all executions of $\pi$. The trace formula of $\pi$ is the formula:
-$$TF(\pi) := T[\pi[0]]^{<0>} \wedge ....... \wedge T[\pi[n-1]]^{<n-1>}$$
+-----------------------------------------------\\
+ADD Control Flow Graph Formalism here !!\\
+-----------------------------------------------\\
 A trace is called feasible if its trace formula is satisfiable, otherwise we call it infeasible. \\
 A program $P = <st,\Phi>$ is safe if for every trace $\pi \in Trace(P)$ whose final statement is an error label statement and every execution $\sigma$ of $\pi$, the final state of $\sigma$ does not satisfies $\Phi(error)$.\\
 If a program is not safe, an error can be witnessed along a trace. The error corresponds to a set of executions that satisfies the error label at the end of the trace.\\

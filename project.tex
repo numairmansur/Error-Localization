@@ -173,17 +173,19 @@ We define the semantics of program statements and programs in terms of $atomic$ 
 $$st^a  := assume(\mathbf{cond})\ |\ x:=e\ |\ label\ error\ |\ havoc\ \mathbf{cond}$$
 A \textbf{\textit{trace}} is a finite sequence of atomic statements. Let $\pi$ be a trace of length $n$.\\
 A program state $S$ is a function that assigns a value $S(x)$ to each program variable $x \in X$. Formulas $Preds(X)$ can also be called state formulas and we write $S \Rightarrow F$ to denote that a state $S$ satisfies a state formula $F$.\\
-The formulas $Preds(X \cup X')$ are called \textbf{\textit{transition formulas}}. We use transition formulas to represent the semantics of atomic statements in a trace, where the variables $X'$ denote the values of the variables from $X$ in the next state. We write $s,s' \Rightarrow T$ to denote that states $s$ and $s'$ satisfy the transition formula $T$.\\
+The formulas $Preds(X \cup X')$ are called \textbf{\textit{transition formulas}}. We use transition formulas to represent the semantics of atomic statements in a trace, where the variables $X'$ denote the values of the variables from $X$ in the next state.[?? EXPLAIN HOW IS IT REPRESENTING THE SEMANTICS ??] We write $s,s' \Rightarrow T$ to denote that states $s$ and $s'$ satisfy the transition formula $T$.\\
 An \textit{\textbf{execution}} $\sigma$ of a trace $\pi$ of length $n$ is a sequence of states $s_0....s_n$ such that for all $0 \leq i \leq n$, $s_i,s_{i+1} \Rightarrow T[\pi[i]]$. We denote by $Execs(\pi)$ the set of all executions of $\pi$. The trace formula of $\pi$ is the formula:
 $$TF(\pi) := T[\pi[0]]^{<0>} \wedge ....... \wedge T[\pi[n-1]]^{<n-1>}$$
 A trace is called feasible if its trace formula is satisfiable, otherwise we call it infeasible. \\
-A program $P = <st,\Phi>$ is safe if for every trace $\pi \in Trace(P)$ whose final statement is a label statement and every execution $\sigma$ of $\pi$, the final state of $\sigma$ satisfies $\Phi(l)$.\\
-If a program is not safe, an error can be witnessed along a trace. The error corresponds to a set of executions that violate the assertion associated with the last label of the trace.\\
+A program $P = <st,\Phi>$ is safe if for every trace $\pi \in Trace(P)$ whose final statement is an error label statement and every execution $\sigma$ of $\pi$, the final state of $\sigma$ does not satisfies $\Phi(error)$.\\
+If a program is not safe, an error can be witnessed along a trace. The error corresponds to a set of executions that satisfies the error label at the end of the trace.\\
 \textbf{Error \& Error Trace: }For an unsafe program $P=<st, \Phi>$ , with a trace $\pi = st_0^a;.....st_{n-2}^a;label\ error$, an error precondition $\Psi$, a state formula $\phi$, such that $\Phi(error)=\phi$, we say that there is an \textbf{\textit{error}} in the program $P$ if the following condition hold :\\
 $\Psi \wedge TF(\pi) \wedge \phi^{<n>} $ is satisfiable.\\
 In this case $\pi$ is called an \textbf{\textit{error trace}}. Hence for an error trace $\pi$, no execution of the trace $\pi$ that starts in a state satisfying the \textbf{\textit{error pre-condition}} $\Psi$ ends in a state satisfying the postcondition $\phi$.\\
-\textbf{Weakest Precondition Operator:} For some given formula $R \in Preds(X)$, and a program statement $st$, the weakest precondition operator returns the weakest formula that must be true such that if we execute $st$, $R$ holds. 
-$$wp(st,R) \wedge T[st] \Rightarrow R$$.
+\textbf{Weakest Precondition Operator:} For some given formula $R \in Preds(X)$, and a program statement $st$, the weakest precondition operator $WP()$ returns the weakest formula that must be true such that if we execute $st$, $R$ holds. 
+$$WP(T[st],R) \wedge T[st] \Rightarrow R$$
+So according to the above definition, the error-precondition for an error trace $\pi$ is:
+$$error\ precondition:WP(T[\pi],False)$$
 
 
 \subsubsection{Preliminary definitions (to be discarded)}
@@ -196,7 +198,7 @@ $$\forall x,P \Rightarrow wp(ST,R)$$.
 
 \subsubsection{Definition}
 If a relevant assignment statement in an error trace is removed or replaced by a non-deterministic input statement (havoc), then this can alter the observable error and we cannot guarantee any more that we will reach the error after executing the new error trace. \\
-More formally, we say that in a error trace $\pi$, an assignment statement $\pi[i]$ is relevant w.r.t non-flow sensitive relevancy criteria if after replacing that statement in the trace with a havoc statement to get a new trace $\pi'$ , there exists an execution $\sigma'$ in $Execs(\pi')$, such that $\Psi \wedge TF(\pi') \wedge \phi^{<n>} $ is satisfiable.
+More formally, we say that in a error trace $\pi$, an assignment statement $\pi[i]$ is relevant w.r.t non-flow sensitive relevancy criteria if we remove the $i^{th}$ statement and insert a havoc statement over the same variable at position $i$ to get a new trace $\pi'$ , there exists an execution $\sigma'$ in $Execs(\pi')$, such that $\Psi \wedge TF(\pi') \wedge \phi^{<n>} $ is satisfiable.
 \\
 For example:
 \begin{lstlisting}
@@ -204,7 +206,7 @@ foo()
 {
 	x := 1;
 	y := 2;
-	If ( x == 2 )
+	If ( x == 1 )
 	{
 		y++;
 	}
@@ -222,13 +224,42 @@ assume( y==3 )
 If we replace $y:=3$ by $hacov(y)$, then $y$ can non-deterministically be assigned any value and there will be an execution for which condition in the end $\phi = (y!=3)$ will not be violated and the formula $\Psi \wedge TF(\pi') \wedge \phi^{<n>} $ is satisfiable.
 
 \subsubsection{Algorithm}
- Let $\pi$ be an error trace of length $n$, $WP()$ the weakest pre-condition operator, $\pi[i]$ the $i^{th}$ statement of $\pi$ and $\pi[i,j]$ be the sub-trace $\pi[i] . . . \pi[j-1]$.\\
- \\
- Let $\phi$ be a post-condition and $\phi =  WP(False, \pi[i+1,n])$.\\
- Let $\Psi$ be pre-condition and $\Psi = \neg WP(False, \pi[i,n])$.\\
+ Let $\pi$ be an error trace of length $n$, $WP()$ the weakest pre-condition operator, $\pi[i]$ the $i^{th}$ statement of $\pi$.\\
+ Lets call $\Psi$ a pre-condition and $\Psi = \neg WP(False, \pi[i,n])$.\\
+ Lets call $\phi$ a post-condition and $\phi =  WP(False, \pi[i+1,n])$.\\
  Where $n$ is the length of the error trace.
 A statement $\pi[i]$ in an error trace $\pi$ is relevant with respect to the non-flow sensitive criteria $(*)$ if the conjunction of the the three formulas $(\psi,\pi[i],\neg \phi) $ is unsatisfiable and $\pi[i]$ is in the unsatisfiable core.\\
 $\pi[i]$ is considered relevant with respect to non-flow sensitive criteria $(@)$ if  $(\psi,\pi[i],\neg \phi) $ is satisfiable. (In this case, $\pi[i]$ is a non-deterministic input statement $(Havoc)$).\\
+\rule{\textwidth}{1pt}\\
+Algorithm 1: \textbf{nonFlow}(trace $\pi$)\\
+\noindent\rule{12cm}{0.4pt}\\
+\textbf{\textit{Input:}} Trace $\pi$ of length n.\\
+\textbf{\textit{Output:}} A list of relevant statements in the trace.
+\begin{lstlisting}
+nonFlow(trace)
+{
+	formula wpList = [];
+	relevantStatements =[];
+	wpList.append(FALSE);
+	for(i=n-1 to 0)
+	{
+		formula wp = WeakestPrecondition(last element of wpList, trace[i]);
+		wpList.append(wp);
+	}
+	for(i=n-1 to 0)
+	{
+		formula pre = NEGATIVE(wpList[i+1])
+		relevance = UNSATCORE(pre, trace[i],wpList[i]);
+		if(relevance == "unsatisfiable" AND trace[i] is in unsatisfiable core)
+		{
+			relevantStatements.append(trace[i]);
+		}
+		
+	}
+	return(relevantStatements);
+}
+\end{lstlisting}
+\rule{\textwidth}{1pt}\\
 For example consider the following code:
 \begin{lstlisting}
 foo()

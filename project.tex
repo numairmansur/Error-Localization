@@ -163,14 +163,14 @@ We will encode the (error?)trace into a so called extended trace formula which c
 
 \subsubsection*{Formal Setting:}
 Let $X$ be a fixed set of variables which we call "program variables", and let $L$ be a set of labels. We denote by $Expr(X)$ the set of terms built from variables in $X$ and we denote by $Preds(X)$ the set of all quantifier-free formulas with free variables in $X$.\\
-A \textit{program statement} $st$ is either a conditional choice, a while loop, a sequence of statements, an assignment or a label.
-$$st := if\ \mathbf{cond}\ then\ \mathbf{st}\ else\ \mathbf{st}\ |\ while\ \mathbf{cond}\ do\ \mathbf{st}\ |\ st;st\ |\ x:=e\ |\ label\ l$$
-Labels have no operational meaning. They are only used to uniquely identify certain points during the execution of the program statement.\\
+A \textit{program statement} $st$ is either a conditional choice, a while loop, a sequence of statements, an assignment or an error label.
+$$st := if\ \mathbf{cond}\ then\ \mathbf{st}\ else\ \mathbf{st}\ |\ while\ \mathbf{cond}\ do\ \mathbf{st}\ |\ st;st\ |\ x:=e\ |\ label\ error$$
+Error labels have no operational meaning. They are only used to uniquely identify the error states at certain points during the execution of the program statement.\\
 A program $P=<st,\Phi>$ consists of a program statement $st$, and an assertion map.
-$$\Phi: L \rightarrow Preds(X)$$
-which maps each label $L$ in st to a formula that should hold at the point of execution of $st$ determined by $L$.\\
+$$\Phi: error \rightarrow Preds(X)$$
+which maps each error label $error$ in st to a formula that should not hold at the point of execution of $st$ determined by $error$.\\
 We define the semantics of program statements and programs in terms of $atomic$ $statements$ which are defined by the following grammar.
-$$st^a  := if\ \mathbf{cond}\ |\ endif\ |\ x:=e\ |\ label\ L\ |\ havoc\ \mathbf{cond}$$
+$$st^a  := assume(\mathbf{cond})\ |\ x:=e\ |\ label\ error\ |\ havoc\ \mathbf{cond}$$
 A \textbf{\textit{trace}} is a finite sequence of atomic statements. Let $\pi$ be a trace of length $n$.\\
 A program state $S$ is a function that assigns a value $S(x)$ to each program variable $x \in X$. Formulas $Preds(X)$ can also be called state formulas and we write $S \Rightarrow F$ to denote that a state $S$ satisfies a state formula $F$.\\
 The formulas $Preds(X \cup X')$ are called \textbf{\textit{transition formulas}}. We use transition formulas to represent the semantics of atomic statements in a trace, where the variables $X'$ denote the values of the variables from $X$ in the next state. We write $s,s' \Rightarrow T$ to denote that states $s$ and $s'$ satisfy the transition formula $T$.\\
@@ -178,35 +178,25 @@ An \textit{\textbf{execution}} $\sigma$ of a trace $\pi$ of length $n$ is a sequ
 $$TF(\pi) := T[\pi[0]]^{<0>} \wedge ....... \wedge T[\pi[n-1]]^{<n-1>}$$
 A trace is called feasible if its trace formula is satisfiable, otherwise we call it infeasible. \\
 A program $P = <st,\Phi>$ is safe if for every trace $\pi \in Trace(P)$ whose final statement is a label statement and every execution $\sigma$ of $\pi$, the final state of $\sigma$ satisfies $\Phi(l)$.\\
-If a program is not safe, an error can be witnessed along a trace. The error corresponds to a set of executions that violate the assertion associated with the last label of the trace. We call it the violated \textbf{\textit{correctness assertion}} as mentioned in the introduction section of this sub-section. \\
-\textbf{Error \& Error Trace: }For an unsafe program $P=<st, \Phi>$ , with a trace $\pi = st_0^a;.....st_{n-2}^a;label\ l$, an error precondition $\Psi$, a state formula $\phi$, such that $\Phi(l)=\phi$, we say that there is an \textbf{\textit{error}} in the program $P$ if the following conditions hold :\\
-1) $\Psi \wedge TF(\pi)$ is satisfiable \\
-2) $\Psi \wedge TF(\pi) \wedge \phi^{<n>} $ is unsatisfiable\\
-In this case $\pi$ is called an \textbf{\textit{error trace}}. Hence for an error trace $\pi$, no execution of the trace $\pi$ that starts in a state satisfying the \textbf{\textit{error pre-condition}} $\Psi$ ends in a state satisfying the postcondition $\phi$.
+If a program is not safe, an error can be witnessed along a trace. The error corresponds to a set of executions that violate the assertion associated with the last label of the trace.\\
+\textbf{Error \& Error Trace: }For an unsafe program $P=<st, \Phi>$ , with a trace $\pi = st_0^a;.....st_{n-2}^a;label\ error$, an error precondition $\Psi$, a state formula $\phi$, such that $\Phi(error)=\phi$, we say that there is an \textbf{\textit{error}} in the program $P$ if the following condition hold :\\
+$\Psi \wedge TF(\pi) \wedge \phi^{<n>} $ is satisfiable.\\
+In this case $\pi$ is called an \textbf{\textit{error trace}}. Hence for an error trace $\pi$, no execution of the trace $\pi$ that starts in a state satisfying the \textbf{\textit{error pre-condition}} $\Psi$ ends in a state satisfying the postcondition $\phi$.\\
+\textbf{Weakest Precondition Operator:} For some given formula $R \in Preds(X)$, and a program statement $st$, the weakest precondition operator returns the weakest formula that must be true such that if we execute $st$, $R$ holds. 
+$$wp(st,R) \wedge T[st] \Rightarrow R$$.
+
 
 \subsubsection{Preliminary definitions (to be discarded)}
-\textbf{Trace:} We assume a fixed set of statements $\Sigma$. A $trace$ is a sequence of statements, i.e $$ \tau = st_1 ... st_n$$
-where $st_1...st_n \in \Sigma$ and $n \geq 0$ (the sequence is possibly empty). We view a statement $st$ as a letter and a trace $\tau$ as a word over the alphabet $\Sigma$, i.e. $\tau \in \Sigma^*$. Since one calls a set of words a $language$, the set of traces is the language of all words over the alphabet $\Sigma$.
-$${traces} = \Sigma^*$$
-\textbf{Program Automata}: Programs and their control flow structure can be presented with the help of a program automata. Program automata provide a simple model of programs that abstracts from the syntactic constructs and semantics of specific programming languages.\\
-A program automaton is a finite automaton. A state in a program automaton corresponds to a program location, and transitions between two states are labelled with program statements. That is, a program automaton accepts a regular language of finite words over statements. Each word in this language corresponds to one control flow path. Not every path of a program automaton gives rise to feasible executions.\\
-Formally , let $\Sigma$ be a fixed set of program statements. A $program$ $automaton A$ is a tuple $(Loc, \delta,l_0,l_e)$ where
-\\
-- $Loc$ is a finite set of locations.\\
-- $\delta_p \subseteq Loc x \Sigma x Loc$ is a finite transition relation,\\
-- $l_0$ is an initial location, and\\
-- $l_e$ is an exit location.\\
-We interpret $A$ as a finite automaton over alphabet $\Sigma$ with intial state $l_0$ and unique final state $l_e$.\\
-\textbf{Error Trace:} We call a trace and error trace if that trace is accepted by a Program Automaton and that trace corresponds to a path from the initial state to the error location. \\
 \textbf{Weakest Precondition Operator (Def 1): }For some given program statement $S$ and some postcondition $R$ there is a (possibly empty) set of program states such that if execution of $S$ is initiated from one of these states then $S$ is guaranteed to terminate in a state for which $R$ is true. The weakest precondition of $S$ with respect to $R$, normally written $wp (S,R)$ is a predicate that characterizes this set of states.\\
 \textbf{Def 2: }For some given logical predicate $R$, and a program statement $ST$, $wp(R,ST)$ is defined to be the weakest logical predicate that must be true before executing $S$ in order to prove that $R$ is true afterwards. \cite{wpdefinition}.\\
-Let us assume variable $x$ denotes the tuple of variables involved in statement $ST$. Then, a given Hoare Triple $\{P\} ST \{R\}$ is provable in Hoare Logic for total corectness if and only if the first-order predicate below holds:
-$$\forall x,P \Rightarrow wp(ST,R)$$
-\textbf{Error Pre-condition: } ...
+Let us assume variable $x$ denotes the tuple of variables involved in statement $ST$. Then, a given Hoare Triple $\{P\} ST \{R\}$ is provable in Hoare Logic for total correctness if and only if the first-order predicate below holds:
+$$\forall x,P \Rightarrow wp(ST,R)$$.
+
 
 
 \subsubsection{Definition}
-We say that in a error trace $\pi$, an assignment statement $\pi[i]$ is relevant w.r.t non-flow sensitive relevancy criteria if after replacing that statement in the trace with a havoc statement to get a new trace $\pi'$ , there exists an execution $\sigma'$ in $Execs(\pi')$, such that $\Psi \wedge TF(\pi') \wedge \phi^{<n>} $ is satisfiable.
+If a relevant assignment statement in an error trace is removed or replaced by a non-deterministic input statement (havoc), then this can alter the observable error and we cannot guarantee any more that we will reach the error after executing the new error trace. \\
+More formally, we say that in a error trace $\pi$, an assignment statement $\pi[i]$ is relevant w.r.t non-flow sensitive relevancy criteria if after replacing that statement in the trace with a havoc statement to get a new trace $\pi'$ , there exists an execution $\sigma'$ in $Execs(\pi')$, such that $\Psi \wedge TF(\pi') \wedge \phi^{<n>} $ is satisfiable.
 \\
 For example:
 \begin{lstlisting}
@@ -283,7 +273,8 @@ $\pi[4] \Longrightarrow x=1$\\
 $\phi =  WP(False, \pi[5,7]) \Longrightarrow x=0 \vee \neg(z=0)$\\
 \\
 The formula $(\psi,\pi[4],\neg \phi)$ is unsatisfiable and $\pi[4]$ is in the unsatisfiable core. Hence $\pi[4]$ is relevant with respect to Non-Flow Sensitive relevance criterion and we therefore label it with a $[*]$.
-
+\subsubsection{Example}
+...
 \subsection{Flow Sensitive Relevance criteria }
 The definition of relevancy is actually similar to the non-flow sensitive case. The only thing different is that now we take branches in the trace into account. If there is a branch in the error trace, the relevancy of the statements inside the error trace will only be calculated if the branch as a whole is relevant to the error. We see that we can get slightly different results from the Non-Flow Sensitive case because it is possible that a statement might be relevant with respect to non-flow sensitive case but it lies inside a branch which is not relevant. \\
 When we say that a branch $\pi[i,j]$ must be relevant to the error, we mean that the branch is reduced to a transition formula which we call a $"Markhor Formula"$ and it's relevancy is calculated in the same way as we did for a statement in the non-flow sensitive case (by checking if the conjunction of $(\psi, \pi[i],\neg \phi)$ is unsatisfiable and the statement is in the unsatisfiable core).

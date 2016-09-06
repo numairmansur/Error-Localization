@@ -163,18 +163,33 @@ We will encode the (error?)trace into a so called extended trace formula which c
 
 \subsubsection*{Formal Setting:}
 -----------------------------------------------\\
-ADD Control Flow Graph Formalism here !!\\
------------------------------------------------\\
+We present programs and their control flow structure using \textit{program automata}. Program automata provide a simple model of programs that abstracts from the syntactic constructs and semantics of specific programming languages. A program automaton is a finite automaton. A state in a program automaton corresponds to a program location and transitions between two states are labelled with program statements. That is, program automaton accepts a regular language of finite words over statements. Each word in this language corresponds to one control flow path. Not every path of a program automaton gives rise to a feasible execution [COME BACK TO FEASIBILITY OF AN EXECUTION].
+Formally, let $\Sigma$ be a fixed set of program statements. A program automaton $A$ is a tuple $(Loc, \delta, l_0, l_{exit},l_{error})$ where\\
+- $Loc$ is a finite set of locations.\\
+- $\delta \subseteq Loc$ x$\ \Sigma$ x $Loc$ is a finite transition relation.\\
+- $l_0$ is an initial location.\\
+- $l_{exit}$ is a set of exit locations.\\
+- $l_{error}$ is a set of error locations.\\
+We interpret $A$ as a finite automaton over alphabet $\Sigma$ with initial state $l_0$ and final states $l_{exit}$ or $l_{error}$. A \textit{run} $\rho$ of $A$ is a finite sequence of locations and statements $l_0st_0l_1....st_{n-1}l_n$, such that for all $i \in [0,n)$,  $(l_i,st_i,l_{i+1}) \in \delta$. A \textit{trace} is a finite sequence of statements. We call $trace(\rho) = st_0...st_{n-1}$ the trace associated with $\rho$. A run is accepting if its final state is in $l_{exit}$ or $l_{error}$. We call a word $\pi \in \Sigma^*$ a trace of $A$ if $\pi= trace(\rho)$ for some accepting run $\rho$ of $A$.\\
+We present the semantics of program automata using formulas in first-order logic. Let X be a fixed set of program variables. A program state $s$ is a function that assigns a value $s(x)$ to each program variable $x \in X$. A \textit{state formula} F is a first-order constraint over free variables from X. We write $s \Rightarrow F$ to denote that a state $s$ satisfies a state formula $F$.\\
+For a variable $x \in X$ and $i \in N$, we denote by $x^{<i>}$ the variable which models the value of $x$ in a state that is shifted $i$ times into the future. We extend this shift function from variables to sets of variables, as expected, and we denote by $X'$ the set of variables $X^{<1>}$. For a formula F with free variables from Y, we write $F^{<i>}$ for the formula obtained by replacing each occurance of a variable $y \in Y$ in F with the variable $y^{<i>}$. A \textit{transition formula T}  is a first order constraint over free variables from $X \cup X'$, where variables $X'$ denote the values of the variables from $X$ in the next state. That is, a transition formula T represents a binary relation on states. We write $s,s' \Rightarrow T$ to denote that states $s$ and $s'$ satisfy the transition formula $T$. We assume that every statement $st \in \Sigma$ has an associated transition formula $TF(\sigma)$ that provides the semantics of $st$. For example the transition formula of an assume statement can be defined as the $TF(assume(F)) \equiv F \bigwedge X = X'$, where $X = X'$ stands for the conjunction of equalities $x=x'$ for all $x \in X$.\\
+For a trace $\pi \in \Sigma^*$ with $\pi = st_0st_1.....st_n$, we define its \textit{trace formula} $TF(\pi)$ as the conjunction of the shifted transition formulas of the statements in $\pi$
+$$TF(\pi) = TF(st_0) \bigwedge TF(st_1)^{<1>} \bigwedge ..... \bigwedge TF(st_n)^{<n>}$$
+An \textit{\textbf{execution}} $\sigma$ of a trace $\pi$ of length $n$ is a sequence of states $s_0....s_n$ such that for all $0 \leq i \leq n$, $s_i,s_{i+1} \Rightarrow T[\pi[i]]$. We denote by $Execs(\pi)$ the set of all executions of $\pi$.
 A trace is called feasible if its trace formula is satisfiable, otherwise we call it infeasible. \\
-A program $P = <st,\Phi>$ is safe if for every trace $\pi \in Trace(P)$ whose final statement is an error label statement and every execution $\sigma$ of $\pi$, the final state of $\sigma$ does not satisfies $\Phi(error)$.\\
-If a program is not safe, an error can be witnessed along a trace. The error corresponds to a set of executions that satisfies the error label at the end of the trace.\\
-\textbf{Error \& Error Trace: }For an unsafe program $P=<st, \Phi>$ , with a trace $\pi = st_0^a;.....st_{n-2}^a;label\ error$, an error precondition $\Psi$, a state formula $\phi$, such that $\Phi(error)=\phi$, we say that there is an \textbf{\textit{error}} in the program $P$ if the following condition hold :\\
-$\Psi \wedge TF(\pi) \wedge \phi^{<n>} $ is satisfiable.\\
-In this case $\pi$ is called an \textbf{\textit{error trace}}. Hence for an error trace $\pi$, no execution of the trace $\pi$ that starts in a state satisfying the \textbf{\textit{error pre-condition}} $\Psi$ ends in a state satisfying the postcondition $\phi$.\\
+--  --  --  --  --  --  --  --  --  --  --  --  --  --  -- \\
+(!!Don't Read!!)(((A program automata is safe if for every trace $\pi \in Trace(P)$ whose final statement is an error label statement and every execution $\sigma$ of $\pi$, the final state of $\sigma$ does not satisfies $\Phi(error)$.)))\\
+--  --  --  --  --  --  --  --  --  --  --  --  --  --  -- \\
+A program is safe if all the feasible traces in the corresponding program automata don’t have an error state as the end state.[OK?]\\
+If a program is not safe, an error can be witnessed along a trace. The error corresponds to a set of executions that satisfies the transition formula of statement at the end of the trace.\\
+\textbf{Error \& Error Trace: }For an unsafe program $P$ , with a trace $\pi = st_0;.....st_{n-1};$ whose corresponding run's last state is an error state, an error precondition $\Psi$, a state formula $\phi$, such that $TF[\pi[n]]=\phi$, we say that there is an \textbf{\textit{error}} in the program $P$ if the following conditions hold :\\
+1) $\Psi \wedge TF(\pi)$ is satisfiable.\\
+2) $\Psi \wedge TF(\pi) \wedge \phi^{<n>} $ is un-satisfiable.\\
+In this case $\pi$ is called an \textbf{\textit{error trace}}. Hence for an error trace $\pi$, no execution of the trace $\pi$ that starts in a state satisfying the \textbf{\textit{error pre-condition}} $\Psi$ ends in an exit state.\\
 \textbf{Weakest Precondition Operator:} For some given formula $R \in Preds(X)$, and a program statement $st$, the weakest precondition operator $WP()$ returns the weakest formula that must be true such that if we execute $st$, $R$ holds. 
 $$WP(T[st],R) \wedge T[st] \Rightarrow R$$
 So according to the above definition, the error-precondition for an error trace $\pi$ is:
-$$error\ precondition:WP(T[\pi],False)$$
+$$error\ precondition:WP(TF[\pi],False)$$
 
 
 \subsubsection{Preliminary definitions (to be discarded)}

@@ -1,0 +1,6 @@
+Weakest Precondition Operator --
+http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.480.4483&rep=rep1&type=pdf
+
+http://delivery.acm.org/10.1145/810000/803208/p175-manna.pdf?ip=132.230.194.9&id=803208&acc=ACTIVE%20SERVICE&key=2BA2C432AB83DA15%2E4191B95BD496D1F1%2E4D4702B0C3E38B35%2E4D4702B0C3E38B35&CFID=844516670&CFTOKEN=62033384&__acm__=1475071040_29047373f87a611eccf9c237d1c5556a
+
+http://research.microsoft.com/en-us/um/people/leino/papers/krml114a.pdf

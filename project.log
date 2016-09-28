@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2016.3.10)  6 SEP 2016 16:39
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2016.3.10)  28 SEP 2016 17:29
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -506,29 +506,26 @@ Underfull \hbox (badness 10000) in paragraph at lines 131--136
 
 LaTeX Warning: Command \textquoteright invalid in math mode on input line 155.
 
-[6]
-Overfull \hbox (5.71391pt too wide) in paragraph at lines 177--190
-\OT1/cmr/bx/n/10 Error & Er-ror Trace: \OT1/cmr/m/n/10 For an un-safe pro-gram 
-$\OML/cmm/m/it/10 P$ \OT1/cmr/m/n/10 , with a trace $\OML/cmm/m/it/10 ^^Y \OT1/
-cmr/m/n/10 = \OML/cmm/m/it/10 st[]\OT1/cmr/m/n/10 ; \OML/cmm/m/it/10 :::::st[]\
-OT1/cmr/m/n/10 ;$
+[6] [7]
+Underfull \hbox (badness 10000) in paragraph at lines 189--194
+
  []
 
-[7] [8] [9]
-Underfull \hbox (badness 10000) in paragraph at lines 304--311
+[8] [9] [10]
+Underfull \hbox (badness 10000) in paragraph at lines 305--312
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 304--311
+Underfull \hbox (badness 10000) in paragraph at lines 305--312
 
  []
 
-[10] [11] [12] (./project.aux) ) 
+[11] [12] [13] (./project.aux) ) 
 Here is how much of TeX's memory you used:
  4144 strings out of 494985
  54868 string characters out of 6180356
- 199557 words of memory out of 5000000
+ 205557 words of memory out of 5000000
  7310 multiletter control sequences out of 15000+600000
  9728 words of font info for 35 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
@@ -549,10 +546,10 @@ ic/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfo
 nts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm
 /cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.
 pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb>
-Output written on project.pdf (12 pages, 239866 bytes).
+Output written on project.pdf (13 pages, 240480 bytes).
 PDF statistics:
- 111 PDF objects out of 1000 (max. 8388607)
- 79 compressed objects within 1 object stream
+ 115 PDF objects out of 1000 (max. 8388607)
+ 82 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -182,14 +182,15 @@ A trace is called feasible if its trace formula is satisfiable, otherwise we cal
 --  --  --  --  --  --  --  --  --  --  --  --  --  --  -- \\
 A program is safe if all the feasible traces in the corresponding program automata don’t have an error state as the end state.[OK?]\\
 If a program is not safe, an error can be witnessed along a trace. The error corresponds to a set of executions that satisfies the transition formula of statement at the end of the trace.\\
-\textbf{Error \& Error Trace: }For an unsafe program $P$ , with a trace $\pi = st_0;.....st_{n-1};$ whose corresponding run's last state is an error state, an error precondition $\Psi$, a state formula $\phi$, such that $TF[\pi[n]]=\phi$, we say that there is an \textbf{\textit{error}} in the program $P$ if the following conditions hold :\\
+\textbf{Weakest Precondition Operator:} For some given formula $R \in Preds(X)$, and a program statement $st$, the weakest precondition operator $wp()$ returns the weakest formula that must be true such that if we execute $st$, $R$ holds. 
+$$wp(T[st],R) \wedge T[st] \Rightarrow R$$
+$wp(st,R)$ is a predicate that characterizes all pre-states of $st$ from which no execution will go wrong and from which every execution ends in a state satisfying $R$.\\
+\textbf{Error-Precondition:} In a trace $\pi$ that ends in an error state, an error-precondition can be defined as the following:
+$$error\ precondition:wp(TF[\pi],False)$$
+\textbf{Error \& Error Trace: }For an unsafe program, with a trace $\pi = st_0;.....st_{n-1};$ whose corresponding run's last state is an error state, an error precondition $\Psi$, a state formula $\phi$, such that $TF[\pi[n]]=\phi$, we say that there is an \textbf{\textit{error}} in the program if the following conditions hold :\\
 1) $\Psi \wedge TF(\pi)$ is satisfiable.\\
 2) $\Psi \wedge TF(\pi) \wedge \phi^{<n>} $ is un-satisfiable.\\
-In this case $\pi$ is called an \textbf{\textit{error trace}}. Hence for an error trace $\pi$, no execution of the trace $\pi$ that starts in a state satisfying the \textbf{\textit{error pre-condition}} $\Psi$ ends in an exit state.\\
-\textbf{Weakest Precondition Operator:} For some given formula $R \in Preds(X)$, and a program statement $st$, the weakest precondition operator $WP()$ returns the weakest formula that must be true such that if we execute $st$, $R$ holds. 
-$$WP(T[st],R) \wedge T[st] \Rightarrow R$$
-So according to the above definition, the error-precondition for an error trace $\pi$ is:
-$$error\ precondition:WP(TF[\pi],False)$$
+In this case $\pi$ is called an \textbf{\textit{error trace}}. Hence for an error trace $\pi$, no execution of the trace $\pi$ that starts in a state satisfying the error pre-condition $\Psi$ ends in an exit state.\\
 
 
 \subsubsection{Preliminary definitions (to be discarded)}

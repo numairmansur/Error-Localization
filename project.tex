@@ -38,7 +38,7 @@
 The most tedious task in a programmer’s routine is to spend time on debugging and to determine the cause of the error. Debugging can be made much simpler if we can determine automatically what program segments are actually responsible for the error. This process of automatically determining error locations is called \textbf{“Fault Localization”}.
 \\
 Fault Localization encompasses the task of identification of the program statements that are \textbf{relevant} for the error trace and determining the variables whose values should be tracked in order to understand the cause of the error. 
-\\
+ \\
 There can be many notions of error relevancy. During my master praktikum, I worked with and developed algorithm for two new relevancy criterion, which we called Flow-Sensitive and non Flow-Sensitive error relevancy. A part of this work will be to formalize these two new types of error relevancy. But first we need a basic formal definition to "relevancy", that is, what does it mean that a statement is relevant for an error. Surprisingly enough, I was unable to find a formal and a generally accepted definition of error relevancy in the literature. But this also makes sense because relevancy is not a well established concept and is a hard thing to define, let alone formally. Therefore, another aim of this project is to try to give a formal definition to error relevancy.
 \subsection{Relevant Work}
 In the paper Flow-Sensitive Fault Localization \cite{faultlocalization}, the authors take into account the flow of the program while determining the statements that are relevant for the error. They do it by a new flow-sensitive encoding of error traces into trace formulas. After which, by identifying the irrelevant portions of the new trace formula, we can isolate the possible cause of the error. The result of a flow-sensitive fault localization not only explains why the error occurred, but also justifies why the statements leading to the error were executed \cite{faultlocalization}.\\
@@ -173,6 +173,19 @@ Formally, let $\Sigma$ be a fixed set of program statements. A program automaton
 We interpret $A$ as a finite automaton over alphabet $\Sigma$ with initial state $l_0$ and final states $l_{exit}$ or $l_{error}$. A \textit{run} $\rho$ of $A$ is a finite sequence of locations and statements $l_0st_0l_1....st_{n-1}l_n$, such that for all $i \in [0,n)$,  $(l_i,st_i,l_{i+1}) \in \delta$. A \textit{trace} is a finite sequence of statements. We call $trace(\rho) = st_0...st_{n-1}$ the trace associated with $\rho$. A run is accepting if its final state is in $l_{exit}$ or $l_{error}$. We call a word $\pi \in \Sigma^*$ a trace of $A$ if $\pi= trace(\rho)$ for some accepting run $\rho$ of $A$.\\
 We present the semantics of program automata using formulas in first-order logic. Let X be a fixed set of program variables. A program state $s$ is a function that assigns a value $s(x)$ to each program variable $x \in X$. A \textit{state formula} F is a first-order constraint over free variables from X. We write $s \Rightarrow F$ to denote that a state $s$ satisfies a state formula $F$.\\
 For a variable $x \in X$ and $i \in N$, we denote by $x^{<i>}$ the variable which models the value of $x$ in a state that is shifted $i$ times into the future. We extend this shift function from variables to sets of variables, as expected, and we denote by $X'$ the set of variables $X^{<1>}$. For a formula F with free variables from Y, we write $F^{<i>}$ for the formula obtained by replacing each occurance of a variable $y \in Y$ in F with the variable $y^{<i>}$. A \textit{transition formula T}  is a first order constraint over free variables from $X \cup X'$, where variables $X'$ denote the values of the variables from $X$ in the next state. That is, a transition formula T represents a binary relation on states. We write $s,s' \Rightarrow T$ to denote that states $s$ and $s'$ satisfy the transition formula $T$. We assume that every statement $st \in \Sigma$ has an associated transition formula $TF(\sigma)$ that provides the semantics of $st$. For example the transition formula of an assume statement can be defined as the $TF(assume(F)) \equiv F \bigwedge X = X'$, where $X = X'$ stands for the conjunction of equalities $x=x'$ for all $x \in X$.\\
+
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+st & T[st] \\
+\hline
+assignment statement $(x := e)$ & $x'=e \bigwedge \lbrace X$\textbackslash$x \rbrace = \lbrace X'$\textbackslash $x' \rbrace$ \\
+assume statement $(assume(cond))$ & $cond \bigwedge X=X'$  \\
+havoc statement $havoc(cond)$ & $cond'\bigwedge \lbrace X$\textbackslash$vars (cond) \rbrace = \lbrace X'$\textbackslash$vars(cond') \rbrace$\\
+\hline
+\end{tabular}
+\end{center}
+
 For a trace $\pi \in \Sigma^*$ with $\pi = st_0st_1.....st_n$, we define its \textit{trace formula} $TF(\pi)$ as the conjunction of the shifted transition formulas of the statements in $\pi$
 $$TF(\pi) = TF(st_0) \bigwedge TF(st_1)^{<1>} \bigwedge ..... \bigwedge TF(st_n)^{<n>}$$
 An \textit{\textbf{execution}} $\sigma$ of a trace $\pi$ of length $n$ is a sequence of states $s_0....s_n$ such that for all $0 \leq i \leq n$, $s_i,s_{i+1} \Rightarrow T[\pi[i]]$. We denote by $Execs(\pi)$ the set of all executions of $\pi$.

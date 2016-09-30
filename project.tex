@@ -200,9 +200,9 @@ $$wp(T[st],R) \wedge T[st] \Rightarrow R$$
 $wp(st,R)$ is a predicate that characterizes all pre-states of $st$ from which no execution will go wrong and from which every execution ends in a state satisfying $R$.\\
 \textbf{Error-Precondition:} In a trace $\pi$ that ends in an error state, an error-precondition can be defined as the following:
 $$error\ precondition:wp(TF[\pi],False)$$
-\textbf{Error \& Error Trace: }For an unsafe program, with a trace $\pi = st_0;.....st_{n-1};$ whose corresponding run's last state is an error state, an error precondition $\Psi$, a state formula $\phi$, such that $TF[\pi[n]]=\phi$, we say that there is an \textbf{\textit{error}} in the program if the following conditions hold :\\
-1) $\Psi \wedge TF(\pi)$ is satisfiable.\\
-2) $\Psi \wedge TF(\pi) \wedge \phi^{<n>} $ is un-satisfiable.\\
+\textbf{Error \& Error Trace: }For an unsafe program, with a trace $\pi = st_0;.....st_{n-1};$ whose corresponding run's last state is an error state, an error precondition $\Psi$, a state formula $\phi$, such that $TF[\pi[n-1]]=\phi$, we say that there is an \textbf{\textit{error}} in the program if the following conditions hold :\\
+1) $\Psi \wedge TF(\pi[0,n-2])$ is satisfiable.\\
+2) $\Psi \wedge TF(\pi[0,n-2]) \wedge \phi^{<n-1>} $ is un-satisfiable.\\
 In this case $\pi$ is called an \textbf{\textit{error trace}}. Hence for an error trace $\pi$, no execution of the trace $\pi$ that starts in a state satisfying the error pre-condition $\Psi$ ends in an exit state.\\
 
 

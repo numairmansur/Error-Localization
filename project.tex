@@ -239,14 +239,20 @@ assume( y==3 )
 \end{lstlisting}
 If we replace $y:=3$ by $hacov(y)$, then $y$ can non-deterministically be assigned any value and there will be an execution for which condition in the end $\phi = (y!=3)$ will not be violated and the formula $\Psi \wedge TF(\pi'[0,n-2]) \wedge \phi^{<n-1>} $ is satisfiable.\\
 \textbf{Formal definition:}\\
--If we start the execution of the error trace from a state satisfying the error-precondition $\Psi$, then we will always end up in an error state. \\
-- If we start the execution of an error trace from a state other then the error-precondition, then we can get \textit{\textbf{stuck}}.\\
-- If we start the execution of an error trace from a state satisfying the error-precondition and we replace an assignment statement in the error trace with a havoc statement and we get stuck again after doing that,  then that statement is called a \textit{\textbf{relevant statement}}.
+-If wwe start the execution of the program from a state satisfying the error-precondition $\Psi$, then if we start the execution of the program from that state then we will always end up in an error state. \\
+- If we start the execution of an error trace from a state other then the error-precondition, then we can get \textit{\textbf{stuck}} (does that mean that we might not be able to execute the error trace properly ?).\\
+- If we start the execution of an error trace from a state satisfying the error-precondition and we replace an assignment statement in the error trace with a havoc statement and we get stuck again after doing that,  then that statement is called a \textit{\textbf{relevant statement}}.\\
+\textbf{What does it mean to get stuck?}\\
+Well, it depends. We can say that getting stuck can have two meanings. It depends on what are we considering: \\
+1) Program level scope\\
+2) Error Trace\\
+If we see it from the angle of \textbf{Program level scope}, then we can say that the execution of the program will not terminate and the program is stuck in a non-terminating loop or something.\\
+But ! if we see it from an angle of the \textbf{error trace}, then it could mean that now you are getting blocked in the error trace and an assume statement can now become a \textit{\textbf{blocking statement}}. Now how to formalize this ? an assume statement becoming a blocking statement.
 
 \subsubsection{Algorithm}
- Let $\pi$ be an error trace of length $n$, $WP()$ the weakest pre-condition operator, $\pi[i]$ the $i^{th}$ statement of $\pi$.\\
- Lets call $\Psi$ a pre-condition and $\Psi = \neg WP(False, \pi[i,n])$.\\
- Lets call $\phi$ a post-condition and $\phi =  WP(False, \pi[i+1,n])$.\\
+Let $\pi$ be an error trace of length $n$, $WP()$ the weakest pre-condition operator, $\pi[i]$ the $i^{th}$ statement of $\pi$.\\
+Lets call $\Psi$ a pre-condition and $\Psi = \neg WP(False, \pi[i,n])$.\\
+Lets call $\phi$ a post-condition and $\phi =  WP(False, \pi[i+1,n])$.\\
  Where $n$ is the length of the error trace.
 A statement $\pi[i]$ in an error trace $\pi$ is relevant with respect to the non-flow sensitive criteria $(*)$ if the conjunction of the the three formulas $(\psi,\pi[i],\neg \phi) $ is unsatisfiable and $\pi[i]$ is in the unsatisfiable core.\\
 $\pi[i]$ is considered relevant with respect to non-flow sensitive criteria $(@)$ if  $(\psi,\pi[i],\neg \phi) $ is satisfiable. (In this case, $\pi[i]$ is a non-deterministic input statement $(Havoc)$).\\

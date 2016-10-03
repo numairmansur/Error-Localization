@@ -246,8 +246,9 @@ If we replace $y:=3$ by $hacov(y)$, then $y$ can non-deterministically be assign
 Well, it depends. We can say that getting stuck can have two meanings. It depends on what are we considering: \\
 1) Program level scope\\
 2) Error Trace\\
-If we see it from the angle of \textbf{Program level scope}, then we can say that the execution of the program will not terminate and the program is stuck in a non-terminating loop or something.\\
-But ! if we see it from an angle of the \textbf{error trace}, then it could mean that now you are getting blocked in the error trace and an assume statement can now become a \textit{\textbf{blocking statement}}. Now how to formalize this ? an assume statement becoming a blocking statement.
+If we see it from the angle of \textbf{Program level scope}, then we can say that the execution of the program will not terminate and the program is stuck in a non-terminating loop or something. [NO !!!!! that does not make sense because all of our programs are terminating you idiot!]. [[SO REMOVE THIS ARGUMENT FROM HERE]] lol :D\\
+But ! if we see it from an angle of the \textbf{error trace}, then it could mean that now you are getting blocked in the error trace and an assume statement can now become a \textit{\textbf{blocking statement}}. Because in an error trace there are only assignment statements or assume statements. Assignment statements can't become blocking, only assume can. Now how to formalize this ? An assume statement becoming a blocking statement.\\
+One possible way to define this could be that  $\Psi \wedge TF(\pi'[0,n-2]) $ is now un-satisfialble. So we might formally be able to define the meaning of getting stuck. That is , the error trace execution can get stuck if $\Psi \wedge TF(\pi'[0,n-2]) $ is unsatisfiable. that also means that one of the assume statement is now a blocking statement.
 
 \subsubsection{Algorithm}
 Let $\pi$ be an error trace of length $n$, $WP()$ the weakest pre-condition operator, $\pi[i]$ the $i^{th}$ statement of $\pi$.\\

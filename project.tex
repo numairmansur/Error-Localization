@@ -155,14 +155,13 @@ $REL = \{ x=0 \}$ \\
 $\pi’ = \{x=1, y=1, y=2, havoc(x)\}$
 
 \subsection{Non-Flow Sensitive Relevance criteria }
-\subsubsection{Preliminary definitions (new ones)}
+\subsubsection{Preliminary definitions}
 \subsubsection*{Introduction:}
 Proof based fault localization techniques rely on encoding of an error trace into a so called error trace formula. A \textit{\textbf{error trace formula}} is an unsatisfiable logical formula (or is it ? isn't it unsatisfiable together with the post condition).\\
 An error is observable by executing an error trace starting from a state that satisfies an \textbf{\textit{error pre-condition}}.\\
 We will encode the (error?)trace into a so called extended trace formula which consists the error precondition, correctness assertion and the trace formula of the trace. When the extended trace formula is unsatisfiable, we say that the trace in the extended trace formula is an error trace and we say that we are seeing an "error".
 
 \subsubsection*{Formal Setting:}
------------------------------------------------\\
 We present programs and their control flow structure using \textit{program automata}. Program automata provide a simple model of programs that abstracts from the syntactic constructs and semantics of specific programming languages. A program automaton is a finite automaton. A state in a program automaton corresponds to a program location and transitions between two states are labelled with program statements. That is, program automaton accepts a regular language of finite words over statements. Each word in this language corresponds to one control flow path. Not every path of a program automaton gives rise to a feasible execution [COME BACK TO FEASIBILITY OF AN EXECUTION].
 Formally, let $\Sigma$ be a fixed set of program statements. A program automaton $A$ is a tuple $(Loc, \delta, l_0, l_{exit},l_{error})$ where\\
 - $Loc$ is a finite set of locations.\\
@@ -181,7 +180,7 @@ st & T[st] \\
 \hline
 assignment statement $(x := e)$ & $x'=e \bigwedge \lbrace X$\textbackslash$x \rbrace = \lbrace X'$\textbackslash $x' \rbrace$ \\
 assume statement $(assume(cond))$ & $cond \bigwedge X=X'$  \\
-havoc statement $havoc(cond)$ & $cond'\bigwedge \lbrace X$\textbackslash$vars (cond) \rbrace = \lbrace X'$\textbackslash$vars(cond') \rbrace$\\
+havoc statement $havoc(vars)$ & $vars'\bigwedge \lbrace X$\textbackslash$vars \rbrace = \lbrace X'$\textbackslash$vars' \rbrace$\\
 \hline
 \end{tabular}
 \end{center}
@@ -190,11 +189,7 @@ For a trace $\pi \in \Sigma^*$ with $\pi = st_0st_1.....st_n$, we define its \te
 $$TF(\pi) = TF(st_0) \bigwedge TF(st_1)^{<1>} \bigwedge ..... \bigwedge TF(st_n)^{<n>}$$
 An \textit{\textbf{execution}} $\sigma$ of a trace $\pi$ of length $n$ is a sequence of states $s_0....s_n$ such that for all $0 \leq i \leq n$, $s_i,s_{i+1} \Rightarrow T[\pi[i]]$. We denote by $Execs(\pi)$ the set of all executions of $\pi$.
 A trace is called feasible if its trace formula is satisfiable, otherwise we call it infeasible. \\
---  --  --  --  --  --  --  --  --  --  --  --  --  --  -- \\
-(!!Don't Read!!)(((A program automata is safe if for every trace $\pi \in Trace(P)$ whose final statement is an error label statement and every execution $\sigma$ of $\pi$, the final state of $\sigma$ does not satisfies $\Phi(error)$.)))\\
---  --  --  --  --  --  --  --  --  --  --  --  --  --  -- \\
-A program is safe if all the feasible traces in the corresponding program automata don’t have an error state as the end state.[OK?]\\
-If a program is not safe, an error can be witnessed along a trace. The error corresponds to a set of executions that satisfies the transition formula of statement at the end of the trace.\\
+A program is safe if all the feasible traces in the corresponding program automata don’t have an error state as the end state. If a program is not safe, an error can be witnessed along a trace.\\
 \textbf{Weakest Precondition Operator:} For some given formula $R \in Preds(X)$, and a program statement $st$, the weakest precondition operator $wp()$ returns the weakest formula that must be true such that if we execute $st$, $R$ holds. 
 $$wp(T[st],R) \wedge T[st] \Rightarrow R$$
 $wp(st,R)$ is a predicate that characterizes all pre-states of $st$ from which no execution will go wrong and from which every execution ends in a state satisfying $R$.\\
@@ -214,7 +209,7 @@ $$\forall x,P \Rightarrow wp(ST,R)$$.
 
 
 
-\subsubsection{Definition}
+\subsubsection{Non-Flow Sensitive Relevancy}
 Intuitively, in an error trace $\pi$ an assignment statement in an error trace is relevant w.r.t non-flow sensitive relevancy criteria if after removing or replacing that statement with a non-deterministic $havoc()$ to get a new trace $\pi'$, we can't be certain any more that we will reach the error state. We can also say that there exists an execution $\sigma'$ in $Execs(\pi')$, such that $\Psi \wedge TF(\pi'[0,n-2]) \wedge \phi^{<n-1>} $ is now satisfiable.\\
 For example:
 \begin{lstlisting}
@@ -239,14 +234,13 @@ assume( y==3 )
 \end{lstlisting}
 If we replace $y:=3$ by $hacov(y)$, then $y$ can non-deterministically be assigned any value and there will be an execution for which condition in the end $\phi = (y!=3)$ will not be violated and the formula $\Psi \wedge TF(\pi'[0,n-2]) \wedge \phi^{<n-1>} $ is satisfiable.\\
 \textbf{Formal definition:}\\
-We can give the formal description by making the following observations: \\
-1) If we start the execution of the program from a state satisfying the error-precondition $\Psi$, then if we start the execution of the program from that state then we will always end up in an error state. \\
+We can give the formal description by making the following three observations: \\
+1) If we start the execution of an error trace from a state satisfying the error-precondition $\Psi$, then we will always end up in an error state. \\
 2) If we start the execution of an error trace from a state other then the error-precondition, then we can get \textit{\textbf{stuck}} during the execution of the error trace .\\
-3) If we start the execution of an error trace from a state satisfying the error-precondition and we replace an assignment statement in the error trace with a havoc statement and we get stuck again after doing that,  then that statement is called a \textit{\textbf{relevant statement}}.\\
+3) If we start the execution of an error trace from a state satisfying the error-precondition and we replace an assignment statement in the error trace with a havoc statement and we get stuck again,  then that statement is called a \textit{\textbf{relevant statement}}.\\
 \textbf{What does it mean to get stuck?}\\
-Getting stuck could mean that now we are getting blocked in the error trace and an assume statement can now become a \textit{\textbf{blocking statement}}. By blocking statement, we mean that we cannot get passed that statement because the assumption is not true any more. [[Because in an error trace there are only assignment statements or assume statements. Assignment statements can't become blocking, only assume can. Now how to formalize this ? An assume statement becoming a blocking statement ]]\\
-One possible way to define this could be that  $\Psi \wedge TF(\pi'[0,n-2]) $ is now un-satisfialble. So we might formally be able to define the meaning of getting stuck. That is , the error trace execution can get stuck if $\Psi \wedge TF(\pi'[0,n-2]) $ is unsatisfiable. that also means that one of the assume statement is now a blocking statement.
-
+Getting stuck means that now we are getting blocked in the error trace and one of the assume statements in the trace is now a \textit{\textbf{blocking statement}}. By blocking statement, we mean that we cannot get passed that statement because the assumption is not true any more.\\
+Formally, we can define the error trace getting stuck by saying that \\  $\Psi \wedge TF(\pi'[0,n-2]) $ is now un-satisfiable.
 \subsubsection{Algorithm}
 Let $\pi$ be an error trace of length $n$, $WP()$ the weakest pre-condition operator, $\pi[i]$ the $i^{th}$ statement of $\pi$.\\
 Lets call $\Psi$ a pre-condition and $\Psi = \neg WP(False, \pi[i,n])$.\\

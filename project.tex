@@ -240,7 +240,15 @@ We can give the formal description by making the following three observations: \
 3) If we start the execution of an error trace from a state satisfying the error-precondition and we replace an assignment statement in the error trace with a havoc statement and we get stuck again,  then that statement is called a \textit{\textbf{relevant statement}}.\\
 \textbf{What does it mean to get stuck?}\\
 Getting stuck means that now we are getting blocked in the error trace and one of the assume statements in the trace is now a \textit{\textbf{blocking statement}}. By blocking statement, we mean that we cannot get passed that statement because the assumption is not true any more.\\
-Formally, we can define the error trace getting stuck by saying that \\  $\Psi \wedge TF(\pi'[0,n-2]) $ is now un-satisfiable.
+\textbf{Blocking Condition:}\\
+In an error trace $\pi$, and for an $i^{th}$ assume statement $\pi[i]$, a blocking condition $block[i]$ is: 
+$$wp(TF[\pi[0,i]],False)$$
+\textbf{Blocking Statement:}\\
+In an error trace $\pi$, a statement $\pi[i]$ is blocking if $block[i]$ is something other then $False$. Intuitively that means, that if for an assume statement, there exists a blocking condition, then that statement is blocking.\\
+\textbf{Getting stuck:}\\
+If replacing an assignment statement in the sub-trace $\pi[0,i]$ (where $\pi[i]$ is an assume statement) with a havoc statement results in $block[i] \subseteq \Psi$, then the error trace will get stuck at $\pi[i]$. Intuitively that mean that now there exists an execution of the error trace which begins with a state satisfying both the error precondition and the blocking condition for the statement $\pi[i]$ that will cause us to get stuck.\\
+\textbf{Relevancy using 'getting stuck' notation:}\\
+...
 \subsubsection{Algorithm}
 Let $\pi$ be an error trace of length $n$, $WP()$ the weakest pre-condition operator, $\pi[i]$ the $i^{th}$ statement of $\pi$.\\
 Lets call $\Psi$ a pre-condition and $\Psi = \neg WP(False, \pi[i,n])$.\\

@@ -210,7 +210,7 @@ $$\forall x,P \Rightarrow wp(ST,R)$$.
 
 
 \subsubsection{Non-Flow Sensitive Relevancy}
-Intuitively, in an error trace $\pi$ an assignment statement in an error trace is relevant w.r.t non-flow sensitive relevancy criteria if after removing or replacing that statement with a non-deterministic $havoc()$ to get a new trace $\pi'$, we can't be certain any more that we will reach the error state. We can also say that there exists an execution $\sigma'$ in $Execs(\pi')$, such that $\Psi \wedge TF(\pi'[0,n-2]) \wedge \phi^{<n-1>} $ is now satisfiable.\\
+Intuitively, in an error trace $\pi$ an assignment statement in an error trace is relevant w.r.t non-flow sensitive relevancy criteria if after removing or replacing that statement with a non-deterministic $havoc()$ to get a new trace $\pi'$, we can't be certain any more that we will reach the error state.\\
 For example:
 \begin{lstlisting}
 foo()
@@ -232,23 +232,114 @@ assume( x==1 )
 y := 3;
 assume( y==3 )
 \end{lstlisting}
-If we replace $y:=3$ by $hacov(y)$, then $y$ can non-deterministically be assigned any value and there will be an execution for which condition in the end $\phi = (y!=3)$ will not be violated and the formula $\Psi \wedge TF(\pi'[0,n-2]) \wedge \phi^{<n-1>} $ is satisfiable.\\
-\textbf{Formal definition:}\\
+If we replace $y:=3$ by $hacov(y)$, then $y$ can non-deterministically be assigned any value and there will be an execution for which condition in the end $\phi = (y!=3)$ will not be violated and we won't be able to reach the error state.\\
+\textbf{Formal definition (intuition):}\\
 We can give the formal description by making the following three observations: \\
 1) If we start the execution of an error trace from a state satisfying the error-precondition $\Psi$, then we will always end up in an error state. \\
-2) If we start the execution of an error trace from a state other then the error-precondition, then we can get \textit{\textbf{stuck}} during the execution of the error trace .\\
-3) If we start the execution of an error trace from a state satisfying the error-precondition and we replace an assignment statement in the error trace with a havoc statement and we get stuck again,  then that statement is called a \textit{\textbf{relevant statement}}.\\
-\textbf{What does it mean to get stuck?}\\
-Getting stuck means that now we are getting blocked in the error trace and one of the assume statements in the trace is now a \textit{\textbf{blocking statement}}. By blocking statement, we mean that we cannot get passed that statement because the assumption is not true any more.\\
-\textbf{Blocking Condition:}\\
-In an error trace $\pi$, and for an $i^{th}$ assume statement $\pi[i]$, a blocking condition $block[i]$ is: 
-$$wp(TF[\pi[0,i]],False)$$
-\textbf{Blocking Statement:}\\
-In an error trace $\pi$, a statement $\pi[i]$ is blocking if $block[i]$ is something other then $False$. Intuitively that means, that if for an assume statement, there exists a blocking condition, then that statement is blocking.\\
-\textbf{Getting stuck:}\\
-If replacing an assignment statement in the sub-trace $\pi[0,i]$ (where $\pi[i]$ is an assume statement) with a havoc statement results in $block[i] \subseteq \Psi$, then the error trace will get stuck at $\pi[i]$. Intuitively that mean that now there exists an execution of the error trace which begins with a state satisfying both the error precondition and the blocking condition for the statement $\pi[i]$ that will cause us to get stuck.\\
-\textbf{Relevancy using 'getting stuck' notation:}\\
-...
+2) If we start the execution of an error trace from a state other then the error-precondition, then we can get \textit{\textbf{restricted}} during the execution of the error trace.. \\
+3) If we start the execution of an error trace from a state satisfying the error-precondition and we replace an assignment statement in the error trace with a havoc statement and we get restricted, then that statement is a \textit{\textbf{relevant statement}}.\\
+\textbf{Restrictivness of a statement:}\\
+Getting restricted during the execution of a trace means that one of the assume statments is blocking the execution of the trace. That means that we cannot get passed that assumption because the guard of the assumtion is not true. \\
+Formally, in a trace $\pi$ an assume statement is restrictive iff \\
+$\exists pre$, where $pre$ is a state formula, such that $Post(\pi[0,i], pre) = False$\\
+or we can also say,
+$$Post(\pi[0,i-1], pre) \not \subseteq guard([\pi[i]])$$
+\textbf{Relevancy of a statement:}\\
+In an error trace $\pi$ with an error pre-condition $\Psi$ and a state formula $pre \subseteq \Psi$ if changing an assignment statement $\pi[i]$ to Havoc() causes some assume statement to become restrictve, then we say that the statement is relevant for the error.\\
+
+\textbf{Examples: }\\
+\textbf{1)}
+\begin{lstlisting}
+foo()
+{
+	x := 0;
+	y := 0;
+	if(y == 0)
+	{
+		x := 1;
+	}
+	else
+	{
+		y := 2;
+	}
+	assert(x == 0);
+}
+\end{lstlisting}
+Error Trace:
+\begin{lstlisting}
+[x = 0]
+[y = 0][*]
+assume(y == 0)
+[x = 1][*]
+assume(x != 0)
+\end{lstlisting}
+From the three assignment statements, if we change $[y = 0]$ to $havoc(y)$, then $assume(y == 0)$ becomes restrictive. Hence $[y = 0]$ is relevant. Same is the case with $[x = 1]$.\\
+\textbf{2)}
+\begin{lstlisting}
+foo()
+{
+	y := 0;
+	z := 0;
+	if(y == 0)
+	{
+		x := 1;
+		if(z == 0)
+		{
+			z := 1;
+		}
+	}
+	else
+	{
+		y := 2;
+	}
+	assert(x == 0);
+}
+\end{lstlisting}
+Error Trace:
+\begin{lstlisting}
+[y = 0] [*]
+[z = 0] [*]
+assume(y == 0)
+[x = 1] [*]
+assume(z == 0)
+[z = 1]
+assume( x != 0)
+\end{lstlisting}
+There are four assignment statements in the trace. If we change $z=1$ to $havoc(z)$ then no assume statement is becoming restrictive. \\
+If we change $x=1$ to $havoc(x)$ then $assume !(x=0)$ becomes restrictive. Same is the case for the remaining two assignment statements.\\
+\textbf{3)}
+\begin{lstlisting}
+foo()
+{
+	y := 0;
+	z := 0;
+	i := 0;
+	while(i < 2)
+	{
+		x := y;
+		y := y+1;
+		i := i+1:
+	}
+	assert(x == 2);
+}
+\end{lstlisting}
+Error Trace:
+\begin{lstlisting}
+[y = 0]
+[z = 0]
+[i = 0]
+assume(i < 2)
+[x = y]
+[y = y+1]
+[i = i+1]
+assume(i<2)
+[x = y]
+[y = y+1]
+[i = i+1]
+assume!(i<2)
+assume(x!=2)
+\end{lstlisting}
+CHECK AT HOME WHICH STATMENTS ARE RELEVANT HERE.
 \subsubsection{Algorithm}
 Let $\pi$ be an error trace of length $n$, $WP()$ the weakest pre-condition operator, $\pi[i]$ the $i^{th}$ statement of $\pi$.\\
 Lets call $\Psi$ a pre-condition and $\Psi = \neg WP(False, \pi[i,n])$.\\

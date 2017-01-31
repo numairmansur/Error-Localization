@@ -7,8 +7,7 @@
 \definecolor{codegreen}{rgb}{0,0.6,0}
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
 \definecolor{codepurple}{rgb}{0.58,0,0.82}
-\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
- 
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92} 
 \lstdefinestyle{mystyle}{
     backgroundcolor=\color{backcolour},   
     commentstyle=\color{codegreen},
@@ -377,34 +376,8 @@ nonFlow(trace)
 }
 \end{lstlisting}
 \rule{\textwidth}{1pt}\\
-For example consider the following code:
-\begin{lstlisting}
-foo()
-{
-  int y;
-  int x;
-  int z;
-  
-  y := 0;
-  z := 0;
-  if(y==0) 
-  {
-    x := 1;
-    if(z==0)
-    {
-      z := 1;
-    }
-  }
-  else 
-  {
-    y := 2;
-    y := 3;
-    y := 4;
-  }
-  assert(x == 0);
-}
-\end{lstlisting}
-For the above code we will get the following error trace:
+Taking example number 2 from above with the following error trace:
+
 \begin{lstlisting}
 y := 0; [*]
 z := 0; [*]
@@ -421,7 +394,7 @@ $\pi[4] \Longrightarrow x=1$\\
 $\phi =  WP(False, \pi[5,7]) \Longrightarrow x=0 \vee \neg(z=0)$\\
 \\
 The formula $(\psi,\pi[4],\neg \phi)$ is unsatisfiable and $\pi[4]$ is in the unsatisfiable core. Hence $\pi[4]$ is relevant with respect to Non-Flow Sensitive relevance criterion and we therefore label it with a $[*]$.
-\subsubsection{Example}
+\subsubsection{Proof of corectness of the algorithm:}
 ...
 \subsection{Flow Sensitive Relevance criteria }
 The definition of relevancy is actually similar to the non-flow sensitive case. The only thing different is that now we take branches in the trace into account. If there is a branch in the error trace, the relevancy of the statements inside the error trace will only be calculated if the branch as a whole is relevant to the error. We see that we can get slightly different results from the Non-Flow Sensitive case because it is possible that a statement might be relevant with respect to non-flow sensitive case but it lies inside a branch which is not relevant. \\

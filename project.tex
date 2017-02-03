@@ -245,6 +245,10 @@ or we can also say,
 $$Post(\pi[0,i-1], pre) \not \subseteq guard([\pi[i]])$$
 \textbf{Relevancy of a statement:}\\
 In an error trace $\pi$ with an error pre-condition $\Psi$ and a state formula $pre \subseteq \Psi$ if changing an assignment statement $\pi[i]$ to Havoc() causes some assume statement to become restrictve, then we say that the statement is relevant for the error.\\
+Formally: \\
+$\pi[i]$ is relevant if $\exists$ a trace $\pi'$, where\\
+$\pi'[i]$ is a havoc statement in terms of the variable on the left side of $\pi[i]$ and $\exists$ some assume statement at position $j$ such that \\
+$$post(\pi'[0,j-1], pre) = false$$ 
 
 \textbf{Examples: }\\
 \textbf{1)}
@@ -338,7 +342,6 @@ assume(i<2)
 assume!(i<2)
 assume(x!=2)
 \end{lstlisting}
-CHECK AT HOME WHICH STATMENTS ARE RELEVANT HERE.
 \subsubsection{Algorithm}
 Let $\pi$ be an error trace of length $n$, $WP()$ the weakest pre-condition operator, $\pi[i]$ the $i^{th}$ statement of $\pi$.\\
 Lets call $\Psi$ a pre-condition and $\Psi = \neg WP(False, \pi[i,n])$.\\

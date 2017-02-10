@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.1.29)  3 FEB 2017 15:56
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.1.29)  9 FEB 2017 17:07
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -613,25 +613,25 @@ Underfull \hbox (badness 10000) in paragraph at lines 196--201
  []
 
 [8]
-Underfull \hbox (badness 10000) in paragraph at lines 245--251
+Underfull \hbox (badness 10000) in paragraph at lines 245--250
 
  []
 
 [9] [10]
-LaTeX Font Info:    Try loading font information for OML+cmr on input line 320.
+LaTeX Font Info:    Try loading font information for OML+cmr on input line 319.
 
  (/usr/share/texlive/texmf-dist/tex/latex/base/omlcmr.fd
 File: omlcmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OML/cmr/m/n' in size <8> not available
-(Font)              Font shape `OML/cmm/m/it' tried instead on input line 320.
+(Font)              Font shape `OML/cmm/m/it' tried instead on input line 319.
  [11]
-Underfull \hbox (badness 10000) in paragraph at lines 393--400
+Underfull \hbox (badness 10000) in paragraph at lines 392--399
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 393--400
+Underfull \hbox (badness 10000) in paragraph at lines 392--399
 
  []
 
@@ -639,7 +639,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 393--400
 Here is how much of TeX's memory you used:
  4258 strings out of 494910
  55790 string characters out of 6179836
- 176111 words of memory out of 5000000
+ 177111 words of memory out of 5000000
  7496 multiletter control sequences out of 15000+600000
  9728 words of font info for 35 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
@@ -661,7 +661,7 @@ onts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/
 cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.
 pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></u
 sr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb>
-Output written on project.pdf (14 pages, 252495 bytes).
+Output written on project.pdf (14 pages, 252574 bytes).
 PDF statistics:
  122 PDF objects out of 1000 (max. 8388607)
  87 compressed objects within 1 object stream

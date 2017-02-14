@@ -212,14 +212,19 @@ $$\forall x,P \Rightarrow wp(ST,R)$$.
 
 \newpage
 \subsubsection{Non-Flow Sensitive Relevancy}
-An assignment statement is relevant in a trace if the assigned value matters for the reachibility of the error. If we are reaching the error [?] for any possible value, then the assignment is irrelevant.
-For example: \\
+An assignment statement is relevant in a trace if the assigned value matters for the reachibility of the error. If we are reaching the error [what does reaching the error means?] for any possible value, then the assignment is irrelevant.\\
+We can begin to formally define relevancy by first making the following three observations:\\
+1) If we start the execution \textbf{\textit{[What is an execution ?]}} of an error trace from a state satisfying the error-precondition $\Psi$, then we will always end up in an error state. \\
+2) If we start the execution of an error trace from a state which is not in the the error-precondition, then we can get \textit{\textbf{stuck}} during the execution of the error trace. Getting stuck means that one of the assume statments is blocking the execution of the trace and the guard in one of the assume statements is not satisfied. \\
+\textbf{\textit{Also define formally what it means to get stuck and what is an execution of an error trace.}}\\
+3) If we start the execution of an error trace from a state satisfying the error-precondition and we replace an assignment statement in the error trace with a havoc statement and we get stuck, then that statement is a \textit{\textbf{relevant statement}}.\\
+Consider the error trace below:
 \begin{lstlisting}
 y := 3;
 x := 1;
 assume( y==3 )
 \end{lstlisting}
-Consider the error trace above that we obtain from the following program:
+Which we obtain from the following program:
 \begin{lstlisting}
 foo()
 {
@@ -228,25 +233,15 @@ foo()
 	assert(y !=3 );
 }
 \end{lstlisting}
-If we replace $y:=3$ by $hacov(y)$, then $y$ can non-deterministically be assigned any value and there will be an execution for which assumption in the end $[y==3]$ will not be satisfied and we won't be able to reach the error state.\\
-EXPLAIN why x is not relevant. \\
-\textbf{Formal definition (intuition):}\\
-We can give the formal description by making the following three observations: \\
-1) If we start the execution[?] of an error trace from a state satisfying the error-precondition $\Psi$, then we will always end up in an error state. \\
-2) If we start the execution of an error trace from a state which is not in the the error-precondition, then we can get \textit{\textbf{stuck}} during the execution of the error trace.. \\
-\\ ALso define formally what it means to get stuck and what is an execution of an error trace.
-3) If we start the execution of an error trace from a state satisfying the error-precondition and we replace an assignment statement in the error trace with a havoc statement and we get restricted, then that statement is a \textit{\textbf{relevant statement}}.\\
-\\ MAYBE MERGE THESE TWO ? \\
-
-\textbf{Restrictivness of a statement:}\\
-Getting restricted means that one of the assume statments is blocking the execution of the trace. That means that we cannot get passed that assumption because the guard of the assumtion is not true. \\
-Merge the above definition with the above descriptions.\\
+If we replace $y:=3$ by $hacov(y)$, then $y$ can non-deterministically be assigned any value and there will be an execution for which assumption in the end $[y==3]$ will not be satisfied and we won't be able to satisfy the error state.\\
+On the other hand changing the statement $x := 1$ to $havoc(x)$ will have no effect on the assumption in the end. Hence it is not relevant.\\
+\textit{\textbf{[define Guard in the definitions section]}}
 \begin{mydef}[Restrictivness of a statement]
 Let $pre$ be a state formula, $\pi$ a trace and $i$ a position such that $\pi[i]$ is an assume statement. We call the assume statement $\pi[i]$ \emph{restricitve} iff $Post(\pi[0,i], pre) = False$.
-\end{mydef}
-We note that the above condition is equivilent to:\\
+\\We note that the above condition is equivilent to:
 $$Post(\pi[0,i-1], pre) \not \subseteq guard(\pi[i])$$
-DEFINE GUARD\\
+\end{mydef}
+
 \begin{mydef}[Relevancy of a statement]
 Let $\pi$ be an error trace and $\pi[i]$ be an assignment statement at position $i$ having the form $x:=t$, where $x$ is a variable and $t$ is an expression. Let $\pi'$ be the trace which is obtained by replacing $\pi[i]$ by  $havoc(x)$. Let $\Psi$ be the error precondition of $\pi$. The assignment statement $\pi[i]$ is \emph{relevant} if there exists some assume statement at position $j > i$ in $\pi'$ such that $\pi'[j]$ is restrictive for $\pi'$ and $\Psi$. 
 \end{mydef}

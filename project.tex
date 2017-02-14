@@ -3,6 +3,7 @@
 \usepackage{listings}
 \usepackage{color}
 \usepackage{amsmath}
+\usepackage{amsthm}
 \usepackage{graphicx}
 \definecolor{codegreen}{rgb}{0,0.6,0}
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
@@ -26,6 +27,8 @@
     showtabs=false,                  
     tabsize=2
 }
+\newtheorem{mydef}{Definition}
+
 \lstset{style=mystyle}
 \usepackage[utf8]{inputenc}
 \title{Fault Localization \& Relevance Analysis \\ {\tiny (For the latest version: http://numairmansur.github.io/Error-Localization/project.pdf)}}
@@ -193,7 +196,7 @@ A program is safe if all the feasible traces in the corresponding program automa
 $$wp(T[st],R) \wedge T[st] \Rightarrow R$$
 $wp(st,R)$ is a predicate that characterizes all pre-states of $st$ from which no execution will go wrong and from which every execution ends in a state satisfying $R$.\\
 \textbf{Error-Precondition:} In a trace $\pi$ that ends in an error state, an error-precondition can be defined as the following:
-$$error\ precondition:wp(TF[\pi],False)$$
+$$error\ precondition:\neg wp(TF[\pi],False)$$
 \textbf{Error \& Error Trace: }For an unsafe program, with a trace $\pi = st_0;.....st_{n-1};$ whose corresponding run's last state is an error state, an error precondition $\Psi$, a state formula $\phi$, such that $TF[\pi[n-1]]=\phi$, we say that there is an \textbf{\textit{error}} in the program if the following conditions hold :\\
 1) $\Psi \wedge TF(\pi[0,n-2])$ is satisfiable.\\
 2) $\Psi \wedge TF(\pi[0,n-2]) \wedge \phi^{<n-1>} $ is un-satisfiable.\\
@@ -209,47 +212,45 @@ $$\forall x,P \Rightarrow wp(ST,R)$$.
 
 \newpage
 \subsubsection{Non-Flow Sensitive Relevancy}
-An assignment statement is relevant if the assigned value matters for the reachibility of the error. If we are reaching the error state for any possible value, then the assignment is irrelevant. or equivilalntly we can say that in an error trace $\pi$ an assignment statement in an error trace is relevant w.r.t non-flow sensitive relevancy criteria if after replacing that statement with a non-deterministic $havoc()$ to get a new trace $\pi'$, we can't guarantee anymore that we will reach the error state.
-For example:
+An assignment statement is relevant in a trace if the assigned value matters for the reachibility of the error. If we are reaching the error [?] for any possible value, then the assignment is irrelevant.
+For example: \\
+\begin{lstlisting}
+y := 3;
+x := 1;
+assume( y==3 )
+\end{lstlisting}
+Consider the error trace above that we obtain from the following program:
 \begin{lstlisting}
 foo()
 {
+	y := 3;
 	x := 1;
-	y := 2;
-	If ( x == 1 )
-	{
-		y++;
-	}
 	assert(y !=3 );
 }
 \end{lstlisting}
-Error Trace $\pi$ will be:
-\begin{lstlisting}
-x := 1;
-y := 2;
-assume( x==1 )
-y := 3;
-assume( y==3 )
-\end{lstlisting}
 If we replace $y:=3$ by $hacov(y)$, then $y$ can non-deterministically be assigned any value and there will be an execution for which assumption in the end $[y==3]$ will not be satisfied and we won't be able to reach the error state.\\
+EXPLAIN why x is not relevant. \\
 \textbf{Formal definition (intuition):}\\
 We can give the formal description by making the following three observations: \\
-1) If we start the execution of an error trace from a state satisfying the error-precondition $\Psi$, then we will always end up in an error state. \\
-2) If we start the execution of an error trace from a state other then the error-precondition, then we can get \textit{\textbf{restricted}} during the execution of the error trace.. \\
+1) If we start the execution[?] of an error trace from a state satisfying the error-precondition $\Psi$, then we will always end up in an error state. \\
+2) If we start the execution of an error trace from a state which is not in the the error-precondition, then we can get \textit{\textbf{stuck}} during the execution of the error trace.. \\
+\\ ALso define formally what it means to get stuck and what is an execution of an error trace.
 3) If we start the execution of an error trace from a state satisfying the error-precondition and we replace an assignment statement in the error trace with a havoc statement and we get restricted, then that statement is a \textit{\textbf{relevant statement}}.\\
+\\ MAYBE MERGE THESE TWO ? \\
+
 \textbf{Restrictivness of a statement:}\\
 Getting restricted means that one of the assume statments is blocking the execution of the trace. That means that we cannot get passed that assumption because the guard of the assumtion is not true. \\
-Formally, in a trace $\pi$ an assume statement is restrictive iff \\
-$\exists pre$, where $pre$ is a state formula, such that $Post(\pi[0,i], pre) = False$\\
-or we can also say,
+Merge the above definition with the above descriptions.\\
+\begin{mydef}[Restrictivness of a statement]
+Let $pre$ be a state formula, $\pi$ a trace and $i$ a position such that $\pi[i]$ is an assume statement. We call the assume statement $\pi[i]$ \emph{restricitve} iff $Post(\pi[0,i], pre) = False$.
+\end{mydef}
+We note that the above condition is equivilent to:\\
 $$Post(\pi[0,i-1], pre) \not \subseteq guard(\pi[i])$$
-\textbf{Relevancy of a statement:}\\
-In an error trace $\pi$ with an error pre-condition $\Psi$ and a state formula $pre \subseteq \Psi$ if changing an assignment statement $\pi[i]$ to Havoc() causes some assume statement to become restrictve, then we say that the statement is relevant for the error.\\
-Formally: \\
-$\pi[i]$ is relevant if in a trace $\pi'$, where $\pi'[i]$ is a havoc statement in terms of the variable on the left side of $\pi[i]$ and $\exists$ some assume statement at position $j$ such that \\
-$$post(\pi'[0,j-1], pre) \not \subseteq guard(\pi[j])$$ 
-
-\textbf{Examples: }\\
+DEFINE GUARD\\
+\begin{mydef}[Relevancy of a statement]
+Let $\pi$ be an error trace and $\pi[i]$ be an assignment statement at position $i$ having the form $x:=t$, where $x$ is a variable and $t$ is an expression. Let $\pi'$ be the trace which is obtained by replacing $\pi[i]$ by  $havoc(x)$. Let $\Psi$ be the error precondition of $\pi$. The assignment statement $\pi[i]$ is \emph{relevant} if there exists some assume statement at position $j > i$ in $\pi'$ such that $\pi'[j]$ is restrictive for $\pi'$ and $\Psi$. 
+\end{mydef}
+\textbf{Examples:}\\
 \textbf{1)}
 \begin{lstlisting}
 foo()
@@ -348,6 +349,12 @@ Lets call $\phi$ a post-condition and $\phi =  WP(False, \pi[i+1,n])$.\\
  Where $n$ is the length of the error trace.
 A statement $\pi[i]$ in an error trace $\pi$ is relevant with respect to the non-flow sensitive criteria $(*)$ if the conjunction of the the three formulas $(\psi,\pi[i],\neg \phi) $ is unsatisfiable and $\pi[i]$ is in the unsatisfiable core.\\
 $\pi[i]$ is considered relevant with respect to non-flow sensitive criteria $(@)$ if  $(\psi,\pi[i],\neg \phi) $ is satisfiable. (In this case, $\pi[i]$ is a non-deterministic input statement $(Havoc)$).\\
+\begin{mydef}[theorem]
+Let $\pi$ be an error trace and let $\pi[i]$ be an assignment statement.\\
+Let $\Psi_{temp} = \neg WP(False, \pi[i,n])$.\\
+Let $\phi =  WP(False, \pi[i+1,n])$.\\
+The statement $\pi[i]$ is relevant iff $\psi \Rightarrow WP(\phi,Havoc(x))$
+\end{mydef}
 \rule{\textwidth}{1pt}\\
 Algorithm 1: \textbf{nonFlow}(trace $\pi$)\\
 \noindent\rule{12cm}{0.4pt}\\

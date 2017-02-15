@@ -315,12 +315,11 @@ Lets call $\phi$ a post-condition and $\phi =  WP(False, \pi[i+1,n])$.\\
 A statement $\pi[i]$ in an error trace $\pi$ is relevant with respect to the non-flow sensitive criteria $(*)$ if the conjunction of the the three formulas $(\psi,\pi[i],\neg \phi) $ is unsatisfiable and $\pi[i]$ is in the unsatisfiable core.\\
 $\pi[i]$ is considered relevant with respect to non-flow sensitive criteria $(@)$ if  $(\psi,\pi[i],\neg \phi) $ is satisfiable. (In this case, $\pi[i]$ is a non-deterministic input statement $(Havoc)$).\\
 \begin{theorem}[Relevancy]
-Let $\pi$ be an error trace and let $\pi[i]$ be an assignment statement.\\
-Let $P = \neg WP(False, \pi[i,n])$.\\
-Let $Q =  WP(False, \pi[i+1,n])$.\\
-The statement $\pi[i]$ is relevant iff $P \Rightarrow WP(Q,Havoc(x))$
+Let $\pi$ be an error trace of length $n$ and $\pi[i]$ be an assignment statement at position $i$ having the form $x:=t$, where $x$ is a variable and $t$ is an expression. Let $P$ and $Q$ be two predicates where $P = \neg WP(False, \pi[i,n])$ and $Q =  WP(False, \pi[i+1,n])$. The statement $\pi[i]$ is relevant iff
+ $$P \Rightarrow WP(Q,havoc(x))$$
+ Proof:
 \end{theorem}
-Proof: Let us first define the following 2 lemmas: \\
+Let us first define the following 2 lemmas: \\
 \begin{lemma}
 If for a program statement $S$ and predicates $P$ and $Q$, $\lbrace P \rbrace S \lbrace Q \rbrace$ is a valid Hoare triple, then
 $$SP(P,S) \Rightarrow Q$$
@@ -331,10 +330,8 @@ $$P \Rightarrow WP(S,Q)$$
 \begin{lemma}
 If $\lbrace P \rbrace havoc(S) \lbrace Q \rbrace$ is a valid hoare triple then the program statement $S$ is not in the unsatisfiable core.
 \end{lemma}
-
-The statement is relevant if $\lbrace p \rbrace havoc(s) \lbrace \neg Q \rbrace$ is unsatisfiable and $havoc(S)$ is in the unsatisfiable core. \\
-That means in  $\lbrace p \rbrace havoc(s) \lbrace Q \rbrace$ should not be in the unsatisfiable core. \\
-or we can write: $$P \Rightarrow WP(Q,Havoc(S))$$
+The statement $S$ is relevant if $havoc(S)$ is not in the unsatisfiable core or we can write that $\lbrace p \rbrace havoc(S) \lbrace Q \rbrace$ is a valid hoare triple. \\
+or $$P \Rightarrow WP(Q,Havoc(S))$$
 
 \newpage
 \rule{\textwidth}{1pt}\\

@@ -29,6 +29,7 @@
 }
 \newtheorem{mydef}{Definition}
 \newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
 
 \lstset{style=mystyle}
 \usepackage[utf8]{inputenc}
@@ -315,10 +316,27 @@ A statement $\pi[i]$ in an error trace $\pi$ is relevant with respect to the non
 $\pi[i]$ is considered relevant with respect to non-flow sensitive criteria $(@)$ if  $(\psi,\pi[i],\neg \phi) $ is satisfiable. (In this case, $\pi[i]$ is a non-deterministic input statement $(Havoc)$).\\
 \begin{theorem}[Relevancy]
 Let $\pi$ be an error trace and let $\pi[i]$ be an assignment statement.\\
-Let $\Psi_{temp} = \neg WP(False, \pi[i,n])$.\\
-Let $\phi =  WP(False, \pi[i+1,n])$.\\
-The statement $\pi[i]$ is relevant iff $\psi \Rightarrow WP(\phi,Havoc(x))$
+Let $P = \neg WP(False, \pi[i,n])$.\\
+Let $Q =  WP(False, \pi[i+1,n])$.\\
+The statement $\pi[i]$ is relevant iff $P \Rightarrow WP(Q,Havoc(x))$
 \end{theorem}
+Proof: Let us first define the following 2 lemmas: \\
+\begin{lemma}
+If for a program statement $S$ and predicates $P$ and $Q$, $\lbrace P \rbrace S \lbrace Q \rbrace$ is a valid Hoare triple, then
+$$SP(P,S) \Rightarrow Q$$
+$$P \Rightarrow WP(S,Q)$$
+\end{lemma}
+
+
+\begin{lemma}
+If $\lbrace P \rbrace havoc(S) \lbrace Q \rbrace$ is a valid hoare triple then the program statement $S$ is not in the unsatisfiable core.
+\end{lemma}
+
+The statement is relevant if $\lbrace p \rbrace havoc(s) \lbrace \neg Q \rbrace$ is unsatisfiable and $havoc(S)$ is in the unsatisfiable core. \\
+That means in  $\lbrace p \rbrace havoc(s) \lbrace Q \rbrace$ should not be in the unsatisfiable core. \\
+or we can write: $$P \Rightarrow WP(Q,Havoc(S))$$
+
+\newpage
 \rule{\textwidth}{1pt}\\
 Algorithm 1: \textbf{nonFlow}(trace $\pi$)\\
 \noindent\rule{12cm}{0.4pt}\\

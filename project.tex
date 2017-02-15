@@ -28,6 +28,7 @@
     tabsize=2
 }
 \newtheorem{mydef}{Definition}
+\newtheorem{theorem}{Theorem}
 
 \lstset{style=mystyle}
 \usepackage[utf8]{inputenc}
@@ -216,7 +217,7 @@ An assignment statement is relevant in a trace if the assigned value matters for
 We can begin to formally define relevancy by first making the following three observations:\\
 1) If we start the execution \textbf{\textit{[What is an execution ?]}} of an error trace from a state satisfying the error-precondition $\Psi$, then we will always end up in an error state. \\
 2) If we start the execution of an error trace from a state which is not in the the error-precondition, then we can get \textit{\textbf{stuck}} during the execution of the error trace. Getting stuck means that one of the assume statments is blocking the execution of the trace and the guard in one of the assume statements is not satisfied. \\
-\textbf{\textit{Also define formally what it means to get stuck and what is an execution of an error trace.}}\\
+\textbf{\textit{[Also define formally what it means to get stuck and what is an execution of an error trace]}}\\
 3) If we start the execution of an error trace from a state satisfying the error-precondition and we replace an assignment statement in the error trace with a havoc statement and we get stuck, then that statement is a \textit{\textbf{relevant statement}}.\\
 Consider the error trace below:
 \begin{lstlisting}
@@ -246,7 +247,16 @@ $$Post(\pi[0,i-1], pre) \not \subseteq guard(\pi[i])$$
 Let $\pi$ be an error trace and $\pi[i]$ be an assignment statement at position $i$ having the form $x:=t$, where $x$ is a variable and $t$ is an expression. Let $\pi'$ be the trace which is obtained by replacing $\pi[i]$ by  $havoc(x)$. Let $\Psi$ be the error precondition of $\pi$. The assignment statement $\pi[i]$ is \emph{relevant} if there exists some assume statement at position $j > i$ in $\pi'$ such that $\pi'[j]$ is restrictive for $\pi'$ and $\Psi$. 
 \end{mydef}
 \textbf{Examples:}\\
-\textbf{1)}
+\textbf{1)}\\
+Consider an Error Trace:
+\begin{lstlisting}
+[x = 0]
+[y = 0][*]
+assume(y == 0)
+[x = 1][*]
+assume(x != 0)
+\end{lstlisting}
+That we get from the following program:
 \begin{lstlisting}
 foo()
 {
@@ -256,23 +266,23 @@ foo()
 	{
 		x := 1;
 	}
-	else
-	{
-		y := 2;
-	}
 	assert(x == 0);
 }
 \end{lstlisting}
-Error Trace:
-\begin{lstlisting}
-[x = 0]
-[y = 0][*]
-assume(y == 0)
-[x = 1][*]
-assume(x != 0)
-\end{lstlisting}
 From the three assignment statements, if we change $[y = 0]$ to $havoc(y)$, then $assume(y == 0)$ becomes restrictive. Hence $[y = 0]$ is relevant. Same is the case with $[x = 1]$.\\
-\textbf{2)}
+But on the other hand, $x := 0$ is not relevant because changing this statemnet to havoc is not making any assume statement restrictive.\\
+\textbf{2)}\\
+Consider an error trace:
+\begin{lstlisting}
+[y = 0] [*]
+[z = 0] [*]
+assume(y == 0)
+[x = 1] [*]
+assume(z == 0)
+[z = 1]
+assume( x != 0)
+\end{lstlisting}
+That we get from the following program:
 \begin{lstlisting}
 foo()
 {
@@ -293,63 +303,22 @@ foo()
 	assert(x == 0);
 }
 \end{lstlisting}
-Error Trace:
-\begin{lstlisting}
-[y = 0] [*]
-[z = 0] [*]
-assume(y == 0)
-[x = 1] [*]
-assume(z == 0)
-[z = 1]
-assume( x != 0)
-\end{lstlisting}
-There are four assignment statements in the trace. If we change $z=1$ to $havoc(z)$ then no assume statement is becoming restrictive. \\
-If we change $x=1$ to $havoc(x)$ then $assume !(x=0)$ becomes restrictive. Same is the case for the remaining two assignment statements.\\
-\textbf{3)}
-\begin{lstlisting}
-foo()
-{
-	y := 0;
-	z := 0;
-	i := 0;
-	while(i < 2)
-	{
-		x := y;
-		y := y+1;
-		i := i+1:
-	}
-	assert(x == 2);
-}
-\end{lstlisting}
-Error Trace:
-\begin{lstlisting}
-[y = 0]
-[z = 0]
-[i = 0]
-assume(i < 2)
-[x = y]
-[y = y+1]
-[i = i+1]
-assume(i<2)
-[x = y]
-[y = y+1]
-[i = i+1]
-assume!(i<2)
-assume(x!=2)
-\end{lstlisting}
-\subsubsection{Algorithm}
+Following is the list of assignment statements and assume statements that are becoming restrictive if the assignment statements are changed to havoc().\\
+There are four assignment statements in the trace. If we change $z=1$ to $havoc(z)$ then no assume statement is becoming restrictive and hence it is not relevant. \\
+If we change $x=1$ to $havoc(x)$ then $assume !(x=0)$ becomes restrictive. If we change $z := 0$ to $havoc(z)$ then $assume(z==0)$ is becoming restrictive. If we change $y:=0$ to havoc(y) then $assume(y==0)$ is becoming restrictive.
+\subsubsection{Algorithm:}
 Let $\pi$ be an error trace of length $n$, $WP()$ the weakest pre-condition operator, $\pi[i]$ the $i^{th}$ statement of $\pi$.\\
 Lets call $\Psi$ a pre-condition and $\Psi = \neg WP(False, \pi[i,n])$.\\
 Lets call $\phi$ a post-condition and $\phi =  WP(False, \pi[i+1,n])$.\\
  Where $n$ is the length of the error trace.
 A statement $\pi[i]$ in an error trace $\pi$ is relevant with respect to the non-flow sensitive criteria $(*)$ if the conjunction of the the three formulas $(\psi,\pi[i],\neg \phi) $ is unsatisfiable and $\pi[i]$ is in the unsatisfiable core.\\
 $\pi[i]$ is considered relevant with respect to non-flow sensitive criteria $(@)$ if  $(\psi,\pi[i],\neg \phi) $ is satisfiable. (In this case, $\pi[i]$ is a non-deterministic input statement $(Havoc)$).\\
-\begin{mydef}[theorem]
+\begin{theorem}[Relevancy]
 Let $\pi$ be an error trace and let $\pi[i]$ be an assignment statement.\\
 Let $\Psi_{temp} = \neg WP(False, \pi[i,n])$.\\
 Let $\phi =  WP(False, \pi[i+1,n])$.\\
 The statement $\pi[i]$ is relevant iff $\psi \Rightarrow WP(\phi,Havoc(x))$
-\end{mydef}
+\end{theorem}
 \rule{\textwidth}{1pt}\\
 Algorithm 1: \textbf{nonFlow}(trace $\pi$)\\
 \noindent\rule{12cm}{0.4pt}\\

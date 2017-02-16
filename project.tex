@@ -306,7 +306,9 @@ foo()
 \end{lstlisting}
 Following is the list of assignment statements and assume statements that are becoming restrictive if the assignment statements are changed to havoc().\\
 There are four assignment statements in the trace. If we change $z=1$ to $havoc(z)$ then no assume statement is becoming restrictive and hence it is not relevant. \\
-If we change $x=1$ to $havoc(x)$ then $assume !(x=0)$ becomes restrictive. If we change $z := 0$ to $havoc(z)$ then $assume(z==0)$ is becoming restrictive. If we change $y:=0$ to havoc(y) then $assume(y==0)$ is becoming restrictive.
+If we change $x=1$ to $havoc(x)$ then $assume !(x=0)$ becomes restrictive. \\
+If we change $z := 0$ to $havoc(z)$ then $assume(z==0)$ is becoming restrictive.\\
+If we change $y:=0$ to havoc(y) then $assume(y==0)$ is becoming restrictive.
 \subsubsection{Algorithm:}
 Let $\pi$ be an error trace of length $n$, $WP()$ the weakest pre-condition operator, $\pi[i]$ the $i^{th}$ statement of $\pi$.\\
 Lets call $\Psi$ a pre-condition and $\Psi = \neg WP(False, \pi[i,n])$.\\
@@ -317,11 +319,10 @@ $\pi[i]$ is considered relevant with respect to non-flow sensitive criteria $(@)
 \begin{theorem}[Relevancy]
 Let $\pi$ be an error trace of length $n$ and $\pi[i]$ be an assignment statement at position $i$ having the form $x:=t$, where $x$ is a variable and $t$ is an expression. Let $P$ and $Q$ be two predicates where $P = \neg WP(False, \pi[i,n])$ and $Q =  WP(False, \pi[i+1,n])$. The statement $\pi[i]$ is relevant iff the following implication does not hold.
  $$P \Rightarrow WP(Q,havoc(x))$$
- Proof:
 \end{theorem}
 Let us first define the following 2 lemmas: \\
 \begin{lemma}
-If for a program statement $S$ and predicates $P$ and $Q$, $\lbrace P \rbrace S \lbrace Q \rbrace$ is a valid Hoare triple, then
+For a program statement $S$ and predicates $P$ and $Q$, where $P$ is condition that is true before the execution of the statement $S$ and $Q$ is a post condition, we have:
 $$SP(P,S) \Rightarrow Q$$
 $$P \Rightarrow WP(S,Q)$$
 \end{lemma}
@@ -330,8 +331,7 @@ $$P \Rightarrow WP(S,Q)$$
 \begin{lemma}
 If $\lbrace P \rbrace havoc(S) \lbrace Q \rbrace$ is a valid hoare triple then the program statement $S$ is not in the unsatisfiable core.
 \end{lemma}
-The statement $S$ is relevant if $havoc(S)$ is not in the unsatisfiable core or we can write that $\lbrace p \rbrace havoc(S) \lbrace Q \rbrace$ is a valid hoare triple. \\
-or $$P \Rightarrow WP(Q,Havoc(S))$$
+
 
 \newpage
 \rule{\textwidth}{1pt}\\

@@ -239,7 +239,7 @@ If we replace $y:=3$ by $hacov(y)$, then $y$ can non-deterministically be assign
 On the other hand changing the statement $x := 1$ to $havoc(x)$ will have no effect on the assumption in the end. Hence it is not relevant.\\
 \textit{\textbf{[define Guard in the definitions section]}}
 \begin{mydef}[Restrictivness of a statement]
-Let $pre$ be a state formula, $\pi$ a trace and $i$ a position such that $\pi[i]$ is an assume statement. We call the assume statement $\pi[i]$ \emph{restricitve} iff $Post(\pi[0,i], pre) = False$.
+Let $pre$ be a state formula, $\pi$ a trace and $i$ a position such that $\pi[i]$ is an assume statement. We call the assume statement $\pi[i]$ \emph{restricitve} iff $Post(\pi[0,i], pre) = False$. \textit{\textbf{[This condition is potentially wrong.]}}
 \\We note that the above condition is equivilent to:
 $$Post(\pi[0,i-1], pre) \not \subseteq guard(\pi[i])$$
 \end{mydef}
@@ -315,7 +315,7 @@ Lets call $\phi$ a post-condition and $\phi =  WP(False, \pi[i+1,n])$.\\
 A statement $\pi[i]$ in an error trace $\pi$ is relevant with respect to the non-flow sensitive criteria $(*)$ if the conjunction of the the three formulas $(\psi,\pi[i],\neg \phi) $ is unsatisfiable and $\pi[i]$ is in the unsatisfiable core.\\
 $\pi[i]$ is considered relevant with respect to non-flow sensitive criteria $(@)$ if  $(\psi,\pi[i],\neg \phi) $ is satisfiable. (In this case, $\pi[i]$ is a non-deterministic input statement $(Havoc)$).\\
 \begin{theorem}[Relevancy]
-Let $\pi$ be an error trace of length $n$ and $\pi[i]$ be an assignment statement at position $i$ having the form $x:=t$, where $x$ is a variable and $t$ is an expression. Let $P$ and $Q$ be two predicates where $P = \neg WP(False, \pi[i,n])$ and $Q =  WP(False, \pi[i+1,n])$. The statement $\pi[i]$ is relevant iff
+Let $\pi$ be an error trace of length $n$ and $\pi[i]$ be an assignment statement at position $i$ having the form $x:=t$, where $x$ is a variable and $t$ is an expression. Let $P$ and $Q$ be two predicates where $P = \neg WP(False, \pi[i,n])$ and $Q =  WP(False, \pi[i+1,n])$. The statement $\pi[i]$ is relevant iff the following implication does not hold.
  $$P \Rightarrow WP(Q,havoc(x))$$
  Proof:
 \end{theorem}

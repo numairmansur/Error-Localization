@@ -331,6 +331,24 @@ $$P \Rightarrow WP(S,Q)$$
 \begin{lemma}
 If $\lbrace P \rbrace havoc(S) \lbrace Q \rbrace$ is a valid hoare triple then the program statement $S$ is not in the unsatisfiable core.
 \end{lemma}
+\textit{\textbf{Proof}}:(a very very rough sketch)\\
+Suppose we have an error trace $\pi$ of length 2 containing one assignment statment and one assume statement. Let $guard$ be the guard of the assume statment.\\
+Consider the case where we take into account the first statement (i.e $i=1$)\\
+Suppose that the assignment statement $x:=t$ is relevant. That means:
+$$Post(Havoc(x), pre) \not \subseteq guard$$
+Since we are considering the case where $i=0$, therefore $pre=\psi$, where $\psi$ is the error precondition of the error trace.
+$$Post(Havoc(x), \psi) \not \subseteq guard$$
+The theorem states that the following condition does not hold 
+\begin{equation} 
+P \Rightarrow WP(Q,havoc(x)) 
+\end{equation}
+We have\\
+$\psi = \neg WP(Q, assignment)$\\
+$P =  \psi$\\
+$Q = WP(guard, FALSE) = \neg guard$\\
+Substituting the values in (1), we get
+$$ \neg WP(\neg guard, assignment) \Rightarrow WP(\neg guard, Havoc)$$
+which i think does not hold ?
 
 
 \newpage

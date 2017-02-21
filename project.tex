@@ -239,8 +239,7 @@ If we replace $y:=3$ by $hacov(y)$, then $y$ can non-deterministically be assign
 On the other hand changing the statement $x := 1$ to $havoc(x)$ will have no effect on the assumption in the end. Hence it is not relevant.\\
 \textit{\textbf{[define Guard in the definitions section]}}
 \begin{mydef}[Restrictivness of a statement]
-Let $pre$ be a state formula, $\pi$ a trace and $i$ a position such that $\pi[i]$ is an assume statement. We call the assume statement $\pi[i]$ \emph{restricitve} iff $Post(\pi[0,i], pre) = False$. \textit{\textbf{[This condition is potentially wrong.]}}
-\\We note that the above condition is equivilent to:
+Let $pre$ be a state formula, $\pi$ a trace and $i$ a position such that $\pi[i]$ is an assume statement. We call the assume statement $\pi[i]$ \emph{restricitve} iff the following condition holds.
 $$Post(\pi[0,i-1], pre) \not \subseteq guard(\pi[i])$$
 \end{mydef}
 
@@ -320,18 +319,31 @@ $\pi[i]$ is considered relevant with respect to non-flow sensitive criteria $(@)
 Let $\pi$ be an error trace of length $n$ and $\pi[i]$ be an assignment statement at position $i$ having the form $x:=t$, where $x$ is a variable and $t$ is an expression. Let $P$ and $Q$ be two predicates where $P = \neg WP(False, \pi[i,n])$ and $Q =  WP(False, \pi[i+1,n])$. The statement $\pi[i]$ is relevant iff the following implication does not hold.
  $$P \Rightarrow WP(Q,havoc(x))$$
 \end{theorem}
-Let us first define the following 2 lemmas: \\
+Before proving the theorem let us list down some facts about the WP and SP operators.\\
 \begin{lemma}
-For a program statement $S$ and predicates $P$ and $Q$, where $P$ is condition that is true before the execution of the statement $S$ and $Q$ is a post condition, we have:
-$$SP(P,S) \Rightarrow Q$$
-$$P \Rightarrow WP(S,Q)$$
+For a program statement $st$ and predicates $P$ and $Q$, where $P$ is condition that is true before the execution of the statement and $Q$ is a post condition, we have:
+$$SP(P,st) \Rightarrow Q$$
+$$P \Rightarrow WP(st,Q)$$
 \end{lemma}
 
+\begin{lemma}
+For a predicate Q, the following implication holds:\\
+$$WP(\neg Q) = \neg WP(Q)$$
+\end{lemma}
 
 \begin{lemma}
-If $\lbrace P \rbrace havoc(S) \lbrace Q \rbrace$ is a valid hoare triple then the program statement $S$ is not in the unsatisfiable core.
+For a predicate Q and an assignment statement of the form $x:=t$ where $x$ is the variable and $t$ is the expression, 
+$$WP(Q;havoc(x)) \subseteq WP(Q; x:=t)$$
 \end{lemma}
-\textit{\textbf{Proof}}:(a very very rough sketch)\\
+
+\begin{lemma}
+For a predicate Q and an assignment statement of the form $x:=t$ where $x$ is the variable and $t$ is the expression, the following implication holds:
+$$WP(Q;havoc(x)) \Rightarrow WP(Q;x:=t)$$
+and by contraposition:
+$$\neg WP(Q;x:=t) \Rightarrow \neg WP(Q;havoc(x))$$
+\end{lemma}
+
+\textit{\textbf{Proof}}:(a very very very rough sketch)\\
 Suppose we have an error trace $\pi$ of length 2 containing one assignment statment and one assume statement. Let $guard$ be the guard of the assume statment.\\
 Consider the case where we take into account the first statement (i.e $i=0$)\\
 Suppose that the assignment statement $x:=t$ is relevant. That means:
@@ -346,9 +358,14 @@ We have\\
 $\psi = \neg WP(Q, assignment)$\\
 $P =  \psi$\\
 $Q = WP(guard, FALSE) = \neg guard$\\
-Substituting the values in (1), we get
-$$ \neg WP(\neg guard, assignment) \Rightarrow WP(\neg guard, Havoc)$$
-which i think does not hold ?
+Substituting the values in (1), we get the following implication which does not hold:
+\begin{equation}
+\neg WP(\neg guard, assignment) \Rightarrow WP(\neg guard, Havoc)
+\end{equation}
+Suppose in (2), $\neg WP(\neg guard, assignment)$ holds.\\
+then from lemma (4) $\neg WP(\neg guard, havoc)$ holds.\\
+and consequently $WP(\neg guard,havoc)$ does not hold.
+
 
 
 \newpage

@@ -321,19 +321,14 @@ Let $\pi$ be an error trace of length $n$ and $\pi[i]$ be an assignment statemen
 \end{theorem}
 Before proving the theorem let us list down some facts about the WP and SP operators.\\
 \begin{lemma}
-For a program statement $st$ and predicates $P$ and $Q$, where $P$ is condition that is true before the execution of the statement and $Q$ is a post condition, we have:
+For a program statement $st$ and predicates $P$ and $Q$, where $P$ is condition that is true before the execution of the statement and $Q$ is a post condition, the following two implications are equivilant(also known as the duality of WP and SP):
 $$SP(P,st) \Rightarrow Q$$
 $$P \Rightarrow WP(st,Q)$$
 \end{lemma}
 
 \begin{lemma}
-For a predicate Q, the following implication holds:\\
-$$WP(\neg Q) = \neg WP(Q)$$
-\end{lemma}
-
-\begin{lemma}
-For a predicate Q and an assignment statement of the form $x:=t$ where $x$ is the variable and $t$ is the expression, 
-$$WP(Q;havoc(x)) \subseteq WP(Q; x:=t)$$
+For a predicate Q and a statemnt st which is an assignment statement the following implication holds:\\
+$$WP(\neg Q,st) = \neg WP(Q,st)$$
 \end{lemma}
 
 \begin{lemma}
@@ -341,6 +336,11 @@ For a predicate Q and an assignment statement of the form $x:=t$ where $x$ is th
 $$WP(Q;havoc(x)) \Rightarrow WP(Q;x:=t)$$
 and by contraposition:
 $$\neg WP(Q;x:=t) \Rightarrow \neg WP(Q;havoc(x))$$
+\end{lemma}
+
+
+\begin{lemma}
+For a predicate $Q$ and an assignment statment $x:=t$ , if the formula $x:=t \Rightarrow Q$, then $WP(Q;x:=t)$ is $True$.
 \end{lemma}
 
 \textit{\textbf{Proof}}:(a very very very rough sketch)\\
@@ -362,9 +362,17 @@ Substituting the values in (1), we get the following implication which does not 
 \begin{equation}
 \neg WP(\neg guard, assignment) \Rightarrow WP(\neg guard, Havoc)
 \end{equation}
+The above implication does not hold if following 2 conditions holds:\\
+1) left hand side hold but the right hand side does not hold.\\
+2) left hand side is always TRUE. That means there is a case where it actually holds.\\
 Suppose in (2), $\neg WP(\neg guard, assignment)$ holds.\\
 then from lemma (4) $\neg WP(\neg guard, havoc)$ holds.\\
-and consequently $WP(\neg guard,havoc)$ does not hold.
+and consequently $WP(\neg guard,havoc)$ does not hold.\\
+If in the error trace, the assignment statement is relevant and is of the form such that the formula $x:=t \Rightarrow guard$\\
+Then:\\
+$WP(guard; x:=t)$ holds $True$\\
+$\neg WP(\neg guard; x:=t)$ holds $True$
+
 
 
 

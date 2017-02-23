@@ -363,13 +363,13 @@ Substituting the values in (1), we get the following implication which does not 
 \neg WP(\neg guard, assignment) \Rightarrow WP(\neg guard, Havoc)
 \end{equation}
 The above implication does not hold if following 2 conditions holds:\\
-1) left hand side hold but the right hand side does not hold.\\
-2) left hand side is always TRUE. That means there is a case where it actually holds.\\
+1) assume that the left hand side hold then derive that the right hand side does not hold.\\
+2) left hand side is TRUE. That means there is a case where it actually holds.\\
 Suppose in (2), $\neg WP(\neg guard, assignment)$ holds.\\
-then from lemma (4) $\neg WP(\neg guard, havoc)$ holds.\\
+then from lemma (3) $\neg WP(\neg guard, havoc)$ holds.\\
 and consequently $WP(\neg guard,havoc)$ does not hold.\\
 If in the error trace, the assignment statement is relevant and is of the form such that the formula $x:=t \Rightarrow guard$\\
-Then:\\
+Then from lemma (4):\\
 $WP(guard; x:=t)$ holds $True$\\
 $\neg WP(\neg guard; x:=t)$ holds $True$
 
@@ -425,8 +425,13 @@ $\pi[4] \Longrightarrow x=1$\\
 $\phi =  WP(False, \pi[5,7]) \Longrightarrow x=0 \vee \neg(z=0)$\\
 \\
 The formula $(\psi,\pi[4],\neg \phi)$ is unsatisfiable and $\pi[4]$ is in the unsatisfiable core. Hence $\pi[4]$ is relevant with respect to Non-Flow Sensitive relevance criterion and we therefore label it with a $[*]$.
-\subsubsection{Proof of corectness of the algorithm:}
-...
+\subsubsection{Security Error/non-determinisitic assignment Relevancy (golden frame case):}
+A statement can be called a security error relevant(or a non-determinisitc assignment relevant) statement if it is a non-deterministic assignment and relevant for the reachability of the error.
+\begin{theorem}[Security Error Relevancy] 
+Let $\pi$ be an error trace of length $n$ and $\pi[i]$ be a non-deterministic assignment statement at position $i$ having the form $havoc(x)$, where $x$ is a variable. Let $P$ and $Q$ be two predicates where $P = \neg WP(False, \pi[i,n])$ and $Q =  WP(False, \pi[i+1,n])$. The statement $\pi[i]$ is relevant iff the following implication holds.
+ $$P \Rightarrow WP(Q,havoc(x))$$
+\end{theorem}
+
 \subsection{Flow Sensitive Relevance criteria }
 The definition of relevancy is actually similar to the non-flow sensitive case. The only thing different is that now we take branches in the trace into account. If there is a branch in the error trace, the relevancy of the statements inside the error trace will only be calculated if the branch as a whole is relevant to the error. We see that we can get slightly different results from the Non-Flow Sensitive case because it is possible that a statement might be relevant with respect to non-flow sensitive case but it lies inside a branch which is not relevant. \\
 When we say that a branch $\pi[i,j]$ must be relevant to the error, we mean that the branch is reduced to a transition formula which we call a $"Markhor Formula"$ and it's relevancy is calculated in the same way as we did for a statement in the non-flow sensitive case (by checking if the conjunction of $(\psi, \pi[i],\neg \phi)$ is unsatisfiable and the statement is in the unsatisfiable core).

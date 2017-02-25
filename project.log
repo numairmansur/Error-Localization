@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.1.29)  23 FEB 2017 16:27
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.1.29)  23 FEB 2017 16:39
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -644,22 +644,22 @@ Underfull \hbox (badness 10000) in paragraph at lines 330--331
  []
 
 [11] [12] [13]
-Overfull \hbox (15.0pt too wide) in paragraph at lines 380--385
+Overfull \hbox (15.0pt too wide) in paragraph at lines 381--386
 [][] 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 421--428
+Underfull \hbox (badness 10000) in paragraph at lines 422--429
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 421--428
+Underfull \hbox (badness 10000) in paragraph at lines 422--429
 
  []
 
 
-Overfull \hbox (9.86342pt too wide) in paragraph at lines 428--428
+Overfull \hbox (9.86342pt too wide) in paragraph at lines 429--429
 []\OT1/cmr/bx/n/10 Security Error/non-determinisitic as-sign-ment Rel-e-vancy (
 golden
  []
@@ -689,7 +689,7 @@ ic/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfo
 nts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm
 /cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.
 pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb>
-Output written on project.pdf (16 pages, 257769 bytes).
+Output written on project.pdf (16 pages, 257784 bytes).
 PDF statistics:
  124 PDF objects out of 1000 (max. 8388607)
  88 compressed objects within 1 object stream

@@ -364,15 +364,11 @@ Substituting the values in (1), we get the following implication which does not 
 \end{equation}
 The above implication does not hold if following 2 conditions holds:\\
 1) assume that the left hand side hold then derive that the right hand side does not hold.\\
-2) left hand side is TRUE. That means there is a case where it actually holds.\\
-Suppose in (2), $\neg WP(\neg guard, assignment)$ holds.\\
+2) left hand side is not FALSE. That means there is a case where it actually holds.\\
+1) Suppose in (2), $\neg WP(\neg guard, assignment)$ holds.\\
 then from lemma (3) $\neg WP(\neg guard, havoc)$ holds.\\
 and consequently $WP(\neg guard,havoc)$ does not hold.\\
-If in the error trace, the assignment statement is relevant and is of the form such that the formula $x:=t \Rightarrow guard$\\
-Then from lemma (4):\\
-$WP(guard; x:=t)$ holds $True$\\
-and from lemma (2):\\
-$\neg WP(\neg guard; x:=t)$ holds $True$
+2) P which is the error precondition in this case can not be false because we assumed in the begining that we have an error trace and that we are reaching the error state. \\
 
 
 

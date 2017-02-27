@@ -343,33 +343,26 @@ $$\neg WP(Q;x:=t) \Rightarrow \neg WP(Q;havoc(x))$$
 For a predicate $Q$ and an assignment statment $x:=t$ , if the formula $x:=t \Rightarrow Q$, then $WP(Q;x:=t)$ is $True$.
 \end{lemma}
 
-\textit{\textbf{Proof}}:(a very very very rough sketch)\\
+\textit{\textbf{Proof}}:\\
 Suppose we have an error trace $\pi$ of length 2 containing one assignment statment and one assume statement. Let $guard$ be the guard of the assume statment.\\
 Consider the case where we take into account the first statement (i.e $i=0$)\\
-Suppose that the assignment statement $x:=t$ is relevant. That means:
-$$Post(Havoc(x), pre) \not \subseteq guard$$
-Since we are considering the case where $i=0$, therefore $pre=\psi$, where $\psi$ is the error precondition of the error trace.
-$$Post(Havoc(x), \psi) \not \subseteq guard$$
+Suppose that the assignment statement $x:=t$ is relevant.\\
 The theorem states that the following condition does not hold 
 \begin{equation} 
 P \Rightarrow WP(Q,havoc(x)) 
 \end{equation}
-We have\\
-$\psi = \neg WP(Q, assignment)$\\
-$P =  \psi$\\
-$Q = WP(guard, FALSE) = \neg guard$\\
-Substituting the values in (1), we get the following implication which does not hold:
-\begin{equation}
-\neg WP(\neg guard, assignment) \Rightarrow WP(\neg guard, Havoc)
-\end{equation}
-The above implication does not hold if the following 2 conditions hold:
+The above implication does not hold if:
 \begin{itemize}
   \item The left hand side holds and the right hand side does not hold.
   \item Left hand side is not False.
 \end{itemize}
-
-Assume in (2), $\neg WP(\neg guard, assignment)$ holds, then from Lemma (3), $\neg WP(\neg guard, havoc)$ holds and consequently $WP(\neg guard,havoc)$ does not hold. \\
-P which is the error precondition in this case can not be false because we assumed in the begining that we have an error trace and that we are reaching the error state. \\
+For the initial case, $P$ will be $\neg WP(Q, x:=t)$, which is the error precondition of the trace. $Q$ will be $WP(guard, FALSE) = \neg guard$.\\
+Substituting the values in (1), we get:
+\begin{equation}
+\neg WP(\neg guard, x:=t) \Rightarrow WP(\neg guard, Havoc(x))
+\end{equation}
+Assume in (2), $\neg WP(\neg guard, assignment)$ holds, then from Lemma (3), \\$\neg WP(\neg guard, havoc)$ holds and consequently $WP(\neg guard,havoc)$ does not hold. \\
+Also, $\neg WP(\neg guard, assignment)$ which is the error precondition for our assumed trace can not be false, since we assumed that the trace is an error trace and we are reaching the error state.\\
 
 
 

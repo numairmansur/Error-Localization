@@ -5,10 +5,8 @@ TASKS
  (3) Try to prove the theorem    (InProgress)
 		- If the statement is relevant then changing it to havoc will make the assume statement restrictive. 
 		  and the WP of a havoc statment with a negative of a guard will be false if we take the negative sign out of the WP() operator ??
-			? ? ? ? ? ?  i dont know what am i saying here ? ? ? ? ? ? ? ?
-
 	(3b) Use lemma 5 to prove the first small case. (Done)
-	(3c) Contiue with the proof for the general case. (NEXT)
+	(3c) Contiue with the proof for the general case. (IN Progress..)
 		(3c.1) Think about the case where you have i=0 but the length of the trace is now 'n' and not 2.
  (4) Think about analogous definitions for our "Golden Frame" relevancy. (UPNEXT)  
  (5) Write down an analogous theorem for our "Golden Frame" relevancy.   (UPNEXT)

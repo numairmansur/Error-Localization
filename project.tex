@@ -239,8 +239,8 @@ If we replace $y:=3$ by $hacov(y)$, then $y$ can non-deterministically be assign
 On the other hand changing the statement $x := 1$ to $havoc(x)$ will have no effect on the assumption in the end. Hence it is not relevant.\\
 \textit{\textbf{[define Guard in the definitions section]}}
 \begin{mydef}[Restrictivness of a statement]
-Let $pre$ be a state formula, $\pi$ a trace and $i$ a position such that $\pi[i]$ is an assume statement. We call the assume statement $\pi[i]$ \emph{restricitve} iff the following condition holds.
-$$Post(\pi[0,i-1], pre) \not \subseteq guard(\pi[i])$$
+Let $pre$ be a state formula, $\pi$ a trace and $i$ a position such that $\pi[i]$ is an assume statement. We call the assume statement $\pi[i]$ \emph{restricitve} iff the following implication does not hold.
+$$Post(\pi[0,i-1], pre) \Rightarrow guard(\pi[i])$$
 \end{mydef}
 
 \begin{mydef}[Relevancy of a statement]
@@ -323,7 +323,7 @@ Before proving the theorem let us list down some facts about the WP and SP opera
 \begin{lemma}
 For a program statement $st$ and predicates $P$ and $Q$, where $P$ is condition that is true before the execution of the statement and $Q$ is a post condition, the following two implications are equivilant(also known as the duality of WP and SP):
 $$SP(P,st) \Rightarrow Q$$
-$$P \Rightarrow WP(st,Q)$$
+$$P \Rightarrow WP(Q,st)$$
 \end{lemma}
 
 \begin{lemma}
@@ -352,7 +352,7 @@ The above implication does not hold if:
   \item The left hand side holds and the right hand side does not hold.
   \item Left hand side is not False.
 \end{itemize}
-For the initial case, $P$ will be $\neg WP(Q, x:=t)$, which is the error precondition of the trace. $Q$ will be $\neg WP(guard, FALSE) = guard$.\\
+For the initial case, $P$ will be $\neg WP(Q, x:=t)$, which is the error precondition of the trace. $Q$ will be $\neg WP(FALSE, guard) = guard$.\\
 Substituting the values in (1), we get:
 \begin{equation}
 \neg WP(\neg guard, x:=t) \Rightarrow WP(guard, Havoc(x))
@@ -365,7 +365,7 @@ If the following implication does not hold then the statement is relevant:
 P \Rightarrow WP(Q,havoc(x)) 
 \end{equation}
 Where \\ 
-$Q$ is $\neg WP(guard, False) = guard$\\
+$Q$ is $\neg WP(False, guard) = guard$\\
 $P$ is $\neg WP(Q, x:=t) = \neg WP(guard, x:=t)$\\
 So, we know that the following implication does not hold:\\
 $$\neg WP(guard, x:=t) \Rightarrow WP(guard, havoc(x))$$

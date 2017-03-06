@@ -366,15 +366,20 @@ P \Rightarrow WP(Q,havoc(x))
 \end{equation}
 Where \\ 
 $Q$ is $\neg WP(False, guard) = guard$\\
-$P$ is $\neg WP(Q, x:=t) = \neg WP(guard, x:=t)$\\
+$P$ is $\neg WP(\neg guard, x:=t)$\\
 So, we know that the following implication does not hold:\\
-$$\neg WP(guard, x:=t) \Rightarrow WP(guard, havoc(x))$$
+$$\neg WP(\neg guard, x:=t) \Rightarrow WP(guard, havoc(x))$$
 From lemma (2)
-$$ WP(\neg guard, x:=t) \Rightarrow WP(guard, havoc(x))$$ does not hold.\\
-From Lemma (1) $(SP(P,st) \Rightarrow Q)$:\\
-$$SP(WP(\neg guard, x:=t), havoc(x)) \Rightarrow guard$$
+\begin{equation}
+WP(guard, x:=t) \Rightarrow WP(guard, havoc(x))
+\end{equation}
 does not hold.\\
-Which satisfy our definition of relevancy of a statement.
+From the "duality of WP and SP" (lemma 1), if in the above expression, we consider the right hand side of the implication as $P$, $guard$ as $Q$ and $havoc(x)$ as $st$, then we can write the above implication as: \\
+\begin{equation}
+SP(WP(guard, x:=t), havoc(x)) \Rightarrow guard
+\end{equation}
+The above implication also does not hold as it is equivalent to (4). \\
+That means that from our supposed trace which contains one assignment statment and one assume statement with error precondition $WP(guard,x:=t)$, if we get a new trace where the assignment $x:=t$ is replaced by $havoc(x)$, the strongest postcondition of the error precondition and $havoc(x)$ does not imply the guard of the assume statement. Which according to the definition of relevancy would mean that the statement $x:=t$ is relevant.
 
 \newpage
 \rule{\textwidth}{1pt}\\

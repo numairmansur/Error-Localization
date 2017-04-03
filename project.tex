@@ -379,7 +379,45 @@ From the "duality of WP and SP" (lemma 1), if in the above expression, we consid
 SP(WP(guard, x:=t), havoc(x)) \Rightarrow guard
 \end{equation}
 The above implication also does not hold as it is equivalent to (4). \\
-That means that from our supposed trace which contains one assignment statment and one assume statement with error precondition $WP(guard,x:=t)$, if we get a new trace where the assignment $x:=t$ is replaced by $havoc(x)$, the strongest postcondition of the error precondition and $havoc(x)$ does not imply the guard of the assume statement. Which according to the definition of relevancy would mean that the statement $x:=t$ is relevant.
+That means that from our supposed trace which contains one assignment statment and one assume statement with error precondition $WP(guard,x:=t)$, if we get a new trace where the assignment $x:=t$ is replaced by $havoc(x)$, the strongest postcondition of the error precondition and $havoc(x)$ does not imply the guard of the assume statement. Which according to the definition of relevancy would mean that the statement $x:=t$ is relevant.\\
+\\ Now we consider the case where the length of the trace is $n$ and the first statment of the trace is an assignment statement. We consider this assignment statement for now.\\
+$"\Rightarrow"$\\
+If the first staement $st$ is relevant, then the following implication does not hold.
+\begin{equation} 
+P \Rightarrow WP(Q,havoc(x)) 
+\end{equation}
+If the statment $st$ is relevant, then there exists some assume statement in the trace at position $j$, which is restrictive if we replace the assignment statement with a havoc statement.\\
+We know that
+\begin{equation} 
+SP(P, havoc(x),\pi[1,j-1]) \Rightarrow guard(\pi[j]) 
+\end{equation}
+does not hold.
+and consequently from lemma (1):
+\begin{equation} 
+P \Rightarrow WP(guard(\pi[j]); havoc(x),\pi[1,j-1])
+\end{equation}
+does not hold.\\
+We also know that:
+\begin{equation} 
+SP(Q; \pi[1,j-1]) \Rightarrow guard(\pi[j])
+\end{equation}
+and consequently from lemma (1):
+\begin{equation} 
+Q \Rightarrow WP(guard(\pi[j]); \pi[1,j-1])
+\end{equation}
+Expression (8) can be written as 
+\begin{equation} 
+P \Rightarrow WP( WP(guard(\pi[j]); \pi[1,j-1]); havoc(x))
+\end{equation}
+does not hold.\\
+Substituting from (10) and we can write the above form expression as:
+\begin{equation} 
+P \Rightarrow WP(Q; havoc(x))
+\end{equation}
+does not hold.
+
+
+
 
 \newpage
 \rule{\textwidth}{1pt}\\

@@ -24,7 +24,7 @@ The magic happens when we have to determine how we calculate the relevancy of th
 
 ------MARKHOR FORMULA-----
 
-Check the exact form of Markhor formula from the code
+Check the exact form of Markhor formula from the code .
 
 
 

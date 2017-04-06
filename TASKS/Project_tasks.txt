@@ -13,7 +13,8 @@ TASKS
 		I somehow need a distinction, that if the statement is relenvant, then only in that case, that implcation does not hold. Other wise it holds.
 
 	(3d) Contiue with the proof for the general case  [IN Progress..]
-		(3c.1) Think about the case where you have i=0 but the length of the trace is now 'n' and not 2
+		(3c.1) Think about the case where you have i=0 but the length of the trace is now 'n' and not 2 [In Progress]
+		(3c.2) Write a new lemma explaing that step u did in the proof without any explanantion. it is on the photo of the white board.
 
  (4) Think about analogous definitions for our "Golden Frame" relevancy. (UPNEXT)  
  (5) Write down an analogous theorem for our "Golden Frame" relevancy.   (UPNEXT)

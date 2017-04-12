@@ -471,7 +471,7 @@ The formula $(\psi,\pi[4],\neg \phi)$ is unsatisfiable and $\pi[4]$ is in the un
 \subsubsection{Security Error/non-determinisitic assignment Relevancy (golden frame case):}
 A statement can be called a security error relevant(or a non-determinisitc assignment relevant) statement if it is a non-deterministic assignment and relevant for the reachability of the error.
 \begin{theorem}[Security Error Relevancy] 
-Let $\pi$ be an error trace of length $n$ and $\pi[i]$ be a non-deterministic assignment statement at position $i$ having the form $havoc(x)$, where $x$ is a variable. Let $P$ and $Q$ be two predicates where $P = \neg WP(False, \pi[i,n])$ and $Q =  WP(False, \pi[i+1,n])$. The statement $\pi[i]$ is relevant iff the following implication holds.
+Let $\pi$ be an error trace of length $n$ and $\pi[i]$ be a non-deterministic assignment statement at position $i$ having the form $havoc(x)$, where $x$ is a variable. Let $P$ and $Q$ be two predicates where $P = \neg WP(False, \pi[i,n])$ and $Q = \neg WP(False, \pi[i+1,n])$. The statement $\pi[i]$ is relevant iff the following implication does not hold.
  $$P \Rightarrow WP(Q,havoc(x))$$
 \end{theorem}
 

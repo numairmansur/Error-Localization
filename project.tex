@@ -308,7 +308,7 @@ There are four assignment statements in the trace. If we change $z=1$ to $havoc(
 If we change $x=1$ to $havoc(x)$ then $assume !(x=0)$ becomes restrictive. \\
 If we change $z := 0$ to $havoc(z)$ then $assume(z==0)$ is becoming restrictive.\\
 If we change $y:=0$ to havoc(y) then $assume(y==0)$ is becoming restrictive.
-\subsubsection{Algorithm:}
+\subsubsection* {Algorithm:}
 Let $\pi$ be an error trace of length $n$, $WP()$ the weakest pre-condition operator, $\pi[i]$ the $i^{th}$ statement of $\pi$.\\
 Lets call $\Psi$ a pre-condition and $\Psi = \neg WP(False, \pi[i,n])$.\\
 Lets call $\phi$ a post-condition and $\phi =  WP(False, \pi[i+1,n])$.\\
@@ -469,12 +469,27 @@ $\phi =  WP(False, \pi[5,7]) \Longrightarrow x=0 \vee \neg(z=0)$\\
 \\
 The formula $(\psi,\pi[4],\neg \phi)$ is unsatisfiable and $\pi[4]$ is in the unsatisfiable core. Hence $\pi[4]$ is relevant with respect to Non-Flow Sensitive relevance criterion and we therefore label it with a $[*]$.
 \subsubsection{Security Error/non-determinisitic assignment Relevancy (golden frame case):}
-A statement can be called a security error relevant(or a non-determinisitc assignment relevant) statement if it is a non-deterministic assignment and relevant for the reachability of the error.
+A statement can be called a security error relevant(or a non-determinisitc assignment relevant) statement if it is a non-deterministic assignment statement and relevant for the reachability of the error.
+
+\begin{mydef}[Relevancy of a statement]
+Let $\pi$ be a feasible error trace and $\pi[i]$ be a $Havoc$ statement at position $i$ having the form $havoc(x)$, where $x$ is a variable. Let $x:=t$ be an assignment statement where $x$ is the same variable as in $havoc(x)$ and $t$ is an expression. The $havoc$ statement $\pi[i]$ is relevant if there exists an assignemnt $x:=t$ such that if we replace the $havoc$ in $\pi$ with $x:=t$ to get a new trace $\pi'$, then the following implication holds:
+$$SP(true; \pi') \Rightarrow false$$
+\end{mydef}
+
+\subsubsection*{Algorithm}
+Let $\pi$ be an error trace of length $n$, $WP()$ the weakest pre-condition operator, $\pi[i]$ the $i^{th}$ statement of $\pi$.\\
+Lets call $\Psi$ a pre-condition and $\Psi = \neg WP(False, \pi[i,n])$.\\
+Lets call $\phi$ a post-condition and $\phi =  WP(False, \pi[i+1,n])$.\\
+Where $n$ is the length of the error trace.
+A statement $\pi[i]$ in an error trace $\pi$ is relevant with respect to the non-flow sensitive criteria $(@)$ if the conjunction of the the three formulas $(\psi,\pi[i],\neg \phi) $ is satisfiable.\\
+
 \begin{theorem}[Security Error Relevancy] 
 Let $\pi$ be an error trace of length $n$ and $\pi[i]$ be a non-deterministic assignment statement at position $i$ having the form $havoc(x)$, where $x$ is a variable. Let $P$ and $Q$ be two predicates where $P = \neg WP(False, \pi[i,n])$ and $Q = \neg WP(False, \pi[i+1,n])$. The statement $\pi[i]$ is relevant iff the following implication does not hold.
  $$P \Rightarrow WP(Q,havoc(x))$$
 \end{theorem}
 
+\subsubsection*{Proof:}
+Consider first a case where we have an error trace $\pi$ of length 2, containing one havoc statement and one assume statement. Let $guard(x)$ be the guard of the assume statement. 
 \subsection{Flow Sensitive Relevance criteria }
 The definition of relevancy is actually similar to the non-flow sensitive case. The only thing different is that now we take branches in the trace into account. If there is a branch in the error trace, the relevancy of the statements inside the error trace will only be calculated if the branch as a whole is relevant to the error. We see that we can get slightly different results from the Non-Flow Sensitive case because it is possible that a statement might be relevant with respect to non-flow sensitive case but it lies inside a branch which is not relevant. \\
 When we say that a branch $\pi[i,j]$ must be relevant to the error, we mean that the branch is reduced to a transition formula which we call a $"Markhor Formula"$ and it's relevancy is calculated in the same way as we did for a statement in the non-flow sensitive case (by checking if the conjunction of $(\psi, \pi[i],\neg \phi)$ is unsatisfiable and the statement is in the unsatisfiable core).

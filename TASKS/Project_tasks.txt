@@ -27,7 +27,7 @@ We need better terminology.
 How should we call the "normal" relevancy and the "Golden Frame" relevancy?
 Finding a good terminology for this is very important since if we are going to
 publish this work, our main contributions is probably the "Golden Frame"
-relevancy.
+relevancy.  [Because that allows us to model user input behaviour which is very very cool ]
 
 Some preliminary ideas.
 "Assignment Relevancy" and "Havoc Relevancy"

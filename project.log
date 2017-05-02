@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.1.29)  30 APR 2017 15:43
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.1.29)  2 MAY 2017 15:57
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -499,18 +499,18 @@ Now handling font encoding U ...
 )) (./project.aux)
 \openout1 = `project.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 39.
-LaTeX Font Info:    ... okay on input line 39.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 39.
-LaTeX Font Info:    ... okay on input line 39.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 39.
-LaTeX Font Info:    ... okay on input line 39.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 39.
-LaTeX Font Info:    ... okay on input line 39.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 39.
-LaTeX Font Info:    ... okay on input line 39.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 39.
-LaTeX Font Info:    ... okay on input line 39.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 40.
+LaTeX Font Info:    ... okay on input line 40.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 40.
+LaTeX Font Info:    ... okay on input line 40.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 40.
+LaTeX Font Info:    ... okay on input line 40.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 40.
+LaTeX Font Info:    ... okay on input line 40.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 40.
+LaTeX Font Info:    ... okay on input line 40.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 40.
+LaTeX Font Info:    ... okay on input line 40.
 \c@lstlisting=\count129
 
 (/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
@@ -574,122 +574,122 @@ G,.JBIG2,.JB2,.eps]
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
-Underfull \hbox (badness 10000) in paragraph at lines 48--51
+Underfull \hbox (badness 10000) in paragraph at lines 49--52
 
  []
 
 [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-Underfull \hbox (badness 10000) in paragraph at lines 54--58
+Underfull \hbox (badness 10000) in paragraph at lines 55--59
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 54--58
+Underfull \hbox (badness 10000) in paragraph at lines 55--59
 
  []
 
 [2]
-Underfull \hbox (badness 10000) in paragraph at lines 73--74
+Underfull \hbox (badness 10000) in paragraph at lines 74--75
 
  []
 
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 77.
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 78.
 (/usr/share/texlive/texmf-dist/tex/latex/base/omscmr.fd
 File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <8> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 77.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 78.
  [3] [4]
-Underfull \hbox (badness 10000) in paragraph at lines 105--120
+Underfull \hbox (badness 10000) in paragraph at lines 106--121
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 135--140
+Underfull \hbox (badness 10000) in paragraph at lines 136--141
 
  []
 
 [5]
 
-LaTeX Warning: Command \textquoteright invalid in math mode on input line 159.
+LaTeX Warning: Command \textquoteright invalid in math mode on input line 160.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 169--179
+Underfull \hbox (badness 10000) in paragraph at lines 170--180
 
  []
 
 [6]
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 185.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 186.
  [7]
-Underfull \hbox (badness 10000) in paragraph at lines 201--206
+Underfull \hbox (badness 10000) in paragraph at lines 202--207
 
  []
 
 [8] [9] [10]
-Underfull \hbox (badness 10000) in paragraph at lines 312--318
+Underfull \hbox (badness 10000) in paragraph at lines 313--314
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 322--323
+Underfull \hbox (badness 10000) in paragraph at lines 321--322
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 330--331
+Underfull \hbox (badness 10000) in paragraph at lines 333--335
 
  []
 
 [11]
-Underfull \hbox (badness 10000) in paragraph at lines 366--371
+Underfull \hbox (badness 10000) in paragraph at lines 363--366
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 370--372
 
  []
 
 [12]
-Underfull \hbox (badness 10000) in paragraph at lines 375--378
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 380--386
+Underfull \hbox (badness 10000) in paragraph at lines 374--380
 
  []
 
 [13] [14]
-Overfull \hbox (15.0pt too wide) in paragraph at lines 423--428
+Overfull \hbox (15.0pt too wide) in paragraph at lines 412--417
 [][] 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 464--471
+Underfull \hbox (badness 10000) in paragraph at lines 453--460
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 464--471
+Underfull \hbox (badness 10000) in paragraph at lines 453--460
 
  []
 
 
-Overfull \hbox (9.86342pt too wide) in paragraph at lines 471--471
+Overfull \hbox (9.86342pt too wide) in paragraph at lines 460--460
 []\OT1/cmr/bx/n/10 Security Error/non-determinisitic as-sign-ment Rel-e-vancy (
 golden
  []
 
 [15]
-Underfull \hbox (badness 10000) in paragraph at lines 480--485
+Underfull \hbox (badness 10000) in paragraph at lines 469--474
 
  []
 
 [16] [17] [18] [19] [20] (./project.aux) ) 
 Here is how much of TeX's memory you used:
- 4330 strings out of 494910
- 56512 string characters out of 6179836
- 177443 words of memory out of 5000000
- 7567 multiletter control sequences out of 15000+600000
+ 4331 strings out of 494910
+ 56516 string characters out of 6179836
+ 177446 words of memory out of 5000000
+ 7568 multiletter control sequences out of 15000+600000
  9728 words of font info for 35 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
  37i,8n,32p,1194b,1586s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -710,7 +710,7 @@ blic/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/a
 msfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts
 /cm/cmsy8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmt
 i10.pfb>
-Output written on project.pdf (20 pages, 265961 bytes).
+Output written on project.pdf (20 pages, 265016 bytes).
 PDF statistics:
  137 PDF objects out of 1000 (max. 8388607)
  97 compressed objects within 1 object stream

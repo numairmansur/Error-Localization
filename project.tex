@@ -5,6 +5,7 @@
 \usepackage{amsmath}
 \usepackage{amsthm}
 \usepackage{graphicx}
+\newcommand{\limp}{\Rightarrow}
 \definecolor{codegreen}{rgb}{0,0.6,0}
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
 \definecolor{codepurple}{rgb}{0.58,0,0.82}
@@ -309,17 +310,7 @@ If we change $x=1$ to $havoc(x)$ then $assume !(x=0)$ becomes restrictive. \\
 If we change $z := 0$ to $havoc(z)$ then $assume(z==0)$ is becoming restrictive.\\
 If we change $y:=0$ to havoc(y) then $assume(y==0)$ is becoming restrictive.
 \subsubsection* {Algorithm:}
-Let $\pi$ be an error trace of length $n$, $WP()$ the weakest pre-condition operator, $\pi[i]$ the $i^{th}$ statement of $\pi$.\\
-Lets call $\Psi$ a pre-condition and $\Psi = \neg WP(False, \pi[i,n])$.\\
-Lets call $\phi$ a post-condition and $\phi =  WP(False, \pi[i+1,n])$.\\
- Where $n$ is the length of the error trace.
-A statement $\pi[i]$ in an error trace $\pi$ is relevant with respect to the non-flow sensitive criteria $(*)$ if the conjunction of the the three formulas $(\psi,\pi[i],\neg \phi) $ is unsatisfiable and $\pi[i]$ is in the unsatisfiable core.\\
-$\pi[i]$ is considered relevant with respect to non-flow sensitive criteria $(@)$ if  $(\psi,\pi[i],\neg \phi) $ is satisfiable. (In this case, $\pi[i]$ is a non-deterministic input statement $(Havoc)$).\\
-\begin{theorem}[Relevancy]
-Let $\pi$ be an error trace of length $n$ and $\pi[i]$ be an assignment statement at position $i$ having the form $x:=t$, where $x$ is a variable and $t$ is an expression. Let $P$ and $Q$ be two predicates where $P = \neg WP(False, \pi[i,n])$ and $Q =  \neg WP(False, \pi[i+1,n])$. The statement $\pi[i]$ is relevant iff the following implication does not hold.
- $$P \Rightarrow WP(Q,havoc(x))$$
-\end{theorem}
-Before proving the theorem let us list down some facts about the WP and SP operators.\\
+Let $\pi$ be an error trace of length $n$, $WP()$ the weakest pre-condition operator, $\pi[i]$ the $i^{th}$ statement of $\pi$. Let $P=\neg WP(False; \pi[i,n])$ and $Q=\neg WP(False; \pi[i+1,n])$. Where $n$ is the length of the error trace. A statement $\pi[i]$ in an error trace $\pi$ is relevant with respect to the non-flow sensitive criteria $(*)$ if the conjunction of the the three formulas $(P,\pi[i],Q) $ is unsatisfiable and $\pi[i]$ is in the unsatisfiable core.\\
 \begin{lemma}
 For a program statement $st$ and predicates $P$ and $Q$, where $P$ is condition that is true before the execution of the statement and $Q$ is a post condition, the following two implications are equivilant(also known as the duality of WP and SP):
 $$SP(P,st) \Rightarrow Q$$
@@ -327,7 +318,7 @@ $$P \Rightarrow WP(Q,st)$$
 \end{lemma}
 
 \begin{lemma}
-For a predicate Q and a statemnt st which is an assignment statement the following implication holds:\\
+For a predicate Q and a statement st which is an assignment statement the following implication holds:\\
 $$WP(\neg Q,st) = \neg WP(Q,st)$$
 \end{lemma}
 
@@ -338,84 +329,82 @@ and by contraposition:
 $$\neg WP(Q;x:=t) \Rightarrow \neg WP(Q;havoc(x))$$
 \end{lemma}
 
-\textit{\textbf{Proof (Theorem 1)}}:\\
-Suppose we have an error trace $\pi$ of length 2 containing one assignment statment and one assume statement. Let $guard$ be the guard of the assume statment.\\
-Consider the case where we take into account the first statement (i.e $i=0$)\\
+\begin{lemma}
+For predicates $Q,Q'$ and $P$:\\
+If $Q \limp Q'$ and $P \not\limp WP(Q';\pi)$, where $\pi$ is a trace, then\\
+$$P \not\limp WP(Q;\pi)$$
+\end{lemma}
+\begin{proof}
+	If $Q \limp Q'$, then $WP(Q;\pi) \limp WP(Q';\pi)$.\\
+	If $P \not\limp WP(Q';\pi)$ then certainly $P \not\limp WP(Q; \pi)$ since $WP(Q'; \pi)$ is stronger.
+\end{proof}
+\begin{theorem}[Relevancy]
+Let $\pi$ be an error trace of length $n$ and $\pi[i]$ be an assignment statement at position $i$ having the form $x:=t$, where $x$ is a variable and $t$ is an expression. Let $P$ and $Q$ be two predicates where $P = \neg WP(False, \pi[i,n])$ and $Q =  \neg WP(False, \pi[i+1,n])$. The statement $\pi[i]$ is relevant iff the following implication does not hold.
+ $$P \Rightarrow WP(Q,havoc(x))$$
+\end{theorem}
+\begin{proof}
+Suppose we have an error trace $\pi$ of length 2, where $\pi[0]$ is an assignment statement of the form $x:=t$ and $\pi[1]$ is an assume statement where $guard(\pi[1])$ is the guard of the assume statement.\\
+If we consider the assignment statment $\pi[0]$, $P$ will be $\neg WP(\neg guard; x:=t)$ and $Q$ will be $guard(\pi[1])$.\\
 $"\Rightarrow"$ \\
-If the statement is relevant, then the following implication does not hold:
+If the assignment statement $\pi[0]$ is relevant, then:
 \begin{equation} 
-P \Rightarrow WP(Q,havoc(x)) 
+P \not\limp WP(Q,havoc(x)) 
 \end{equation}
-Suppose that the assignment statement $x:=t$ is relevant.\\
-The above implication does not hold if:
-\begin{itemize}
-  \item The left hand side holds and the right hand side does not hold.
-  \item Left hand side is not False.
-\end{itemize}
-For the initial case, $P$ will be $\neg WP(Q, x:=t)$, which is the error precondition of the trace. $Q$ will be $\neg WP(FALSE, guard) = guard$.\\
-Substituting the values in (1), we get:
-\begin{equation}
-\neg WP(\neg guard, x:=t) \Rightarrow WP(guard, Havoc(x))
-\end{equation}
-Assume in (2), $\neg WP(\neg guard, assignment)$ holds, then from Lemma (3), \\$\neg WP(\neg guard, havoc)$ holds and consequently $WP(\neg guard,havoc)$ does not hold. \\
-Also, $\neg WP(\neg guard, assignment)$ which is the error precondition for our assumed trace can not be false, since we assumed that the trace is an error trace and we are reaching the error state.\\
+The relevancy of $\pi[0]$ implies that replacing $\pi[0]$ with $havoc(x)$ will result in the assume statement $\pi[1]$ getting restrictive.\\
+i.e 
+$$SP(P; havoc(x)) \not\limp guard(\pi[1])$$
+or by lemma(1) 
+$$P \not\limp WP(guard(\pi[1]); havoc(x))$$
+$$P \not\limp WP(Q; havoc(x))$$
 $"\Leftarrow"$\\
-If the following implication does not hold then the statement is relevant:
+If
 \begin{equation} 
-P \Rightarrow WP(Q,havoc(x)) 
+P \not\limp WP(Q,havoc(x)) 
 \end{equation}
-Where \\ 
-$Q$ is $\neg WP(False, guard) = guard$\\
-$P$ is $\neg WP(\neg guard, x:=t)$\\
-So, we know that the following implication does not hold:\\
-$$\neg WP(\neg guard, x:=t) \Rightarrow WP(guard, havoc(x))$$
+then the assignment statement $\pi[0]$ is relevant.\\
+Substituting the values for $P$ and $Q$\\
+$$\neg WP(\neg guard(\pi[1]), x:=t) \not\limp WP(guard(\pi[1]), havoc(x))$$
 From lemma (2)
 \begin{equation}
-WP(guard, x:=t) \Rightarrow WP(guard, havoc(x))
+WP(guard(\pi[1]), x:=t) \not\limp WP(guard(\pi[1]), havoc(x))
 \end{equation}
-does not hold.\\
-From the "duality of WP and SP" (lemma 1), if in the above expression, we consider the right hand side of the implication as $P$, $guard$ as $Q$ and $havoc(x)$ as $st$, then we can write the above implication as: \\
+From the "duality of WP and SP" (lemma 1), if in the above expression, we consider the right hand side of the implication as $P$, $guard(\pi[1])$ as $Q$ and $havoc(x)$ as $st$, then we can write the above implication as: \\
 \begin{equation}
-SP(WP(guard, x:=t), havoc(x)) \Rightarrow guard
+SP(WP(guard(\pi[1]), x:=t), havoc(x)) \not\limp guard(\pi[1])
 \end{equation}
-The above implication also does not hold as it is equivalent to (4). \\
-That means that from our supposed trace which contains one assignment statment and one assume statement with error precondition $WP(guard,x:=t)$, if we get a new trace where the assignment $x:=t$ is replaced by $havoc(x)$, the strongest postcondition of the error precondition and $havoc(x)$ does not imply the guard of the assume statement. Which according to the definition of relevancy would mean that the statement $x:=t$ is relevant.\\
-\\ Now we consider the case where the length of the trace is $n$ and the first statment of the trace is an assignment statement. We consider this assignment statement for now.\\
+That means that from our supposed trace which contains one assignment statment and one assume statement with error precondition $WP(guard(\pi[1]),x:=t)$, if we get a new trace where the assignment $x:=t$ is replaced by $havoc(x)$, the strongest postcondition of the error precondition and $havoc(x)$ does not imply the guard of the assume statement. Which according to the definition of relevancy would mean that the statement $x:=t$ is relevant.\\
+\\Now we consider the case where the length of the trace is $n$ and the first statment $\pi[0]$ of the trace $\pi$ is an assignment statement. Let $\pi_s := \pi[1,n]$. If we consider the assignment statement $\pi[0]$, then $P := \neg WP(false; \pi)$, $Q := \neg WP(false, \pi_s)$. Let $\pi'$ be the trace where the $\pi[0]$ is replaced with a havoc statement. \\
+Let $P' := \neg WP(false; \pi') := WP(Q; havoc(x))$, and $Q' := SP(P; havoc(x))$\\
 $"\Rightarrow"$\\
-If the first staement $st$ is relevant, then the following implication does not hold.
+If the assignment staement $\pi[0]$ is relevant, then:
+$$P \not\limp WP(Q;havoc(x))$$ 
+i.e there exists some assume statement in the trace at position $j$, which is restrictive if we replace the assignment statement with a havoc statement.\\
+i.e 
+$$SP(P;\pi'[0,j-1]) \not\limp guard(\pi'[j]) $$
+and consequently from lemma (1):
+$$P \not\limp WP(guard(\pi'[j]);\pi'[0,j-1])$$
+Or 
+$$P \not\limp WP(guard(\pi'[j]);\pi'[0],\pi'[1,j-1])$$
+By the recursive definition of $WP()$
 \begin{equation} 
-P \Rightarrow WP(Q,havoc(x)) 
+P \not\limp WP( WP(guard(\pi'[j]);\pi'[1,j-1]);\pi'[0])
 \end{equation}
-If the statment $st$ is relevant, then there exists some assume statement in the trace at position $j$, which is restrictive if we replace the assignment statement with a havoc statement.\\
-We know that
-\begin{equation} 
-SP(P, havoc(x),\pi[1,j-1]) \Rightarrow guard(\pi[j]) 
-\end{equation}
-does not hold.
+We also know that: 
+$$SP(Q; \pi'[1,j-1]) \limp guard(\pi'[j])$$
 and consequently from lemma (1):
 \begin{equation} 
-P \Rightarrow WP(guard(\pi[j]); havoc(x),\pi[1,j-1])
+Q \limp WP(guard(\pi'[j]); \pi'[1,j-1])
 \end{equation}
-does not hold.\\
-We also know that:
+Let $WP(guard(\pi'[j]); \pi'[1,j-1]) := R$\\
+Then (5) and(6)can be written as:
+$$P \not\limp WP( R;\pi'[0])$$
+$$Q \limp R$$
+From Lemma (4)
 \begin{equation} 
-SP(Q; \pi[1,j-1]) \Rightarrow guard(\pi[j])
+P \not\limp WP(Q; havoc(x))
 \end{equation}
-and consequently from lemma (1):
-\begin{equation} 
-Q \Rightarrow WP(guard(\pi[j]); \pi[1,j-1])
-\end{equation}
-Expression (8) can be written as 
-\begin{equation} 
-P \Rightarrow WP( WP(guard(\pi[j]); \pi[1,j-1]); havoc(x))
-\end{equation}
-does not hold.\\
-Substituting from (10) and we can write the above form expression as:
-\begin{equation} 
-P \Rightarrow WP(Q; havoc(x))
-\end{equation}
-does not hold.
-
+$"\Leftarrow"$\\
+\end{proof}
 
 
 

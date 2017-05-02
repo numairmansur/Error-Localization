@@ -5,7 +5,12 @@
 \usepackage{amsmath}
 \usepackage{amsthm}
 \usepackage{graphicx}
+\usepackage{amsmath,amssymb,amsthm}
 \newcommand{\limp}{\Rightarrow}
+\newcommand{\WP}[2]{\mathit{WP}(#1,#2)}
+\newcommand{\SP}[2]{\mathit{SP}(#1,#2)}
+\newcommand{\havoc}{\mathit{havoc}}
+\newcommand{\guard}{\mathit{guard}}
 \definecolor{codegreen}{rgb}{0,0.6,0}
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
 \definecolor{codepurple}{rgb}{0.58,0,0.82}
@@ -338,6 +343,27 @@ $$P \not\limp WP(Q;\pi)$$
 	If $Q \limp Q'$, then $WP(Q;\pi) \limp WP(Q';\pi)$.\\
 	If $P \not\limp WP(Q';\pi)$ then certainly $P \not\limp WP(Q; \pi)$ since $WP(Q'; \pi)$ is stronger.
 \end{proof}
+\begin{lemma}[nonempty post]\label{lemma:nonempty_post}
+	If $P := \WP{Q}{x := t} \nsubseteq \WP{Q}{\havoc(x)}$ for some $Q$ then $Q \subsetneq \SP{P}{\havoc(x)}$.
+\end{lemma}
+\begin{proof}
+	We will show that $Q \equiv \SP{P}{x := t} \subseteq \SP{P}{\havoc(x)} \not\subseteq Q$ from which it follows that the first inclusion is strict.
+	The first inclusion is immediate from Lemma~3 (main document)\footnote{We have to add it!}.
+	By assumption $P \not\subseteq \WP{Q}{\havoc(x)}$, which by Lemma~1 (main document) is equivalent to the second part.
+\end{proof}
+\begin{lemma}[restrictiveness]\label{lemma:spfalse}
+	If the last statement of a trace $\pi$ of length $n$ is an assume statement and $P \limp \WP{\bot}{\pi}$, then $\SP{P}{\pi[0, j]} \not\limp \guard(\pi[j])$ for some $1 \leq j \leq n$.
+\end{lemma}
+\begin{proof}
+	Induction over $n$ (length of $\pi$):
+	For $n = 1$ we have $\WP{\bot}{\pi[0]} \equiv \guard(\pi[1]) \limp \bot \equiv \neg \guard(\pi[1])$.
+	Now let $n > 1$ and let $Q := \WP{\bot}{\pi[1, n]}$.
+	By induction hypothesis $\SP{Q}{\pi[1, j]} \not\limp \guard(\pi[j])$ for some $j$.
+	If $\pi[0]$ is an assignment or havoc statement we just apply the hypothesis.
+	If $\pi[0]$ is an assume statement then $P \equiv \guard(\pi[1]) \limp Q$, so if $P \not\limp Q$ then $P \not\limp \guard(\pi[1])$.
+\end{proof}
+
+
 \begin{theorem}[Relevancy]
 Let $\pi$ be an error trace of length $n$ and $\pi[i]$ be an assignment statement at position $i$ having the form $x:=t$, where $x$ is a variable and $t$ is an expression. Let $P$ and $Q$ be two predicates where $P = \neg WP(False, \pi[i,n])$ and $Q =  \neg WP(False, \pi[i+1,n])$. The statement $\pi[i]$ is relevant iff the following implication does not hold.
  $$P \Rightarrow WP(Q,havoc(x))$$
@@ -374,7 +400,7 @@ SP(WP(guard(\pi[1]), x:=t), havoc(x)) \not\limp guard(\pi[1])
 \end{equation}
 That means that from our supposed trace which contains one assignment statment and one assume statement with error precondition $WP(guard(\pi[1]),x:=t)$, if we get a new trace where the assignment $x:=t$ is replaced by $havoc(x)$, the strongest postcondition of the error precondition and $havoc(x)$ does not imply the guard of the assume statement. Which according to the definition of relevancy would mean that the statement $x:=t$ is relevant.\\
 \\Now we consider the case where the length of the trace is $n$ and the first statment $\pi[0]$ of the trace $\pi$ is an assignment statement. Let $\pi_s := \pi[1,n]$. If we consider the assignment statement $\pi[0]$, then $P := \neg WP(false; \pi)$, $Q := \neg WP(false, \pi_s)$. Let $\pi'$ be the trace where the $\pi[0]$ is replaced with a havoc statement. \\
-Let $P' := \neg WP(false; \pi') := WP(Q; havoc(x))$, and $Q' := SP(P; havoc(x))$\\
+Let $P' := \neg WP(false; \pi') := WP(Q; havoc(x))$, and $Q' := SP(P; havoc(x))$. Observe here that $P$ can also be stated as $WP(Q;x:=t)$\\
 $"\Rightarrow"$\\
 If the assignment staement $\pi[0]$ is relevant, then:
 $$P \not\limp WP(Q;havoc(x))$$ 
@@ -404,9 +430,33 @@ From Lemma (4)
 P \not\limp WP(Q; havoc(x))
 \end{equation}
 $"\Leftarrow"$\\
+If $$P \not\limp WP(Q; havoc(x))$$
+Then statement $x:=t$ is relevant.
+By assumption and by definition of $P$:
+$$WP(Q; x:=t) \not\limp WP(Q; havoc(x))$$
+By lemma (5) [DEFINE LEMMA 5 PLEASE !!!!] :
+$$Q \subsetneq SP(Q; havoc(x))$$
+or
+$$Q \subsetneq Q'$$
+Let $R = Q'\setminus Q$ or $Q'=R \biguplus Q$ (disjoint union of R and Q).\\
+Now we want to show a contradiction for the states in $Q'$ but from 
+\begin{equation} 
+SP(X \cup Y; \pi) = SP(X; \pi) \cup SP(Y;\pi)
+\end{equation}
+we can conclude that it suffices to show a contradiction for the states in $R$.\\
+Let us assume that for all $1 \leq j \leq n$, statement $\pi'[j]$ is not restrictive. i.e
+$$SP(Q';\pi'[1,j-1]) \limp guard(\pi'[j]) \qquad \forall 1 \leq j \leq n$$
+By equation (8) we can write:
+\begin{equation} 
+SP(R; \pi'[1, j-1]) \limp guard(\pi'[j]) \qquad \forall 1 \leq j \leq n
+\end{equation}
+We know that $R \limp \neg Q$ and hence
+\begin{equation} 
+R \limp WP(false; \pi_s)
+\end{equation}
+Considering (9) and (10) and lemma (SOMETHING) we get a contradiction.
+That means that one of the assume statement is getting restrictive and hence the statement $x:=t$ is relevant.
 \end{proof}
-
-
 
 \newpage
 \rule{\textwidth}{1pt}\\

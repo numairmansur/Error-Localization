@@ -454,7 +454,7 @@ We know that $R \limp \neg Q$ and hence
 \begin{equation} 
 R \limp WP(false; \pi_s)
 \end{equation}
-Considering (9) and (10) and lemma (SOMETHING) we get a contradiction.
+Considering (9) and (10) and lemma (6) we get a contradiction.
 That means that one of the assume statement is getting restrictive and hence the statement $x:=t$ is relevant.
 \end{proof}
 
@@ -516,30 +516,24 @@ $$SP(true; \pi') \Rightarrow false$$
 \end{mydef}
 
 \subsubsection*{Algorithm}
-Let $\pi$ be an error trace of length $n$, $WP()$ the weakest pre-condition operator, $\pi[i]$ the $i^{th}$ statement of $\pi$.\\
-Lets call $\Psi$ a pre-condition and $\Psi = \neg WP(False, \pi[i,n])$.\\
-Lets call $\phi$ a post-condition and $\phi =  WP(False, \pi[i+1,n])$.\\
-Where $n$ is the length of the error trace.
-A statement $\pi[i]$ in an error trace $\pi$ is relevant with respect to the non-flow sensitive criteria $(@)$ if the conjunction of the the three formulas $(\psi,\pi[i],\neg \phi) $ is satisfiable.\\
+Let $\pi$ be an error trace of length $n$, $WP()$ the weakest pre-condition operator, $\pi[i]$ the $i^{th}$ statement of $\pi$. Let $P = \neg WP(False, \pi[i,n])$ and $Q =  WP(False, \pi[i+1,n])$, where $n$ is the length of the error trace. A $havoc$ statement $\pi[i]$ in an error trace $\pi$ is relevant with respect to the non-flow sensitive criteria $(@)$ if the conjunction of the the three formulas $(\psi,\pi[i],\neg \phi) $ is satisfiable.\\
 
 \begin{theorem}[Security Error Relevancy] 
-Let $\pi$ be an error trace of length $n$ and $\pi[i]$ be a non-deterministic assignment statement at position $i$ having the form $havoc(x)$, where $x$ is a variable. Let $P$ and $Q$ be two predicates where $P = \neg WP(False, \pi[i,n])$ and $Q = \neg WP(False, \pi[i+1,n])$. The statement $\pi[i]$ is relevant iff the following implication does not hold.
- $$P \Rightarrow WP(Q,havoc(x))$$
+Let $\pi$ be an error trace of length $n$ and $\pi[i]$ be a non-deterministic assignment statement at position $i$ having the form $havoc(x)$, where $x$ is a variable. Let $P$ and $Q$ be two predicates where $P = \neg WP(False, \pi[i,n])$ and $Q = \neg WP(False, \pi[i+1,n])$. The statement $\pi[i]$ is relevant iff:
+ $$P \not\limp WP(Q,havoc(x))$$
 \end{theorem}
 
 \subsubsection*{Proof:}
-Consider first a case where we have an error trace $\pi$ of length 2, containing one havoc statement and one assume statement. Let $guard(x)$ be the guard of the assume statement. We take into account the $havoc$ statement at position $i=0$.\\
+Suppose we have an error trace of length 2 where $\pi[0]$ is a $havoc$ statement of the form $havoc(x)$, where $x$ is a variable and $\pi[1]$ an assume statement where $guard(\pi[1])$ is the guard of the assume statetment.\\
 $"\Rightarrow"$\\
-The $havoc$ statement is relevant if the following implication does not hold.
-$$P \Rightarrow WP(Q,havoc(x))$$
+If the $havoc$ statement is relevant,  then:
+$$P \not\limp WP(Q,havoc(x))$$
 For the initial case $P$, will be $\neg WP(\neg guard, havoc(x))$, which is the error precondition of the trace and $Q$ will be $guard$.\\
-Hence we have to show that the following implication does not hold.
+Hence we have to show the following:
 \begin{equation}
-\neg WP(\neg guard, havoc(x)) \Rightarrow WP(guard, havoc(x))
+\neg WP(\neg guard, havoc(x)) \not\limp WP(guard, havoc(x))
 \end{equation}
-It can be shown that the above implication does not hold, if \\
-1) The left hand side of the implication is not false.\\
-2) Right hand side of the implication is false.\\
+We can show that the above implication does not hold, by showing that the right hand side is false and the left hand side is not.\\
 If the statement is relevant, then
 $$SP(true, \pi') \Rightarrow false$$
 Which in the case of a trace of length 2 is equivalent to
@@ -547,9 +541,9 @@ $$SP(true, x:=t) \Rightarrow \neg guard$$
 By Lemma(1)
 $$true  \Rightarrow WP(\neg guard, x:=t)$$
 negating both sides
-$$false \Rightarrow \neg WP(\neg guard, x:=t)$$
+$$ \neg WP(\neg guard, x:=t) \Rightarrow false $$
 By lemme(2)
-$$false \Rightarrow WP(guard, x:=t)$$
+$$WP(guard, x:=t) \Rightarrow false$$
 Hence,
 $$ WP(guard; x:=t) = false$$
 Lemma (3) states
@@ -557,13 +551,13 @@ $$WP(guard, havoc(x)) \Rightarrow WP(guard; x:=t)$$
 $$WP(guard; havoc(x)) \Rightarrow false$$
 Since only false implies false, we get the result that 
 $$WP(guard, havoc(x)) = false$$
-Which is the left hand side of the implication in (13).
-Since the right hand side of the implication in (13) is the error precondtion of a feasible error trace, it can not be empty or false. \\
-Hence the implication in (13) does not hold.\\
+Which is the right hand side of the implication in (????).
+Since the left hand side of the implication in (??) is the error precondtion of a feasible error trace, it can not be empty or false. \\
+Hence the implication in (????) does not hold.\\
 $"\Leftarrow"$\\
-The statement $havoc(x)$ is relevant if the following implication does not hold. 
-$$P \Rightarrow WP(Q,havoc(x))$$
-Where $P$ is $\neg WP(\neg guard; havoc(x))$ and $Q$ is $guard$. 
+If
+$$P \not\limp WP(Q,havoc(x))$$
+Then the statement $havoc(x)$ is relevant. Where $P$ is $\neg WP(\neg guard; havoc(x))$ and $Q$ is $guard$. \\
 To show that a $havoc$ statement is relevant we have to show that there exists an assignment $x:=t$ which makes the error trace infeasible. That would imply that there exists a transition that ends up in the state $\neg guard$.\\
 By definition of the $WP()$ operator.
 \begin{itemize}
@@ -575,7 +569,9 @@ By definition of the $WP()$ operator.
 We know that 
 $$\neg WP(\neg guard; havoc(x)) \not \subseteq WP(guard; havoc(x))$$
 The left hand side of the above inequality represent the set of states from which there is atleast one transition that goes to $guard$ and a transition that go to $\neg guard$. And the right hand side represents the set of states from which all transisitons go to $guard$.\\
-Since the left hand side is the error precondition, the above inequality shows that there exist a state in the error precondition, which is not in the set represented by the right hand side and from which there exists a transition that ends up in $\neg guard$ making the error trace infeasible if we replace the error trace with that transition.
+Since the left hand side is the error precondition, the above inequality shows that there exist a state in the error precondition, which is not in the set represented by the right hand side and from which there exists a transition that ends up in $\neg guard$ making the error trace infeasible if we replace the error trace with that transition.\\
+\\
+Now for the case where length of the trace is $n$ and the first statement $\pi[0]$ is a $havoc$ statement.
 
 \subsection{Flow Sensitive Relevance criteria }
 The definition of relevancy is actually similar to the non-flow sensitive case. The only thing different is that now we take branches in the trace into account. If there is a branch in the error trace, the relevancy of the statements inside the error trace will only be calculated if the branch as a whole is relevant to the error. We see that we can get slightly different results from the Non-Flow Sensitive case because it is possible that a statement might be relevant with respect to non-flow sensitive case but it lies inside a branch which is not relevant. \\

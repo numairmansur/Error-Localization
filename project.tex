@@ -551,9 +551,9 @@ $$WP(guard, havoc(x)) \Rightarrow WP(guard; x:=t)$$
 $$WP(guard; havoc(x)) \Rightarrow false$$
 Since only false implies false, we get the result that 
 $$WP(guard, havoc(x)) = false$$
-Which is the right hand side of the implication in (????).
-Since the left hand side of the implication in (??) is the error precondtion of a feasible error trace, it can not be empty or false. \\
-Hence the implication in (????) does not hold.\\
+Which is the right hand side of the implication in (?).
+Since the left hand side of the implication in (?) is the error precondtion of a feasible error trace, it can not be empty or false. \\
+Hence the implication in (?) does not hold.\\
 $"\Leftarrow"$\\
 If
 $$P \not\limp WP(Q,havoc(x))$$
@@ -570,8 +570,6 @@ We know that
 $$\neg WP(\neg guard; havoc(x)) \not \subseteq WP(guard; havoc(x))$$
 The left hand side of the above inequality represent the set of states from which there is atleast one transition that goes to $guard$ and a transition that go to $\neg guard$. And the right hand side represents the set of states from which all transisitons go to $guard$.\\
 Since the left hand side is the error precondition, the above inequality shows that there exist a state in the error precondition, which is not in the set represented by the right hand side and from which there exists a transition that ends up in $\neg guard$ making the error trace infeasible if we replace the error trace with that transition.\\
-\\
-Now for the case where length of the trace is $n$ and the first statement $\pi[0]$ is a $havoc$ statement.
 
 \subsection{Flow Sensitive Relevance criteria }
 The definition of relevancy is actually similar to the non-flow sensitive case. The only thing different is that now we take branches in the trace into account. If there is a branch in the error trace, the relevancy of the statements inside the error trace will only be calculated if the branch as a whole is relevant to the error. We see that we can get slightly different results from the Non-Flow Sensitive case because it is possible that a statement might be relevant with respect to non-flow sensitive case but it lies inside a branch which is not relevant. \\

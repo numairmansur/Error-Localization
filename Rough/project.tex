@@ -211,11 +211,11 @@ $$error\ precondition:\neg wp(TF[\pi],False)$$
 In this case $\pi$ is called an \textbf{\textit{error trace}}. Hence for an error trace $\pi$, no execution of the trace $\pi$ that starts in a state satisfying the error pre-condition $\Psi$ ends in an exit state.\\
 
 
-\subsubsection{Preliminary definitions (to be discarded)}
-\textbf{Weakest Precondition Operator (Def 1): }For some given program statement $S$ and some postcondition $R$ there is a (possibly empty) set of program states such that if execution of $S$ is initiated from one of these states then $S$ is guaranteed to terminate in a state for which $R$ is true. The weakest precondition of $S$ with respect to $R$, normally written $wp (S,R)$ is a predicate that characterizes this set of states.\\
-\textbf{Def 2: }For some given logical predicate $R$, and a program statement $ST$, $wp(R,ST)$ is defined to be the weakest logical predicate that must be true before executing $S$ in order to prove that $R$ is true afterwards. \cite{wpdefinition}.\\
-Let us assume variable $x$ denotes the tuple of variables involved in statement $ST$. Then, a given Hoare Triple $\{P\} ST \{R\}$ is provable in Hoare Logic for total correctness if and only if the first-order predicate below holds:
-$$\forall x,P \Rightarrow wp(ST,R)$$.
+\newpage
+\subsubsection{DEFINITIONS FOR SCREEN SHOT:}
+Let $\pi$ be an error trace. An execution of a trace is a sequence of states $s_0, s_1...s_n$ such that $s_i, s_{i+1} \models T$, where $T$ is the transition formula of $\pi[i]$. Let $\epsilon$ represent the set of all possible executions of the error trace. \\
+\textbf{Blocking Execution} \\
+An execution of a trace is called a blocking execution if there exists a sequence of states $s_0, s_1...s_n$ such that $s_i, s_{i+1} \models T[i]$, where $T[i]$ is the transition formula of $\pi[i]$ and there exits an assume statement in the trace $\pi$ at position $j$ such that $s_{j-1} \not \limp guard(\pi[j])$
 
 
 \newpage

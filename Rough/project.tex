@@ -213,10 +213,13 @@ In this case $\pi$ is called an \textbf{\textit{error trace}}. Hence for an erro
 
 \newpage
 \subsubsection{DEFINITIONS FOR SCREEN SHOT:}
-Let $\pi$ be an error trace. An execution of a trace is a sequence of states $s_0, s_1...s_n$ such that $s_i, s_{i+1} \models T$, where $T$ is the transition formula of $\pi[i]$. Let $\epsilon$ represent the set of all possible executions of the error trace. \\
+Let $\pi$ be an error trace. An execution of a trace is a sequence of states $s_0, s_1...s_n$ such that $s_i, s_{i+1} \models T$, where $T$ is the transition formula of $\pi[i]$. \\
+Let $\epsilon$ represent the set of all possible executions of the error trace. \\
 \textbf{Blocking Execution} \\
-An execution of a trace is called a blocking execution if there exists a sequence of states $s_0, s_1...s_n$ such that $s_i, s_{i+1} \models T[i]$, where $T[i]$ is the transition formula of $\pi[i]$ and there exits an assume statement in the trace $\pi$ at position $j$ such that $s_{j-1} \not \limp guard(\pi[j])$
-
+An execution of a trace is called a blocking execution if there exists a sequence of states $s_0, s_1...s_n$ such that $s_i, s_{i+1} \models T[i]$, where $T[i]$ is the transition formula of $\pi[i]$ and there exits an assume statement in the trace $\pi$ at position $j$ such that $s_{j-1} \not \limp guard(\pi[j])$. \\
+\textbf{Relevancy of an assignment statement x:=t} \\
+Let $\beta$ represent the set of all blocking executions of a trace $\pi$. Let there be an assignment statement of the form $x:=t$ at position $i$. Let $\pi'$ represent a trace that we get after replacing $\pi[i]$ with a havoc statement of the form $havoc(x)$ and let $\beta'$ represent the set of all blocking executions for $\pi'$.\\
+We say that the assignment statement $\pi[i]$ is relevant, if $\beta \subset \beta'$. 
 
 \newpage
 \subsubsection{Non-Flow Sensitive Relevancy}

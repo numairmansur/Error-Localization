@@ -246,7 +246,7 @@ On the other hand changing the statement $x := 1$ to $havoc(x)$ will have no eff
 \textit{\textbf{[define Guard in the definitions section]}}
 \begin{mydef}[Restrictivness of a statement]
 Let $pre$ be a state formula, $\pi$ a trace and $i$ a position such that $\pi[i]$ is an assume statement. We call the assume statement $\pi[i]$ \emph{restricitve} iff :
-$$Post(\pi[0,i-1], pre) \not \limp guard(\pi[i])$$
+$$SP(\pi[0,i-1], pre) \not \limp guard(\pi[i])$$
 \end{mydef}
 
 \begin{mydef}[Relevancy of a statement]

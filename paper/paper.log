@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2016.8.10)  4 JUN 2017 21:36
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2016.8.10)  5 JUN 2017 01:05
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -597,10 +597,10 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] (./paper.aux) ) 
 Here is how much of TeX's memory you used:
- 4339 strings out of 493029
- 57336 string characters out of 6136234
- 123673 words of memory out of 5000000
- 7806 multiletter control sequences out of 15000+600000
+ 4340 strings out of 493029
+ 57348 string characters out of 6136234
+ 123681 words of memory out of 5000000
+ 7807 multiletter control sequences out of 15000+600000
  10937 words of font info for 43 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  37i,6n,32p,362b,219s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -616,7 +616,7 @@ cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cms
 y7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb
 ></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
 
-Output written on paper.pdf (1 page, 113023 bytes).
+Output written on paper.pdf (1 page, 113077 bytes).
 PDF statistics:
  52 PDF objects out of 1000 (max. 8388607)
  37 compressed objects within 1 object stream

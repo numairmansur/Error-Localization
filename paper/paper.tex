@@ -58,20 +58,48 @@ Let $\beta$ represent the set of all blocking executions of a trace $\pi$. Let t
 We say that the assignment statement $\pi[i]$ is relevant if the trace after the replacement has strictly more blocked executions than the trace before the replacement, i.e if $\beta \subsetneq \beta'$. 
 \end{mydef}
 
-\begin{lemma}[bla]\label{lemma:bla}
-We have to write some lemmas connecting blocking executions with some other shit. 
+\begin{lemma}[]\label{lemma:duality}
+For a program statement $st$ and predicates $P$ and $Q$, where $P$ is condition that is true before the execution of the statement and $Q$ is a post condition, the following two implications are equivilant(also known as the duality of WP and SP):
+$$SP(P,st) \Rightarrow Q$$
+$$P \Rightarrow WP(Q,st)$$
 \end{lemma}
-\begin{lemma}[blaa]\label{lemma:blaa}
-blaa
+\begin{lemma}[]\label{lemma:neg_wp_assignment}
+For a predicate Q and a statement st which is an assignment statement the following implication holds:\\
+$$WP(\neg Q,st) = \neg WP(Q,st)$$
 \end{lemma}
-
+\newpage
 \begin{theorem}[Relevancy]\label{mydef:relevancytheorem}
-Let $\pi$ be an error trace of length $n$ and $\pi[i]$ be an assignment statement at position $i$ having the form $x:=t$, where $x$ is a variable and $t$ is an expression. Let $P$ and $Q$ be two predicates where $P = \neg WP(False, \pi[i,n])$ and $Q =  \neg WP(False, \pi[i+1,n])$. The statement $\pi[i]$ is relevant iff:
+Let $\pi$ be an error trace of length $n$ and $\pi[i]$ be an assignment statement at position $i$ having the form $x:=t$, where $x$ is a variable and $t$ is an expression. Let $P$ and $Q$ be two predicates where $P = \neg WP(False; \pi[i,n])$ and $Q =  \neg WP(False; \pi[i+1,n])$. The statement $\pi[i]$ is relevant iff:
  $$P \not \limp WP(Q,havoc(x))$$
 \end{theorem}
 
 \begin{proof}
-
+We will divide the proof in 3 cases. \\
+\textbf{[n=2]} \\
+Suppose we have an error trace of length $n=2$, where $\pi[0]$ is an assignment statement of the form $x:=t$ and $\pi[1]$ is an assume statement where $guard(\pi[1])$ is the guard of the assume statement. If we consider the assignment statement $\pi[0]$, $P$ will be $\neg WP(\neg guard; x:=t)$ and $Q$ will be $guard(\pi[1])$ .\\
+"$\Rightarrow$"\\
+If the assignment statement $\pi[0]$ is relevant, then: \\
+ $$P \not \limp WP(Q,havoc(x))$$
+ The relevancy of $\pi[0]$ implies that replacing $\pi[0]$ with $havoc(x)$ will result in more blocking executions then before.\\
+ i.e
+ $$Q \subsetneq SP(P; havoc(x))$$ 
+ Intuvitevly the above statement means that if we replace $x:=t$ with $havoc(x)$ and it creates more blocking executions, then $SP(P; havoc(x))$ will have more states then in $Q$, while $Q$ being $guard(\pi[1])$ here. \\
+so,
+$$SP(P; havoc(x)) \not \limp guard(\pi[1])$$
+By lemma~\ref{lemma:duality} 
+$$P \not\limp WP(guard(\pi[1]); havoc(x))$$
+$$P \not\limp WP(Q; havoc(x))$$
+"$\Leftarrow$"\\
+If
+$$P \not \limp WP(Q, havoc(x))$$
+then the assignment statement $\pi[0]$ is relevant.\\
+Substituting the values for $P$ and $Q$
+$$\neg WP(\neg guard(\pi[1]), x:=t) \not\limp WP(guard(\pi[1]), havoc(x))$$
+From lemma ~\ref{lemma:neg_wp_assignment}
+$$WP(guard(\pi[1]), x:=t) \not\limp WP(guard(\pi[1]), havoc(x))$$
+From the "duality of WP and SP" (lemma~\ref{lemma:duality}), if in the above expression, we consider the right hand side of the implication as $P$, $guard(\pi[1])$ as $Q$ and $havoc(x)$ as $st$, then we can write the above implication as: \\
+$$SP(WP(guard(\pi[1]), x:=t), havoc(x)) \not\limp guard(\pi[1])$$
+That means that from our supposed trace which contains one assignment statment and one assume statement with error precondition $WP(guard(\pi[1]),x:=t)$, if we get a new trace where the assignment $x:=t$ is replaced by $havoc(x)$, the strongest postcondition of the error precondition and $havoc(x)$ does not imply the guard of the assume statement. Which intuvitively means that replacing the assignment with havoc introduces new states which does not satisfy the guard of the assume statement. These new states also means that the number of blocking executions for the trace with $havoc$ is more then the number of blocking executions in the trace with assignment. Which according to our definiton would mean that the assignment is relevant.\\
 \end{proof}
 
 \end{document}

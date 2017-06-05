@@ -102,5 +102,6 @@ $$SP(WP(guard(\pi[1]), x:=t), havoc(x)) \not\limp guard(\pi[1])$$
 That means that from our supposed trace which contains one assignment statment and one assume statement with error precondition $WP(guard(\pi[1]),x:=t)$, if we get a new trace where the assignment $x:=t$ is replaced by $havoc(x)$, the strongest postcondition of the error precondition and $havoc(x)$ does not imply the guard of the assume statement. Which intuvitively means that replacing the assignment with havoc introduces new states which does not satisfy the guard of the assume statement. These new states also means that the number of blocking executions for the trace with $havoc$ is more then the number of blocking executions in the trace with assignment. Which according to our definiton would mean that the assignment is relevant.\\
 \\
 \textit{\textbf{Case 2:}} $len(\pi)=n$; $\pi[0]$ is an assignment statement: \\
+Consider the case where the length of the trace is $n$ and the first statement $\pi[0]$ of the trace $\pi$ is an assignment statement. 
 \end{proof}
 \end{document}

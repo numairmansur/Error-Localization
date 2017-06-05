@@ -63,10 +63,18 @@ For a program statement $st$ and predicates $P$ and $Q$, where $P$ is condition 
 $$SP(P,st) \Rightarrow Q$$
 $$P \Rightarrow WP(Q,st)$$
 \end{lemma}
+
 \begin{lemma}[]\label{lemma:neg_wp_assignment}
 For a predicate Q and a statement st which is an assignment statement the following implication holds:\\
 $$WP(\neg Q,st) = \neg WP(Q,st)$$
 \end{lemma}
+
+\begin{lemma}[]\label{lemma:neg_wp_assignment}
+If a set of states have some states from which if we being the execution of a trace and that are blocking\\
+then $$SP(P; trace)\not \limp guard(\pi[j])$$ 
+Think about it more !
+\end{lemma}
+
 \newpage
 \begin{theorem}[Relevancy]\label{mydef:relevancytheorem}
 Let $\pi$ be an error trace of length $n$ and $\pi[i]$ be an assignment statement at position $i$ having the form $x:=t$, where $x$ is a variable and $t$ is an expression. Let $P$ and $Q$ be two predicates where $P = \neg WP(False; \pi[i,n])$ and $Q =  \neg WP(False; \pi[i+1,n])$. The statement $\pi[i]$ is relevant iff:
@@ -101,7 +109,40 @@ From the "duality of WP and SP" (lemma~\ref{lemma:duality}), if in the above exp
 $$SP(WP(guard(\pi[1]), x:=t), havoc(x)) \not\limp guard(\pi[1])$$
 That means that from our supposed trace which contains one assignment statment and one assume statement with error precondition $WP(guard(\pi[1]),x:=t)$, if we get a new trace where the assignment $x:=t$ is replaced by $havoc(x)$, the strongest postcondition of the error precondition and $havoc(x)$ does not imply the guard of the assume statement. Which intuvitively means that replacing the assignment with havoc introduces new states which does not satisfy the guard of the assume statement. These new states also means that the number of blocking executions for the trace with $havoc$ is more then the number of blocking executions in the trace with assignment. Which according to our definiton would mean that the assignment is relevant.\\
 \\
-\textit{\textbf{Case 2:}} $len(\pi)=n$; $\pi[0]$ is an assignment statement: \\
-Consider the case where the length of the trace is $n$ and the first statement $\pi[0]$ of the trace $\pi$ is an assignment statement. 
+\textit{\textbf{Case 2:}} $len(\pi)=n$; $\pi[i]$ is an assignment statement, where $i=0$: \\
+Consider the case where the length of the trace is $n$ and the first statement $\pi[0]$ of the trace $\pi$ is an assignment statement. Let $\pi_s := \pi[1,n-1]$. If we consider the assignment statement $\pi[0]$, then $P:= \neg WP(false; \pi)$, $Q:= \neg WP(false, \pi_s)$. Let $\pi'$ be the trace where $\pi[0]$ is replaced by a havoc statement.\\
+Let $P' := \neg WP(false; \pi') := WP(Q; havoc(x))$ and $Q' := SP(P; havoc(x))$. Observe here that $P$ can also be stated as $WP(Q; x:=t)$.\\
+"$\Rightarrow$"\\
+If the assignment statement $\pi[0]$ is relevant, then:
+$$P \not \limp WP(Q; havoc(x))$$
+i.e the trace after the replacement of $\pi[0]$ to $havoc$ has strictly more blocking executions than the trace before the replacement. That means that there exists an assume statement in the trace $\pi$ at position $j$, which is blocking more executions then before. Or we can say that there are more states $s_j$ now for which that assume statement $\pi[j]$ is blocking.\\
+OR
+$$SP(P; \pi[0,j-1]) \subsetneq SP(P; \pi'[0,j-1])$$
+$SP(P; \pi'[0,j-1])$ contains more states for which $guard(\pi'[j])$ does not hold. \\
+Hence,
+$$SP(P; \pi'[0,j-1]) \not \limp guard(\pi'[j])$$
+From lemma~\ref{lemma:duality}:
+$$P \not \limp WP(guard(\pi'[j]; \pi'[0,j-1]))$$
+OR
+$$P \not\limp WP(guard(\pi'[j]);\pi'[0],\pi'[1,j-1])$$
+By the recursive definition of $WP()$
+\begin{equation} 
+P \not\limp WP( WP(guard(\pi'[j]);\pi'[1,j-1]);\pi'[0])
+\end{equation}
+We also know that: 
+$$SP(Q; \pi'[1,j-1]) \limp guard(\pi'[j])$$
+and consequently from lemma (1):
+\begin{equation} 
+Q \limp WP(guard(\pi'[j]); \pi'[1,j-1])
+\end{equation}
+Let $WP(guard(\pi'[j]); \pi'[1,j-1]) := R$\\
+Then (5) and(6)can be written as:
+$$P \not\limp WP( R;\pi'[0])$$
+$$Q \limp R$$
+From Lemma (4)
+\begin{equation} 
+P \not\limp WP(Q; havoc(x))
+\end{equation}
+
 \end{proof}
 \end{document}

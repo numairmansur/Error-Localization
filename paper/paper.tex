@@ -75,7 +75,7 @@ Let $\pi$ be an error trace of length $n$ and $\pi[i]$ be an assignment statemen
 
 \begin{proof}
 We will divide the proof in 3 cases. \\
-\textbf{[n=2]} \\
+\textit{\textbf{Case 1: $len(\pi) = 2$:}} \\
 Suppose we have an error trace of length $n=2$, where $\pi[0]$ is an assignment statement of the form $x:=t$ and $\pi[1]$ is an assume statement where $guard(\pi[1])$ is the guard of the assume statement. If we consider the assignment statement $\pi[0]$, $P$ will be $\neg WP(\neg guard; x:=t)$ and $Q$ will be $guard(\pi[1])$ .\\
 "$\Rightarrow$"\\
 If the assignment statement $\pi[0]$ is relevant, then: \\
@@ -100,6 +100,7 @@ $$WP(guard(\pi[1]), x:=t) \not\limp WP(guard(\pi[1]), havoc(x))$$
 From the "duality of WP and SP" (lemma~\ref{lemma:duality}), if in the above expression, we consider the right hand side of the implication as $P$, $guard(\pi[1])$ as $Q$ and $havoc(x)$ as $st$, then we can write the above implication as: \\
 $$SP(WP(guard(\pi[1]), x:=t), havoc(x)) \not\limp guard(\pi[1])$$
 That means that from our supposed trace which contains one assignment statment and one assume statement with error precondition $WP(guard(\pi[1]),x:=t)$, if we get a new trace where the assignment $x:=t$ is replaced by $havoc(x)$, the strongest postcondition of the error precondition and $havoc(x)$ does not imply the guard of the assume statement. Which intuvitively means that replacing the assignment with havoc introduces new states which does not satisfy the guard of the assume statement. These new states also means that the number of blocking executions for the trace with $havoc$ is more then the number of blocking executions in the trace with assignment. Which according to our definiton would mean that the assignment is relevant.\\
+\\
+\textit{\textbf{Case 2:}} $len(\pi)=n$; $\pi[0]$ is an assignment statement: \\
 \end{proof}
-
 \end{document}

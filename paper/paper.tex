@@ -76,6 +76,15 @@ then $$SP(P; trace)\not \limp guard(\pi[j])$$
 Think about it more !
 \end{lemma}
 
+\begin{lemma}[nonempty post]\label{lemma:nonempty_post}
+If $P := \WP{Q}{x := t} \nsubseteq \WP{Q}{\havoc(x)}$ for some $Q$ then $Q \subsetneq \SP{P}{\havoc(x)}$.
+\end{lemma}
+\begin{proof}
+	We will show that $Q \equiv \SP{P}{x := t} \subseteq \SP{P}{\havoc(x)} \not\subseteq Q$ from which it follows that the first inclusion is strict.
+	The first inclusion is immediate from Lemma~3 (main document)\footnote{We have to add it!}.
+	By assumption $P \not\subseteq \WP{Q}{\havoc(x)}$, which by Lemma~1 (main document) is equivalent to the second part.
+\end{proof}
+
 \newpage
 \begin{theorem}[Relevancy]\label{mydef:relevancytheorem}
 Let $\pi$ be an error trace of length $n$ and $\pi[i]$ be an assignment statement at position $i$ having the form $x:=t$, where $x$ is a variable and $t$ is an expression. Let $P$ and $Q$ be two predicates where $P = \neg WP(False; \pi[i,n])$ and $Q =  \neg WP(False; \pi[i+1,n])$. The statement $\pi[i]$ is relevant iff:
@@ -152,8 +161,44 @@ $$P \not \limp WP(Q; havoc(x))$$
 then the assignment statement $\pi[0]$ is relevant.\\
 By the definition of $P$:
 $$WP(Q; x:=t) \not \limp WP(Q; havoc(x))$$
+By lemma~\ref{lemma:nonempty_post} :
+$$Q \subsetneq SP(Q; havoc(x))$$
+or
+$$Q \subsetneq Q'$$
+Let $R = Q'\setminus Q$ or $Q'=R \biguplus Q$ (disjoint union of R and Q).\\
+Now we want to show a contradiction for the states in $Q'$ but from 
+\begin{equation} 
+SP(X \cup Y; \pi) = SP(X; \pi) \cup SP(Y;\pi)
+\end{equation}
+we can conclude that it suffices to show a contradiction for the states in $R$.\\
+-------I THINK HERE WE HAVE TO ASSUME THAT THE NEW TRACE HAVE THE SAME AMOUNT OF BLOCKING EXECUTIONS-------\\
+---------------------------------------------------------------------------------------------------------\\
+Let us assume that for all $1 \leq j \leq n$, statement $\pi'[j]$ is not restrictive. i.e
+$$SP(Q';\pi'[1,j-1]) \limp guard(\pi'[j]) \qquad \forall 1 \leq j \leq n$$
+---------------------------------------------------------------------------------------------------------\\
+By equation (8) we can write:
+\begin{equation} 
+SP(R; \pi'[1, j-1]) \limp guard(\pi'[j]) \qquad \forall 1 \leq j \leq n
+\end{equation}
+We know that $R \limp \neg Q$ and hence
+\begin{equation} 
+R \limp WP(false; \pi_s)
+\end{equation}
+Considering (9) and (10) and lemma (6) we get a contradiction.
+That means that one of the assume statement is getting restrictive and hence the statement $x:=t$ is relevant.
 \end{proof}
 
+\begin{mydef}[Relevancy of a havoc statement]
+Let $\pi$ be a feasible error trace and $\pi[i]$ be a $Havoc$ statement at position $i$ having the form $havoc(x)$, where $x$ is a variable. Let $x:=t$ be an assignment statement where $x$ is the same variable as in $havoc(x)$ and $t$ is an expression. The $havoc$ statement $\pi[i]$ is relevant if there exists an assignemnt $x:=t$ such that if we replace the $havoc$ in $\pi$ with $x:=t$ to get a new trace $\pi'$, then all the executions of $\pi'$ are blocking (the trace is infeasible).
+$$SP(true; \pi') \Rightarrow false$$
+\end{mydef}
 
+\begin{theorem}[Security Error Relevancy] 
+Let $\pi$ be an error trace of length $n$ and $\pi[i]$ be a non-deterministic assignment statement at position $i$ having the form $havoc(x)$, where $x$ is a variable. Let $P$ and $Q$ be two predicates where $P = \neg WP(False, \pi[i,n])$ and $Q = \neg WP(False, \pi[i+1,n])$. The statement $\pi[i]$ is relevant iff:
+ $$P \not\limp WP(Q,havoc(x))$$
+\end{theorem}
 
+\begin{proof}
+bla bla
+\end{proof}
 \end{document}

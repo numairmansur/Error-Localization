@@ -129,7 +129,8 @@ By the recursive definition of $WP()$
 \begin{equation} 
 P \not\limp WP( WP(guard(\pi'[j]);\pi'[1,j-1]);\pi'[0])
 \end{equation}
-We also know that: 
+We also know that: (NO WE DON'T KNOW THAT ANYMORE)\\
+According to our new definition, the trace might already contain blocking execution. In that case the following implication cannot hold anymore. 
 $$SP(Q; \pi'[1,j-1]) \limp guard(\pi'[j])$$
 and consequently from lemma (1):
 \begin{equation} 
@@ -143,6 +144,15 @@ From Lemma (4)
 \begin{equation} 
 P \not\limp WP(Q; havoc(x))
 \end{equation}
-
+THIS IS NOT CORRECT. CHANGE THIS !! \\
+"$\Leftarrow$"\\
+If 
+$$P \not \limp WP(Q; havoc(x))$$
+then the assignment statement $\pi[0]$ is relevant.\\
+By the definition of $P$:
+$$WP(Q; x:=t) \not \limp WP(Q; havoc(x))$$
 \end{proof}
+
+
+
 \end{document}

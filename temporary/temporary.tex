@@ -45,19 +45,33 @@
 \begin{document}
 
 \maketitle
-\begin{mydef}[Execution]\label{mydef:execution}
+\begin{mydef}[Execution]\label{mydef:execution_definition}
 Let $\pi$ be an error trace of length $n$. An execution of $\pi$ is a sequence of states $s_0, s_1...s_n$ such that $s_i, s_{i+1} \models T$, where $T$ is the transition formula of $\pi[i]$. \\
 Let $\epsilon$ represent the set of all possible executions of the error trace.
 \end{mydef}
 
-\begin{mydef}[Blocking Execution]\label{mydef:blockingexecution}
+\begin{mydef}[Blocking Execution]\label{mydef:blockingexecution_definition}
 An execution of a trace $\pi$ of size $n$ is called a blocking execution if there exists a sequence of states $s_0, s_1...s_j$ where $i<j \leq n$ such that $s_i, s_{i+1} \models T[i]$, where $T[i]$ is the transition formula of $\pi[i]$ and there exits an assume statement in the trace $\pi$ at position $j$ such that $s_{j} \not \limp guard(\pi[j])$.
 \end{mydef}
 
-\begin{mydef}[Relevancy of an assignment statement]\label{mydef:relevancy}
+\begin{mydef}[Relevancy of an assignment statement]\label{mydef:relevancy_definition}
 Let $\beta$ represent the set of all blocking executions of a trace $\pi$. Let there be an assignment statement of the form $x:=t$ at position $i$. Let $\pi'$ represent the trace that we get after replacing $\pi[i]$ with a havoc statement of the form $havoc(x)$ and let $\beta'$ represent the set of all blocking executions for $\pi'$.\\
 We say that the assignment statement $\pi[i]$ is relevant if the trace after the replacement has strictly more blocked executions than the trace before the replacement, i.e if $\beta \subsetneq \beta'$. 
 \end{mydef}
 \newpage
-bla bla bla
+
+\begin{theorem}[Relevancy of an assignment statement]\label{mydef:relevancytheorem}
+Let $\pi$ be an error trace of length $n$ and $\pi[i]$ be an assignment statement at position $i$ having the form $x:=t$, where $x$ is a variable and $t$ is an expression. Let $P$ and $Q$ be two predicates where $P = \neg WP(False; \pi[i,n]) \bigcap SP(True; \pi[1, i-1])$ and $Q =  \neg WP(False; \pi[i+1,n])$. The statement $\pi[i]$ is relevant iff:
+ $$P \not \limp WP(Q,havoc(x))$$
+\end{theorem}
+
+\begin{proof}
+Let $\pi'$ be the trace where the assignment statement $\pi[i]$ is replaced by a havoc statement. \\
+"$\Rightarrow$" \\
+If the assignment statement $\pi[i]$ is relevant then:
+$$P \not \limp WP(Q,havoc(x))$$
+The relevancy of the assignment statement $\pi[i]$ implies that the trace $\pi'$ have strictly more blocking exections then $\pi$. This means that there exists an assume statement in the trace $\pi$ at position $j$, which is blocking more executions then before. Or we can say that there are more states $s_j$ for which the assume statement is blocking. \\
+OR
+something something.
+\end{proof}
 \end{document}

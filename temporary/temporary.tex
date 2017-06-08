@@ -1,4 +1,5 @@
 \documentclass{article}
+\usepackage{authblk}
 \usepackage{blindtext}
 \usepackage{listings}
 \usepackage{color}
@@ -40,8 +41,8 @@
 \lstset{style=mystyle}
 \usepackage[utf8]{inputenc}
 \title{Fault Localization \& Relevance Analysis \\ }
-\author{Matthias Heizmann, Christian Schilling, Numair Mansur}
-
+\author{Numair Mansur, Christian Schilling, Matthias Heizmann}
+\affil{University of Freiburg, Germany}
 \begin{document}
 
 \maketitle
@@ -71,7 +72,6 @@ Let $\pi'$ be the trace where the assignment statement $\pi[i]$ is replaced by a
 If the assignment statement $\pi[i]$ is relevant then:
 $$P \not \limp WP(Q,havoc(x))$$
 The relevancy of the assignment statement $\pi[i]$ implies that the trace $\pi'$ have strictly more blocking exections then $\pi$. This means that there exists an assume statement in the trace $\pi$ at position $j$, which is blocking more executions then before. Or we can say that there are more states $s_j$ for which the assume statement is blocking. \\
-OR
-something something.
+
 \end{proof}
 \end{document}

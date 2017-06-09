@@ -71,7 +71,14 @@ Let $\pi'$ be the trace where the assignment statement $\pi[i]$ is replaced by a
 "$\Rightarrow$" \\
 If the assignment statement $\pi[i]$ is relevant then:
 $$P \not \limp WP(Q,havoc(x))$$
-The relevancy of the assignment statement $\pi[i]$ implies that the trace $\pi'$ have strictly more blocking exections then $\pi$. This means that there exists an assume statement in the trace $\pi$ at position $j$, which is blocking more executions then before. Or we can say that there are more states $s_j$ for which the assume statement is blocking. \\
+Let $Q' := SP(P; havoc(x))$ and $P' := WP(Q;havoc(x))$. \\
+\\
+\includegraphics[width=\linewidth]{traces.jpg}\\
+Relevncy of $x:=t$ implies that replacing it with $havoc(x)$ gives us more blocking executions then before. Therefore
+$$Q \subsetneq Q'$$
+The relevancy of the assignment statement $x:=t$ implies that the trace $\pi'$ have strictly more blocking exections then $\pi$. This means that there exists an assume statement in the trace $\pi$ at position $j$, which is blocking more executions then before. Or we can say that there are more states $s_j$ for which the assume statement is blocking. \\
 
+\newpage
+hello hello
 \end{proof}
 \end{document}

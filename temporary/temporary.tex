@@ -59,10 +59,16 @@ An execution of a trace $\pi$ of size $n$ is called a blocking execution if ther
 Let $\beta$ represent the set of all blocking executions of a trace $\pi$. Let there be an assignment statement of the form $x:=t$ at position $i$. Let $\pi'$ represent the trace that we get after replacing $\pi[i]$ with a havoc statement of the form $havoc(x)$ and let $\beta'$ represent the set of all blocking executions for $\pi'$.\\
 We say that the assignment statement $\pi[i]$ is relevant if the trace after the replacement has strictly more blocked executions than the trace before the replacement, i.e if $\beta \subsetneq \beta'$. 
 \end{mydef}
+
+\begin{lemma}[]\label{lemma:rel_bw_assignment_and_havoc}
+For a predicate $Q$ and an assignment statement of the form $x:=t$ where $x$ is a variable and $t$ is an expression, we have:
+$$WP(Q; havoc(x)) \subseteq WP(Q; x:=t)$$
+\end{lemma}
+
 \newpage
 
 \begin{theorem}[Relevancy of an assignment statement]\label{mydef:relevancytheorem}
-Let $\pi$ be an error trace of length $n$ and $\pi[i]$ be an assignment statement at position $i$ having the form $x:=t$, where $x$ is a variable and $t$ is an expression. Let $P$ and $Q$ be two predicates where $P = \neg WP(False; \pi[i,n]) \bigcap SP(True; \pi[1, i-1])$ and $Q =  \neg WP(False; \pi[i+1,n])$. The statement $\pi[i]$ is relevant iff:
+Let $\pi$ be an error trace of length $n$ and $\pi[i]$ be an assignment statement at position $i$ having the form $x:=t$, where $x$ is a variable and $t$ is an expression. Let $P$ and $Q$ be two predicates where $P = \neg WP(False; \pi[i,n]) \cap SP(True; \pi[1, i-1])$ and $Q =  \neg WP(False; \pi[i+1,n])$. The statement $\pi[i]$ is relevant iff:
  $$P \not \limp WP(Q,havoc(x))$$
 \end{theorem}
 
@@ -71,14 +77,27 @@ Let $\pi'$ be the trace where the assignment statement $\pi[i]$ is replaced by a
 "$\Rightarrow$" \\
 If the assignment statement $\pi[i]$ is relevant then:
 $$P \not \limp WP(Q,havoc(x))$$
-Let $Q' := SP(P; havoc(x))$ and $P' := WP(Q;havoc(x))$. \\
+Note that here we can also write $P$ as $WP(Q; x:=t) \cap SP(True; \pi[1, i-1])$.\\
+Let $Q' := SP(P; havoc(x))$ and $P' := WP(Q;havoc(x)) \cap SP(True; \pi[1, i-1])$. \\
+Since from lemma one, we know that 
+$$WP(Q; havoc(x)) \subseteq WP(Q; x:=t)$$
+and also,
+$$WP(Q; havoc(x)) \cap SP(True; \pi[1, i-1])  \subseteq WP(Q; x:=t) \cap SP(True; \pi[1, i-1])$$
+therefore:
+$$P' \subseteq P$$
+For simplicity in the proof, lets ignore the term $SP(True; \pi[1, i-1])$ from $P$ and $P'$. We simplify $P$ and $P'$ to be $WP(Q; x:=t)$ and $WP(Q; havoc(x))$ respectively. \\
 \\
 \includegraphics[width=\linewidth]{traces.jpg}\\
-Relevncy of $x:=t$ implies that replacing it with $havoc(x)$ gives us more blocking executions then before. Therefore
+Relevancy of $x:=t$ implies that replacing it with $havoc(x)$ gives us strictly more blocking executions then before. Therefore
 $$Q \subsetneq Q'$$
-The relevancy of the assignment statement $x:=t$ implies that the trace $\pi'$ have strictly more blocking exections then $\pi$. This means that there exists an assume statement in the trace $\pi$ at position $j$, which is blocking more executions then before. Or we can say that there are more states $s_j$ for which the assume statement is blocking. \\
-
 \newpage
-hello hello
+Lets look at the following diagram to help us see the states a little better and come to the following conculsions:\\
+\includegraphics[width=\linewidth]{states.jpg}\\
+$$SP(P; havoc(x)) = Q'$$
+$$SP(P'; havoc(x)) = Q$$
+and we know that $Q \subsetneq Q'$. This means that $\exists S \in P \setminus P'$, such that there is a transition from $S$ to $Q'$ if we execute $havoc(x)$. The existence of the state $S$ means:
+$$P \not \limp P'$$
+or
+$$P \not \limp WP(Q; havoc(x))$$
 \end{proof}
 \end{document}

@@ -79,7 +79,7 @@ If the assignment statement $\pi[i]$ is relevant then:
 $$P \not \limp WP(Q,havoc(x))$$
 Note that here we can also write $P$ as $WP(Q; x:=t) \cap SP(True; \pi[1, i-1])$.\\
 Let $Q' := SP(P; havoc(x))$ and $P' := WP(Q;havoc(x)) \cap SP(True; \pi[1, i-1])$. \\
-Since from lemma one, we know that 
+Since from lemma~\ref{lemma:rel_bw_assignment_and_havoc} , we know that 
 $$WP(Q; havoc(x)) \subseteq WP(Q; x:=t)$$
 and also,
 $$WP(Q; havoc(x)) \cap SP(True; \pi[1, i-1])  \subseteq WP(Q; x:=t) \cap SP(True; \pi[1, i-1])$$

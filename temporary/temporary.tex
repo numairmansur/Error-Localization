@@ -81,6 +81,18 @@ $$WP(Q; havoc(x)) \subseteq WP(Q; x:=t)$$
 	By assumption $P \not\subseteq \WP{Q}{\havoc(x)}$, which by Lemma~\ref{lemma:duality} is equivalent to the second part.
 \end{proof}
 
+\begin{lemma}[restrictiveness]\label{lemma:spfalse}
+	If the last statement of a trace $\pi$ of length $n$ is an assume statement and $P \limp \WP{\bot}{\pi}$, then $\SP{P}{\pi[0, j-1]} \not\limp \guard(\pi[j])$ for some $1 \leq j \leq n$.
+\end{lemma}
+\begin{proof}
+	Induction over $n$ (length of $\pi$):
+	For $n = 1$ we have $\WP{\bot}{\pi[0]} \equiv \guard(\pi[1]) \limp \bot \equiv \neg \guard(\pi[1])$.
+	Now let $n > 1$ and let $Q := \WP{\bot}{\pi[1, n]}$.
+	By induction hypothesis $\SP{Q}{\pi[1, j]} \not\limp \guard(\pi[j])$ for some $j$.
+	If $\pi[0]$ is an assignment or havoc statement we just apply the hypothesis.
+	If $\pi[0]$ is an assume statement then $P \equiv \guard(\pi[1]) \limp Q$, so if $P \not\limp Q$ then $P \not\limp \guard(\pi[1])$.
+\end{proof}
+
 \newpage
 
 \begin{theorem}[Relevancy of an assignment statement]\label{mydef:relevancytheorem}
@@ -115,10 +127,10 @@ and we know that $Q \subsetneq Q'$. This means that $\exists S \in P \setminus P
 $$P \not \limp P'$$
 or
 $$P \not \limp WP(Q; havoc(x))$$
-"$\Leftarrow$" [under construction. Please don't read now]\\
+"$\Leftarrow$"\\
 If 
 $$P \not \limp WP(Q,havoc(x))$$
-then the assignment statement $x:=t$ is relevant.\\
+then the assignment statement $x:=t$ at position $i$, is relevant.\\
 By the definition of $P$:
 $$WP(Q; x:=t) \not \limp WP(Q;havoc(x))$$
 By lemma~\ref{lemma:nonempty_post}:
@@ -126,7 +138,23 @@ $$Q \subsetneq SP(Q; havoc(x))$$
 or
 $$Q \subsetneq Q'$$
 Let $R = Q' \setminus Q$ or $Q' = R \biguplus Q$ (disjoint union of R and Q).\\
-Now if we can show that there are states in $R$ such that there is a blocking execution from those states. Then that would mean that replacing the assignment with havoc have introduced some new blocking execitions.
-
+Now if we can show that there are states in $R$ such that there is a blocking execution from those states, then that would mean that replacing the assignment with havoc have introduced new blocking execitions. We can show this fact by contradiction. \\
+Let us assume that for all $i \leq j \leq n$, statement $\pi[j]$ is not restrictive. i.e
+\begin{equation}\label{equation:contradiction}
+SP(Q'; \pi[i; j-1]) \limp guard(\pi[j]) \qquad \forall i \leq j \leq n
+\end{equation}
+We know that
+$$SP(X \cup Y; \pi) = SP(X; \pi) \cup SP(Y; \pi)$$
+So we can write~\ref{equation:contradiction} as:
+$$SP(R; \pi[i; j-1]) \cup SP(Q;\pi[i; j-1]) \limp guard(\pi[j]) \qquad \forall i \leq j \leq n $$
+We only have to show the contradiction on $R$
+\begin{equation}\label{equation:contradiction_equation}
+SP(R; \pi[i; j-1]) \limp guard(\pi[j]) \qquad \forall i \leq j \leq n
+\end{equation}
+We know that $R \limp \neg Q$, or
+\begin{equation}
+R \limp WP(false; \pi[i+1,n])
+\end{equation}
+Considering equation(~\ref{equation:contradiction}) and (~\ref{equation:contradiction_equation}) and lemma(~\ref{lemma:spfalse}), we get a contradiction. That means that we must have atleast one execution which is blocking and hence the statement $x:=t$ is relevant.
 \end{proof}
 \end{document}

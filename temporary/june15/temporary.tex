@@ -49,12 +49,12 @@
 \begin{mydef}[Execution]\label{mydef:execution}
 Let $\pi$ be an error trace of length $n$. An execution of $\pi$ is a sequence of states $s_0, s_1 ... s_n$ such that $s_i, s_{i+1} \vDash T$, where $T$ is the transition formula of $\pi[i]$.
 \end{mydef}
-\begin{mydef}[Infeasible Execution]\label{mydef:infeasible_execution}
-An execution of a trace $\pi$ of size $n$ is called infeasible, if there exists a sequence of states $s_0,s_1...s_j$ where $i<j \leq n$ such that $s_i, s_{i+1} \vDash T$ where $T$ is the transition formula of $\pi[i]$ and there exists an assume statement in the trace $\pi$ at position $j$ such that $s_j \not \limp guard(\pi[j])$
+\begin{mydef}[Blocked Execution]\label{mydef:blocked_execution}
+An execution of a trace $\pi$ of size $n$ is called a blocked execution, if there exists a sequence of states $s_0,s_1...s_j$ where $i<j \leq n$ such that $s_i, s_{i+1} \vDash T$ where $T$ is the transition formula of $\pi[i]$ and there exists an assume statement in the trace $\pi$ at position $j$ such that $s_j \not \limp guard(\pi[j])$
 \end{mydef}
 
 \begin{mydef}[Relevant Statement]\label{mydef:responsible}
 Let $\pi$ be an error trace of length $n$. Let there be an assignment statement at position $i$ of the form $x:=t$ where $x$ is a variable and $t$ is an expression. Let $P$ and $Q$ be two predicates such that for all possible executions of the trace $\pi$ with $s_i,s_{i+1} \vDash T$ , $s_i \in P$ and $s_{i+1} \in Q$.\\
-The assignment statement $\pi[i]$ is relevant if we replace it with a havoc statement of the form $havoc(x)$ to get a new trace $\pi'$ and there exists an infeasible execution with $s'_i,s'_{i+1} \vDash T'$ such that $T'$ is the transition formula for $havoc(x)$, $s'_i \in P$, $s'_{i+1} \in Q'$ where $Q \subsetneq Q'$.
+The assignment statement $\pi[i]$ is relevant if we replace it with a havoc statement of the form $havoc(x)$ to get a new trace $\pi'$ and there exists a blocked execution with $s'_i,s'_{i+1} \vDash T'$ such that $T'$ is the transition formula for $havoc(x)$, $s'_i \in P$, $s'_{i+1} \in Q'$ where $Q \subsetneq Q'$.
 \end{mydef}
 \end{document}

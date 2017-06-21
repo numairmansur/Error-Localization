@@ -57,10 +57,49 @@ An execution of a trace $\pi$ of size $n$ is called a blocked execution, if ther
 Let $\pi = st_1,....,st_n$ be an error trace of length $n$ where $st_i$ is an assignment statement of the form $x:=t$. The assignemnt statement at position $i$ is relevant if there exists an execution $s_1,...s_{n+1}$ of $\pi$ and some value $v$ such that every execution of the trace $x:=v; \pi[i+1,n]$ starting in $s_i$ is has a blocked execution.
 \end{mydef}
 
+\begin{lemma}\label{lemma:duality}
+For a program statement $st$ and predicates $P$ and $Q$, where $P$ is condition that is true before the execution of the statement and $Q$ is a post condition, the following two implications are equivilant(also known as the duality of WP and SP):
+$$SP(P,st) \Rightarrow Q$$
+$$P \Rightarrow WP(Q,st)$$
+\end{lemma}
+
+\begin{lemma}[]\label{lemma:rel_bw_assignment_and_havoc}
+For a predicate $Q$ and an assignment statement of the form $x:=t$ where $x$ is a variable and $t$ is an expression, we have:
+$$WP(Q; havoc(x)) \subseteq WP(Q; x:=t)$$
+\end{lemma}
+
+\begin{lemma}[nonempty post]\label{lemma:nonempty_post}
+	If $P := \WP{Q}{x := t} \nsubseteq \WP{Q}{\havoc(x)}$ for some $Q$ then $Q \subsetneq \SP{P}{\havoc(x)}$.
+\end{lemma}
+\begin{proof}
+	We will show that $Q \equiv \SP{P}{x := t} \subseteq \SP{P}{\havoc(x)} \not\subseteq Q$ from which it follows that the first inclusion is strict.
+	The first inclusion is immediate from Lemma~\ref{lemma:rel_bw_assignment_and_havoc}.
+	By assumption $P \not\subseteq \WP{Q}{\havoc(x)}$, which by Lemma~\ref{lemma:duality} is equivalent to the second part.
+\end{proof}
+
 \begin{theorem}[Relevancy of an assignment statement]\label{mydef:relevancytheorem}
-Let $\pi$ be an error trace of length $n$ and $\pi[i]$ be an assignment statement at position $i$ having the form $x:=t$, where $x$ is a variable and $t$ is an expression. Let $P$ and $Q$ be two predicates where $P = \neg WP(False; \pi[i,n]) \cap SP(True; \pi[1, i-1])$ and $Q =  \neg WP(False; \pi[i+1,n])$. The statement $\pi[i]$ is relevant iff:
+Let $\pi$ be an error trace of length $n$ and $\pi[i]$ be an assignment statement at position $i$ having the form $x:=t$, where $x$ is a variable and $t$ is an expression. Let $P$ and $Q$ be two predicates where $P = \neg WP(False; \pi[i,n])$ and $Q =  \neg WP(False; \pi[i+1,n])$. The statement $\pi[i]$ is relevant iff:
  $$P \not \limp WP(Q,havoc(x))$$
 \end{theorem}
 
+\begin{proof}
+Let $P' = WP(Q;havoc(x))$ and $Q'=SP(P;havoc(x))$. It is obvious that $P$ can also be written as $WP(Q;x:=t)$ and $Q$ as $SP(P;x:=t)$.\\
+"$\Rightarrow$"\\
+If $\pi[i]$ is relevant, then\\
+$$P \not \limp WP(Q;havoc(x))$$
+Obviously all the transition from $P'$ end up in $Q$. Relevancy of $x:=t$ implies that there is a state in $s \in P$ such that there is a transition from $s$ to $\neg Q$. That would mean:
+$$P \not \limp P'$$
+$$P \not \limp WP(Q;havoc(x))$$
+"$\Leftarrow$"\\
+If $P \not \limp WP(Q;havoc(x))$, then the assignment statement $x:=t$ is relevant.\\
+By the definition of $P$:
+$$WP(Q; x:=t) \not \limp WP(Q; havoc(x))$$
+By lemma~\ref{lemma:nonempty_post}:
+$$Q \subsetneq SP(P; havoc(x)) $$
+or
+$$Q \subsetneq Q'$$
+This shows the existence of a state in $Q' \in \neg Q$ and hence a value $v$ for $x$ such that if we replace $x:=t$ with $x:=v$, then every execution is becoming blocking.
 
+
+\end{proof}
 \end{document}

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.1.29)  21 JUN 2017 10:38
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.1.29)  23 JUN 2017 09:11
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -602,7 +602,19 @@ LaTeX Font Info:    Try loading font information for U+msb on input line 50.
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-Underfull \hbox (badness 10000) in paragraph at lines 86--89
+Overfull \hbox (18.71677pt too wide) in paragraph at lines 92--95
+[]\OT1/cmr/m/n/10 Let $\OML/cmm/m/it/10 P[] \OT1/cmr/m/n/10 = \OML/cmm/m/it/10 
+WP\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 Q\OT1/cmr/m/n/10 ; \OML/cmm/m/it/10 havoc\O
+T1/cmr/m/n/10 (\OML/cmm/m/it/10 x\OT1/cmr/m/n/10 )) \OMS/cmsy/m/n/10 \ \OML/cmm
+/m/it/10 SP\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 True\OT1/cmr/m/n/10 ; \OML/cmm/m/i
+t/10 ^^Y\OT1/cmr/m/n/10 [1\OML/cmm/m/it/10 ; i \OMS/cmsy/m/n/10 ^^@ \OT1/cmr/m/
+n/10 1])$ and $\OML/cmm/m/it/10 Q[] \OT1/cmr/m/n/10 = \OML/cmm/m/it/10 SP\OT1/c
+mr/m/n/10 (\OML/cmm/m/it/10 P\OT1/cmr/m/n/10 ; \OML/cmm/m/it/10 havoc\OT1/cmr/m
+/n/10 (\OML/cmm/m/it/10 x\OT1/cmr/m/n/10 ))$.
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 92--95
 
  []
 
@@ -612,7 +624,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 86--89
 Here is how much of TeX's memory you used:
  4384 strings out of 494910
  57938 string characters out of 6179836
- 121958 words of memory out of 5000000
+ 122958 words of memory out of 5000000
  7612 multiletter control sequences out of 15000+600000
  6691 words of font info for 26 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
@@ -628,7 +640,7 @@ public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/
 amsfonts/cm/cmti10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfon
 ts/symbols/msam10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfont
 s/symbols/msbm10.pfb>
-Output written on temporary.pdf (2 pages, 105469 bytes).
+Output written on temporary.pdf (2 pages, 106465 bytes).
 PDF statistics:
  51 PDF objects out of 1000 (max. 8388607)
  36 compressed objects within 1 object stream

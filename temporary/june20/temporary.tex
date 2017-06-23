@@ -99,12 +99,14 @@ $$P \not \limp WP(Q;havoc(x))$$
 "$\Leftarrow$"\\
 If $P \not \limp WP(Q;havoc(x))$, then the assignment statement $x:=t$ is relevant.\\
 By the definition of $P$:
-$$WP(Q; x:=t) \cap SP(True; \pi[1,i-1]) \not \limp WP(Q; havoc(x))$$
+\begin{equation}\label{equation:assumption}
+WP(Q; x:=t) \cap SP(True; \pi[1,i-1]) \not \limp WP(Q; havoc(x))
+\end{equation}
 By lemma~\ref{lemma:nonempty_post}:
 $$Q \subsetneq SP(P; havoc(x)) $$
 or
 $$Q \subsetneq Q'$$
-This shows the existence of a state $s$ in $Q'$ such that $s\in \neg Q$ and hence a value $v$ for $x$ such that if we replace $x:=t$ with $x:=v$, then every execution is becoming blocking.
+This shows the existence of a state $s$ in $Q'$ such that $s\in \neg Q$ and hence a value $v$ for $x$ such that if we replace $x:=t$ with $x:=v$, then every execution is becoming blocking. Also,by equation(~\ref{equation:assumption}) it is clear that there exists an execution till $P$, since $P$ is not empty.
 
 
 \end{proof}

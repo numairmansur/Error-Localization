@@ -70,7 +70,7 @@ and
 $$SP(P;x:=t) \subseteq SP(P;havoc(x))$$
 \end{lemma}
 
-\begin{lemma}[nonempty post]\label{lemma:nonempty_post}
+\begin{lemma}[IGNORE FOR NOW]\label{lemma:nonempty_post}
 	For $P := \WP{Q}{x := t}$ and a set of states $R$, if $ P \cap R \nsubseteq \WP{Q}{\havoc(x)}$ for some $Q$ then $Q \subsetneq \SP{P}{\havoc(x)}$.
 \end{lemma}
 \begin{proof}
@@ -97,16 +97,12 @@ Obviously all the transition from $P'$ end up in $Q$. Relevancy of $x:=t$ implie
 $$P \not \limp P'$$
 $$P \not \limp WP(Q;havoc(x))$$
 "$\Leftarrow$"\\
-If $P \not \limp WP(Q;havoc(x))$, then the assignment statement $x:=t$ is relevant.\\
-By the definition of $P$:
-\begin{equation}\label{equation:assumption}
-WP(Q; x:=t) \cap SP(True; \pi[1,i-1]) \not \limp WP(Q; havoc(x))
-\end{equation}
-By lemma~\ref{lemma:nonempty_post}:
-$$Q \subsetneq SP(P; havoc(x)) $$
-or
-$$Q \subsetneq Q'$$
-This shows the existence of a state $s$ in $Q'$ such that $s\in \neg Q$ and hence a value $v$ for $x$ such that if we replace $x:=t$ with $x:=v$, then every execution is becoming blocking. Also,by equation(~\ref{equation:assumption}) it is clear that there exists an execution till $P$, since $P$ is not empty.
+$\pi[i]$ is relevant, if:
+$$P \not \limp WP(Q;havoc(x))$$
+From lemma~\ref{lemma:duality}, we can write:
+$$SP(P; havoc(x)) \not \limp Q$$
+$$Q' \not \limp Q$$
+This shows the existence of a state $s$ in $Q'$ such that $s\in \neg Q$ and hence a value $v$ for $x$ such that if we replace $x:=t$ with $x:=v$, then every execution is becoming blocking. Also, from our assumption, it is clear that there exists an execution till $P$, since $P$ is not empty.
 
 
 \end{proof}

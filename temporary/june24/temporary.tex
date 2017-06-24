@@ -63,26 +63,7 @@ $$SP(P,st) \Rightarrow Q$$
 $$P \Rightarrow WP(Q,st)$$
 \end{lemma}
 
-\begin{lemma}[]\label{lemma:rel_bw_assignment_and_havoc}
-For a predicate $Q$ and an assignment statement of the form $x:=t$ where $x$ is a variable and $t$ is an expression, we have:
-$$WP(Q; havoc(x)) \subseteq WP(Q; x:=t)$$
-and
-$$SP(P;x:=t) \subseteq SP(P;havoc(x))$$
-\end{lemma}
-
-\begin{lemma}[IGNORE FOR NOW]\label{lemma:nonempty_post}
-	For $P := \WP{Q}{x := t}$ and a set of states $R$, if $ P \cap R \nsubseteq \WP{Q}{\havoc(x)}$ for some $Q$ then $Q \subsetneq \SP{P}{\havoc(x)}$.
-\end{lemma}
-\begin{proof}
-	We will show that $Q : =SP(P; x:=t) \subseteq SP(P;havoc(x)) \not\subseteq SP(P; x:=t)$ from which it follows that the first inclusion is strict.
-	The first inclusion is from Lemma~\ref{lemma:rel_bw_assignment_and_havoc}. It is obvious that a state reachable after $x:=t$ is also reachable 
-	after $havoc(x)$. Hence $SP(P; x:=t) \subseteq SP(P;havoc(x))$. \\
-	By assumption $WP(Q;x:=t) \cap R \not\subseteq \WP{Q}{\havoc(x)}$, which is equivalent to $WP(Q; x:=t) \not \subseteq \ WP(Q; havoc(x))$ which by Lemma~\ref{lemma:duality} is equivalent to.
-	$$SP(WP(Q;x:=t); havoc(x)) \not\subseteq Q$$
-	or 
-	$$SP(P;havoc(x)) \not\subseteq SP(P; x:=t)$$
-\end{proof}
-
+\newpage
 \begin{theorem}[Relevance of an assignment statement]\label{mydef:relevancytheorem}
 Let $\pi$ be an error trace of length $n$ and $\pi[i]$ be an assignment statement at position $i$ having the form $x:=t$, where $x$ is a variable and $t$ is an expression. Let $P$ and $Q$ be two predicates where $P = \neg WP(False; \pi[i,n]) \cap SP(True; \pi[1,i-1])$ and $Q =  \neg WP(False; \pi[i+1,n])$. The statement $\pi[i]$ is relevant iff:
  $$P \not \limp WP(Q,havoc(x))$$

@@ -7,6 +7,8 @@
 \usepackage{amsthm}
 \usepackage{graphicx}
 \usepackage{amsmath,amssymb,amsthm}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
 \newcommand{\limp}{\Rightarrow}
 \newcommand{\WP}[2]{\mathit{WP}(#1,#2)}
 \newcommand{\SP}[2]{\mathit{SP}(#1,#2)}
@@ -45,68 +47,52 @@
 \affil{University of Freiburg, Germany}
 \date{\vspace{-5ex}}
 \begin{document}
-
+% ******************************************** BEGIN DOCUMENT **************************************************************************
 \begin{mydef}[Execution]\label{mydef:execution}
 Let $\pi$ be an error trace of length $n$. An execution of $\pi$ is a sequence of states $s_0, s_1 ... s_n$ such that $s_i, s_{i+1} \vDash T$, where $T$ is the transition formula of $\pi[i]$.
 \end{mydef}
-\begin{mydef}[Blocked Execution]\label{mydef:blocked_execution}
-An execution of a trace $\pi$ of size $n$ is called a blocked execution, if there exists a sequence of states $s_0,s_1...s_j$ where $i<j \leq n$ such that $s_i, s_{i+1} \vDash T$ where $T$ is the transition formula of $\pi[i]$ and there exists an assume statement in the trace $\pi$ at position $j$ such that $s_j \not \limp guard(\pi[j])$
+\begin{mydef}[Blocking Execution]\label{mydef:blocked_execution}
+An execution of a trace $\pi$ of size $n$ is called a blocking execution, if there exists a sequence of states $s_0,s_1...s_j$ where $i<j \leq n$ such that $s_i, s_{i+1} \vDash T$ where $T$ is the transition formula of $\pi[i]$ and there exists an assume statement in the trace $\pi$ at position $j$ such that $s_j \not \limp guard(\pi[j])$
 \end{mydef}
 
-\begin{mydef}[Relevance of a Statement]\label{mydef:responsible}
-Let $\pi = st_1,....,st_n$ be an error trace of length $n$ where $st_i$ is an assignment or a havoc statement of the form $x:=t$ or $havoc(x)$ respectively. The statement at position $i$ is relevant if there exists an execution $s_1,...s_{n+1}$ of $\pi$ and some value $v$ such that every execution of the trace $x:=v; \pi[i+1,n]$ starting in $s_i$ is has a blocked execution.
+\begin{mydef}[Relevance of an assigning statement]\label{mydef:responsible}
+Let $\pi = \langle st_1,....,st_n \rangle$ be an error trace of length $n$ where $st_i$ is an assigning statement at position $i$ that assigns a new value to some variable $x$. The statement $st_i$ is relevant if there exists an execution $s_1,...s_{n+1}$ of $\pi$ and some value $v$ such that every execution of the trace $\langle x:=v; \pi[i+1,n] \rangle$ starting in $s_i$ has a blocking execution.
 \end{mydef}
-
-\begin{lemma}\label{lemma:duality}
-For a program statement $st$ and predicates $P$ and $Q$, where $P$ is condition that is true before the execution of the statement and $Q$ is a post condition, the following two implications are equivilant(also known as the duality of WP and SP):
-$$SP(P,st) \Rightarrow Q$$
-$$P \Rightarrow WP(Q,st)$$
-\end{lemma}
 
 \newpage
-\begin{theorem}[Relevance of an assignment statement]\label{mydef:relevancytheorem}
-Let $\pi$ be an error trace of length $n$ and $\pi[i]$ be an assignment statement at position $i$ having the form $x:=t$, where $x$ is a variable and $t$ is an expression. Let $P$ and $Q$ be two predicates where $P = \neg WP(False; \pi[i,n]) \cap SP(True; \pi[1,i-1])$ and $Q =  \neg WP(False; \pi[i+1,n])$. The statement $\pi[i]$ is relevant iff:
- $$P \not \limp WP(Q,havoc(x))$$
+% ******************************************** NEW PAGE *******************************************************************************
+% Checkout the following link for writing an algo in Latex
+% https://tex.stackexchange.com/questions/163768/write-pseudo-code-in-latex
+\begin{algorithm}
+\caption{Relavance of an assigning statement}\label{relevance}
+\begin{algorithmic}[1]
+\Procedure{Relevance}{}
+\State write me
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+In the algorithm , we check the relevance of a statement by checking if the triple ($P,\pi[i],\neg Q$) is unsatisfiable and $\pi[i]$ is in the unsatisfiable core. We can do this by checking if $P \not \subseteq WP(Q; havoc(x))$ .
+
+
+\newpage
+% ******************************************** NEW PAGE *******************************************************************************
+\begin{theorem}[Equivalence of relevance]\label{mydef:relevancytheorem}
+Let $\pi = \langle st_1,...,st_i,...,st_n \rangle$ be an error trace of length $n$ and $\pi[i]$ be an assigning statement at position $i$ , which assigns a new value to some variable $x$ . Let $P = \neg WP(False; \pi[i,n]) \cap SP(True; \pi[1,i-1])$ be a set of bireachable states at position $i$ and $Q =  \neg WP(False; \pi[i+1,n])$ be the coreachable states at position $i+1$. The statement $\pi[i]$ is relevant iff:
+ $$P \not \subseteq WP(Q,havoc(x))$$
 \end{theorem}
 
 \begin{proof}
-Let $P' = WP(Q;havoc(x)) \cap SP(True; \pi[1,i-1])$ and $Q'=SP(P;havoc(x))$. It is obvious that $P$ can also be written as $WP(Q;x:=t) \cap SP(True; \pi[1,i-1])$.\\
+Let $\mathcal{D}$ be the domain of the variable $x$. \\
 "$\Rightarrow$"\\
 If $\pi[i]$ is relevant, then\\
-$$P \not \limp WP(Q;havoc(x))$$
-Obviously all the transition from $P'$ end up in $Q$. Relevancy of $x:=t$ implies that there is a state in $s \in P$ such that there is a transition from $s$ to $\neg Q$. That would mean:
-$$P \not \limp P'$$
-$$P \not \limp WP(Q;havoc(x))$$
+$$P \not \subseteq WP(Q;havoc(x))$$
+Obviously all the transitions from the states in $WP(Q;havoc(x))$ ends up in $Q$. Relevancy of $\pi[i]$ implies that there is a state in $s \in P$ such that there is a transition from $s$ to $\neg Q$. That would mean:
+$$P \not \subseteq WP(Q;havoc(x))$$
 "$\Leftarrow$"\\
 $\pi[i]$ is relevant, if:
-$$P \not \limp WP(Q;havoc(x))$$
-From lemma~\ref{lemma:duality}, we can write:
-$$SP(P; havoc(x)) \not \limp Q$$
-$$Q' \not \limp Q$$
-This shows the existence of a state $s$ in $Q'$ such that $s\in \neg Q$ and hence a value $v$ for $x$ such that if we replace $x:=t$ with $x:=v$, then every execution is becoming blocking. Also, from our assumption, it is clear that there exists an execution till $P$, since $P$ is not empty.
-
-
+$$P \not \subseteq WP(Q;havoc(x))$$
+We know that $WP(Q;havoc(x))$ is the set of states from which all transitions end up in $Q$. The above non implication shows the existence of a state $s$ in $P$ such that $s \not \in WP(Q; havoc(x))$  from which there is a transition to $\neg Q$. This shows the existence of a value $v \in \mathcal{D}$ that we can assign to $x$ such that if we replace $\pi[i]$ with $x:=v$, then every execution is becoming blocking. Also, from our assumption, it is clear that there exits an execution till $P$, since $P$ is not empty.
 \end{proof}
 
-\newpage
-\begin{theorem}[Relevance of a havoc statement]\label{mydef:relevancytheorem}
-Let $\pi$ be an error trace of length $n$ and $\pi[i]$ be a havoc statement at position $i$ having the form $havoc(x)$, where $x$ is a variable. Let $P$ and $Q$ be two predicates where $P = \neg WP(False; \pi[i,n]) \cap SP(True; \pi[1,i-1])$ and $Q =  \neg WP(False; \pi[i+1,n])$. The statement $\pi[i]$ is relevant iff:
- $$P \not \limp WP(Q,havoc(x))$$
-\end{theorem}
 
-\begin{proof}
-Let $Q'=SP(P;havoc(x))$.\\
-"$\Rightarrow$"\\
-If $\pi[i]$ is relevant, then:
-$$P \not \limp WP(Q; havoc(x))$$
-Obviously $WP(Q;havoc(x))$ is a set of states from which all the transitions end up in $Q$. Relevancy of $havoc(x)$ implies that there is a transition from a state $s \in P$ which ends in $\neg Q$. That is:
-$$P \not \limp WP(Q;havoc(x))$$
-"$\Leftarrow$" \\
-$\pi[i]$ is relevant, if:
-$$P \not \limp WP(Q; havoc(x))$$
-From lemma~\ref{lemma:duality}:
-$$SP(P; havoc(x)) \not \limp Q$$
-$$Q' \not \limp Q$$
-This show the existence of a state $s$ in $Q'$ such that $s \in \neg Q$ and hence a value $v$ for $x$ such that if we replace $havoc(x)$ with $x:=v$, then every execution is becoming blocking. Also, from our assumption, it is clear that there exits an execution till $P$, since $P$ is not empty.
-\end{proof}
 \end{document}

@@ -39,6 +39,7 @@
 \newtheorem{mydef}{Definition}
 \newtheorem{theorem}{Theorem}
 \newtheorem{lemma}{Lemma}
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
 
 \lstset{style=mystyle}
 \usepackage[utf8]{inputenc}
@@ -67,8 +68,17 @@ Let $\pi = \langle st_1,....,st_n \rangle$ be an error trace of length $n$ where
 \caption{Relavance of an assigning statement}\label{relevance}
 \begin{algorithmic}[1]
 \Procedure{Relevance}{}
-\State $trace \gets \text{Error trace of length }\textit{n}$
-\BState \emph{loop}:
+\State $trace \gets \text{Error trace } \pi \text{ of length } \textit{n}$
+\State $relevantStatements \gets \text{[ ]}$
+\For{$i = n$ to $1$}
+\State $Q \gets \neg wp(false;trace(i+1,n))$
+\State $P \gets wp(Q; trace(i))$
+\State $relevance \gets checkUnsatCore(P,trace(i),Q)$
+\If{$relevance = "unsat"$ and $trace(i)$ in $"unsatCore"$ }
+\State $relevantStatements.append(trace(i))$
+\EndIf
+\EndFor
+\Return $relevantStatements$
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}

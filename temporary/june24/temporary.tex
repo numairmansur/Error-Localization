@@ -49,6 +49,7 @@
 \date{\vspace{-5ex}}
 \begin{document}
 % ******************************************** BEGIN DOCUMENT **************************************************************************
+\section{Relevance}
 \begin{mydef}[Execution]\label{mydef:execution}
 Let $\pi$ be an error trace of length $n$. An execution of $\pi$ is a sequence of states $s_0, s_1 ... s_n$ such that $s_i, s_{i+1} \vDash T$, where $T$ is the transition formula of $\pi[i]$.
 \end{mydef}
@@ -60,8 +61,6 @@ An execution of a trace $\pi$ of size $n$ is called a blocking execution, if the
 Let $\pi = \langle st_1,....,st_n \rangle$ be an error trace of length $n$ where $st_i$ is an assigning statement at position $i$ that assigns a new value to some variable $x$. The statement $st_i$ is relevant if there exists an execution $s_1,...s_{n+1}$ of $\pi$ and some value $v$ such that every execution of the trace $\langle x:=v; \pi[i+1,n] \rangle$ starting in $s_i$ has a blocking execution.
 \end{mydef}
 
-\newpage
-% ******************************************** NEW PAGE *******************************************************************************
 % Checkout the following link for writing an algo in Latex
 % https://tex.stackexchange.com/questions/163768/write-pseudo-code-in-latex
 \begin{algorithm}
@@ -104,6 +103,59 @@ $\pi[i]$ is relevant, if:
 $$P \not \subseteq WP(Q;havoc(x))$$
 We know that $WP(Q;havoc(x))$ is the set of states from which all transitions end up in $Q$. The above non implication shows the existence of a state $s$ in $P$ such that $s \not \in WP(Q; havoc(x))$  from which there is a transition to $\neg Q$. This shows the existence of a value $v \in \mathcal{D}$ that we can assign to $x$ such that if we replace $\pi[i]$ with $x:=v$, then every execution is becoming blocking. Also, from our assumption, it is clear that there exits an execution till $P$, since $P$ is not empty.
 \end{proof}
+\newpage
+\section{Previous/Failed approaches:}
+\subsection{Replace with havoc and an assume is restrictive}
+\subsubsection{Approach}
+This is the approach where we said that we replace an assignment with a havoc and if some assume in the trace is becoming restrictive then the assignment statement is becoming restrictive. What was the criteria for the havoc again ?
+\begin{mydef}[Restrictivness of a statement]
+Let $pre$ be a state formula, $\pi$ a trace and $i$ a position such that $\pi[i]$ is an assume statement. We call the assume statement $\pi[i]$ \emph{restricitve} iff :
+$$SP(\pi[0,i-1], pre) \not \limp guard(\pi[i])$$
+\end{mydef}
 
+\begin{mydef}[Relevance of a statement]
+Let $\pi$ be an error trace and $\pi[i]$ be an assignment statement at position $i$ having the form $x:=t$, where $x$ is a variable and $t$ is an expression. Let $\pi'$ be the trace which is obtained by replacing $\pi[i]$ by  $havoc(x)$. Let $\Psi$ be the error precondition of $\pi$. The assignment statement $\pi[i]$ is \emph{relevant} if there exists some assume statement at position $j > i$ in $\pi'$ such that $\pi'[j]$ is restrictive for $\pi'$ and $\Psi$. 
+\end{mydef}
+\subsubsection{Example where it works}
+\begin{lstlisting}
+foo()
+{
+	x := 1;
+	y := 2;
+	z := 3;
+	assert(z > 10);
+}
+\end{lstlisting}
+lines 3 and 4 are not relevant as if we replace them with havoc, no assume in the error trace is becoming restrictive. But if we replace line 5 with $havoc(z)$, then the last assume statement ($assume(z<=10)$)is becoming restrictive. Hence the line with the assignment to $z$ is restrictive.
+\subsubsection{Example where it fails}
+\begin{lstlisting}
+foo()
+{
+	x := 1;
+	y := 2;
+	z := 3;
+	havoc z;
+	assert(z > 10);
+}
+\end{lstlisting}
+In the above example, every statement is now relative. If we replace any of the assigning statements with $havoc$, the trace is restrictive and not necessarily because of the replacement with havoc but because of the last $havoc z$ statement in the program. Hence in this program line 3 and 4 are also relevant.\\
+Another example where this approach fails is:
+\begin{lstlisting}
+procedure main()
+{
+  y := 42;
+  havoc x;
+  assume(x >= 0 && y >= 23);
+  assert(false);
+}
+\end{lstlisting}
+Here replacing the assignment statement $y:=42$ with $havoc(y)$ have no effect on the restrictivness of an already restrictive error trace. Hence it should not be relevant here. However, clearly this statement have an effect on the rechability of the error.
+\subsection{Approach with blocking executions}
+\subsubsection{Approach}
+This is the approach when we discovered that we should focus on the "amount" of restrictivness of an assume statement.
+\subsubsection{Example where it works}
+add !
+\subsubsection{Example where it fails}
+add !
 
 \end{document}

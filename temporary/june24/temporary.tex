@@ -115,7 +115,9 @@ foo()
 	assert(x > 10);
 }
 \end{lstlisting}
-According to our algorithm, only line number 4 is relevant. But according to the error invariant paper 
+According to our algorithm, only line number 4 is relevant since only at this location there exits an assignment to x such that the trace from here on is getting blocked. But at line 3, no such assignment exists.\
+According to the approach using error invariants, the assignment at line 4 is not relevant since this statement have no effect on the error invariant and the error invariant remains the same (inductive error invariant).\\
+Intuitively, it is not so helpful for the user if line 3 is marked relevant. Because even if that line is *fixed*, the program is still ending up in an error state. However, fixing line 4 can also fix the program.
 \newpage
 \section{Previous/Failed approaches:}
 \subsection{Replace with havoc and an assume is restrictive}

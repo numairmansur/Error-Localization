@@ -152,10 +152,39 @@ procedure main()
 Here replacing the assignment statement $y:=42$ with $havoc(y)$ have no effect on the restrictivness of an already restrictive error trace. Hence it should not be relevant here. However, clearly this statement have an effect on the rechability of the error.
 \subsection{Approach with blocking executions}
 \subsubsection{Approach}
-This is the approach when we discovered that we should focus on the "amount" of restrictivness of an assume statement.
-\subsubsection{Example where it works}
-add !
-\subsubsection{Example where it fails}
-add !
+We adopted this definition for relevance when we discovered that we should take into account the "amount" of restrictivness of an assume statement instead of just considering if it is getting restrictive or not. 
+\begin{mydef}[Execution]\label{mydef:execution_definition}
+Let $\pi$ be an error trace of length $n$. An execution of $\pi$ is a sequence of states $s_0, s_1...s_n$ such that $s_i, s_{i+1} \models T$, where $T$ is the transition formula of $\pi[i]$. \\
+Let $\epsilon$ represent the set of all possible executions of the error trace.
+\end{mydef}
 
+\begin{mydef}[Blocking Execution]\label{mydef:blockingexecution_definition}
+An execution of a trace $\pi$ of size $n$ is called a blocking execution if there exists a sequence of states $s_0, s_1...s_j$ where $i<j \leq n$ such that $s_i, s_{i+1} \models T[i]$, where $T[i]$ is the transition formula of $\pi[i]$ and there exits an assume statement in the trace $\pi$ at position $j$ such that $s_{j} \not \limp guard(\pi[j])$.
+\end{mydef}
+
+\begin{mydef}[Relevancy of an assignment statement]\label{mydef:relevancy_definition}
+Let $\beta$ represent the set of all blocking executions of a trace $\pi$. Let there be an assignment statement of the form $x:=t$ at position $i$. Let $\pi'$ represent the trace that we get after replacing $\pi[i]$ with a havoc statement of the form $havoc(x)$ and let $\beta'$ represent the set of all blocking executions for $\pi'$.\\
+We say that the assignment statement $\pi[i]$ is relevant if the trace after the replacement has strictly more blocked executions than the trace before the replacement, i.e if $\beta \subsetneq \beta'$. 
+\end{mydef}
+\subsubsection{Example where it works}
+\begin{lstlisting}
+procedure main()
+{
+  y := 42;
+  havoc x;
+  assume(x >= 0 && y >= 23);
+  assert(false);
+}
+\end{lstlisting}
+This definition now correctly says that $y:=42$ is relevant since changing it to havoc gives us more blocking executions then before.
+\subsubsection{Example where it fails}
+\begin{lstlisting}
+procedure main()
+{
+  y := 10;
+  havoc x;
+  assume(x > 0);
+}
+\end{lstlisting}
+In this example, the statement $y:=10$ clearly have nothing to do with error. But changing it to havoc gives us more blocking executions then before and according to this defintion, it is wrongly marked as relevant too. 
 \end{document}

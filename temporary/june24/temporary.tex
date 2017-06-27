@@ -71,7 +71,7 @@ Let $\pi = \langle st_1,....,st_n \rangle$ be an error trace of length $n$ where
 \State $relevantStatements \gets \text{[ ]}$
 \For{$i = n$ to $1$}
 \State $Q \gets \neg wp(false;trace(i+1,n))$
-\State $P \gets wp(Q; trace(i))$
+\State $P \gets wp(Q; trace(i)) \cap sp(true; trace(1;i-1))$
 \State $relevance \gets checkUnsatCore(P,trace(i),Q)$
 \If{$relevance = "unsat"$ and $trace(i)$ in $"unsatCore"$ }
 \State $relevantStatements.append(trace(i))$
@@ -103,6 +103,19 @@ $\pi[i]$ is relevant, if:
 $$P \not \subseteq WP(Q;havoc(x))$$
 We know that $WP(Q;havoc(x))$ is the set of states from which all transitions end up in $Q$. The above non implication shows the existence of a state $s$ in $P$ such that $s \not \in WP(Q; havoc(x))$  from which there is a transition to $\neg Q$. This shows the existence of a value $v \in \mathcal{D}$ that we can assign to $x$ such that if we replace $\pi[i]$ with $x:=v$, then every execution is becoming blocking. Also, from our assumption, it is clear that there exits an execution till $P$, since $P$ is not empty.
 \end{proof}
+\newpage
+\section{Comparison with other approaches}
+\subsection{Error Invariants approach}
+Consider the following example:
+\begin{lstlisting}
+foo()
+{
+	x := 7;
+	x := 7;
+	assert(x > 10);
+}
+\end{lstlisting}
+According to our algorithm, only line number 4 is relevant. But according to the error invariant paper 
 \newpage
 \section{Previous/Failed approaches:}
 \subsection{Replace with havoc and an assume is restrictive}

@@ -107,7 +107,7 @@ We know that $WP(Q;havoc(x))$ is the set of states from which all transitions en
 \section{Previous/Failed approaches:}
 \subsection{Replace with havoc and an assume is restrictive}
 \subsubsection{Approach}
-This is the approach where we said that we replace an assignment with a havoc and if some assume in the trace is becoming restrictive then the assignment statement is becoming restrictive. What was the criteria for the havoc again ?
+In this approach, we said that we replace an assignment with a havoc and if some assume in the trace is becoming restrictive then the assignment statement is becoming restrictive. What was the criteria for the havoc again ?
 \begin{mydef}[Restrictivness of a statement]
 Let $pre$ be a state formula, $\pi$ a trace and $i$ a position such that $\pi[i]$ is an assume statement. We call the assume statement $\pi[i]$ \emph{restricitve} iff :
 $$SP(\pi[0,i-1], pre) \not \limp guard(\pi[i])$$
@@ -138,7 +138,7 @@ foo()
 	assert(z > 10);
 }
 \end{lstlisting}
-In the above example, every statement is now relative. If we replace any of the assigning statements with $havoc$, the trace is restrictive and not necessarily because of the replacement with havoc but because of the last $havoc z$ statement in the program. Hence in this program line 3 and 4 are also relevant.\\
+In the above example, every statement is now relevant. If we replace any of the assigning statements with $havoc$, the trace is restrictive and not necessarily because of the replacement with havoc but because of the last $havoc(z)$ statement in the program. Hence in this program line 3 and 4 are also relevant.\\
 Another example where this approach fails is:
 \begin{lstlisting}
 procedure main()

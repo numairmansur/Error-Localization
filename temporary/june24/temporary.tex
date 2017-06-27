@@ -111,7 +111,7 @@ Only $havoc(x)$ is relevant since there is no assignment to $y$ in line 3 that c
 \\
 (more examples to follow)
 \newpage
-% ******************************************** NEW PAGE *******************************************************************************
+% ******************************************** NEW P****************************************************************
 \begin{theorem}[Equivalence of relevance]\label{mydef:relevancytheorem}
 Let $\pi = \langle st_1,...,st_i,...,st_n \rangle$ be an error trace of length $n$ and $\pi[i]$ be an assigning statement at position $i$ , which assigns a new value to some variable $x$ . Let $P = \neg WP(False; \pi[i,n]) \cap SP(True; \pi[1,i-1])$ be a set of bireachable states at position $i$ and $Q =  \neg WP(False; \pi[i+1,n])$ be the coreachable states at position $i+1$. The statement $\pi[i]$ is relevant iff:
  $$P \not \subseteq WP(Q,havoc(x))$$
@@ -131,7 +131,7 @@ We know that $WP(Q;havoc(x))$ is the set of states from which all transitions en
 \end{proof}
 \newpage
 \section{Comparison with other approaches}
-\subsection{Error Invariants approach}
+\subsection{Error Invariants \cite{errorinvariants}}
 Consider the following example:
 \begin{lstlisting}
 foo()
@@ -157,6 +157,7 @@ foo()
 According to our algorithm, only the second assignment to $x$ is relevant for the error, since an assignment to x at this point can make an existing execution for the rest of the trace blocking. On the first look it seems that the assignment at line 3 should also be relevant, because it can make an existing execution blocking for the rest of the trace but we can always assign $z$ such a value that it can overide the effect of the assignment at line 3 and make the execution unblocking again.\\
 The error invariant algorithm is not smart enough to recognize that and it says that both of the assigning statements to $x$ are relevant. Since it bases its judgement on changing error invariants which are changing after line 3 and 4 both. \\
 We however believe that our result is more helpful to the user since changing this one line can fix the error in the program.
+\subsection{Flow Sensitive Fault localization \cite{faultlocalization} } 
 \newpage
 \section{Previous/Failed approaches:}
 \subsection{Replace with havoc and an assume is restrictive}
@@ -241,4 +242,13 @@ procedure main()
 }
 \end{lstlisting}
 In this example, the statement $y:=10$ clearly have nothing to do with error. But changing it to havoc gives us more blocking executions then before and according to this defintion, it is wrongly marked as relevant too. 
+
+\begin{thebibliography}{9}
+\bibitem{errorinvariants} 
+E.Ermis, M. Schaf, and T. Wies. Error Invariants. In FM’12, pages 338–353. Springer, 2012.
+\bibitem{inconsistentcode}
+M. Schaf, D. Schawrtz, T. Wies. Explaining Inconsistent Code. In Joint meeting of the European Software Engineering conference and the Symposium on the Foundations of Software Engineering, ESEC/FSE’13, pages: 521 - 531, Saint Petersburg, Russian Federation. August 18-26,2013 
+\bibitem{faultlocalization} 
+J. Christ, E. Ermis, M. Schaf, and T. Wies. Flow-sensitive fault localization. In VMCAI, volume 7737, pages 189–208, Berlin, Heidelberg, 2013. Springer 
+\end{thebibliography}
 \end{document}

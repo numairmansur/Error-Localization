@@ -160,7 +160,21 @@ We however believe that our result is more helpful to the user since changing th
 \subsection{Flow Sensitive Fault localization \cite{faultlocalization} } 
 In the paper flow sensitive fault localization, the authors try to take into account the control flow of the program and propose a flow senstive error localization technique which, they hope, not only explain the cause of the error but also explain why the statements leading to the error were executed. They do this by modifying the so called \textit{error trace formula} to something which they call a \textit{flow sensitive error trace formula}. An error trace formula is just a conjunction of the trace formula of the error trace together with the error precondition and the correctness assertion. Information about the relevant statements can be obtained from the proof of unsatisfiability of the error trace formula. There are however serious shortcomings with this approach of finding relevant statements to begin with.\\
 The flow sensitive error trace formula is a modification of the error trace forumla, such that it now keeps track of dependencies between statements and the branching conditions that are relevant for the reachability of these statements in the control flow graph of the program. \\
-The main focus of the authors here is on finding the relevant assume statements and the statements that cause the guard of the relevant assume statements to hold. We on the other hand only focus on the statements that cause the state of the program to change and do not analyse assume statements directly.  
+The main focus of the authors here is on finding the relevant assume statements and the statements that cause the guard of the relevant assume statements to hold. We on the other hand only focus on the statements that cause the state of the program to change and do not analyse assume statements directly. However, we are still able to find the assignment statements that cause the guard of the relevant assume statemets to hold. Lets look at an example where the flow sensitive approach and our algorithm gives exactly the same result.
+\begin{lstlisting}
+foo()
+{
+	x := 1;
+	y := input - 42;
+	if (y < 0) {
+		x := 0;	
+	}
+	assert(x != 0);
+}
+\end{lstlisting}
+The flow sensitive approach and our algorithm both say that the statements $y := input - 42$ and $x := 0$ are relevant for the error. \\
+\\
+(Example where we give different results ?)
 \newpage
 \section{Previous/Failed approaches:}
 \subsection{Replace with havoc and an assume is restrictive}

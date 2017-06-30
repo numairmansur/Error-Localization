@@ -49,9 +49,10 @@
 \date{\vspace{-5ex}}
 \begin{document}
 % ******************************************** BEGIN DOCUMENT **************************************************************************
-\section{Relevance}
-\subsection{Introduction}
-Put an intuvitve idea of our definition of relevance.
+\section{Motivation}
+Identifying program statements that are the cause for the error is the most time consuming and tedious part of a programmer's debugging routine. This task can be made much simpler if it can be done automatically. The process of automatically finding program statements causing the error is called \textit{error localization}. There can be many techniques to help the user to narrow down his or her search for \textit{responsible} statements. We in this paper present a new such technique that analyze all the assigning statements in a failing program execution and return those that are playing a direct role in taking the program exeuction to the error state.\\
+Many such techniques already exist in the literature that return error-responsible statements based on different criterias and strategies. In this work we focus on program statements that change the state of the program and analyze if that change can have an effect on the reachabilty of the error. Let us look at a simple example that can help us see this a bit more clearly.
+\section{Responsible}
 \begin{mydef}[Execution]\label{mydef:execution}
 Let $\pi$ be an error trace of length $n$. An execution of $\pi$ is a sequence of states $s_0, s_1 ... s_n$ such that $s_i, s_{i+1} \vDash T$, where $T$ is the transition formula of $\pi[i]$.
 \end{mydef}

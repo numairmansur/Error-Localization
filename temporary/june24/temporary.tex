@@ -54,6 +54,9 @@ Identifying program statements that are the cause for the error is the most time
 Many such techniques already exist in the literature that return error-responsible statements based on different criterias and strategies. In this work we focus on program statements that change the state of the program and analyze if that change can have an effect on the reachabilty of the error. Let us look at a simple example that can help us see this a bit more clearly.\\
 \\ (add a simple but good example here that makes it for us to see the application of our approach)
 \section{Responsible}
+\subsection{Introduction:}
+An assignment statement ($x := t$ or $havoc(x)$) is responsible in an error trace if the assigned value matters for the reachability of the error. If the error state is reachable for any possible value of the variable $x$, then we say that the assignment to $x$ at this location in the error trace is not responsible.
+\subsection{Formal defintion:}
 \begin{mydef}[Execution]\label{mydef:execution}
 Let $\pi$ be an error trace of length $n$. An execution of $\pi$ is a sequence of states $s_0, s_1 ... s_n$ such that $s_i, s_{i+1} \vDash T$, where $T$ is the transition formula of $\pi[i]$.
 \end{mydef}
@@ -65,8 +68,7 @@ An execution of a trace $\pi$ of size $n$ is called a blocking execution, if the
 Let $\pi = \langle st_1,....,st_n \rangle$ be an error trace of length $n$ where $st_i$ is an assigning statement at position $i$ that assigns a new value to some variable $x$. The statement $st_i$ is relevant if there exists an execution $s_1,...s_{n+1}$ of $\pi$ and some value $v$ such that every execution of the trace $\langle x:=v; \pi[i+1,n] \rangle$ starting in $s_i$ has a blocking execution.
 \end{mydef}
 
-% Checkout the following link for writing an algo in Latex
-% https://tex.stackexchange.com/questions/163768/write-pseudo-code-in-latex
+\newpage
 \begin{algorithm}
 \caption{Relavance of an assigning statement}\label{relevance}
 \begin{algorithmic}[1]
@@ -76,8 +78,7 @@ Let $\pi = \langle st_1,....,st_n \rangle$ be an error trace of length $n$ where
 \For{$i = n$ to $1$}
 \State $Q \gets \neg wp(false;trace(i+1,n))$
 \State $P \gets wp(Q; trace(i)) \cap sp(true; trace(1;i-1))$
-\State $relevance \gets checkUnsatCore(P,trace(i),Q)$
-\If{$relevance = "unsat"$ and $trace(i)$ in $"unsatCore"$ }
+\If{$P \not \subseteq wp(Q; havoc(x))$ }
 \State $relevantStatements.append(trace(i))$
 \EndIf
 \EndFor
@@ -87,6 +88,7 @@ Let $\pi = \langle st_1,....,st_n \rangle$ be an error trace of length $n$ where
 \end{algorithm}
 In the algorithm , we check the relevance of a statement by checking if the triple ($P,\pi[i],\neg Q$) is unsatisfiable and $\pi[i]$ is in the unsatisfiable core. We can do this by checking if $P \not \subseteq WP(Q; havoc(x))$ .
 
+\newpage
 \subsection{Examples}
 Consider an error trace $x:=1, y:=2, z:=3, havoc(z), assume(z <=10)$ obtained from the following program:
 \begin{lstlisting}
@@ -179,7 +181,7 @@ The flow sensitive approach and our algorithm both say that the statements $y :=
 (Example where we give different results ?)
 \newpage
 \section{Previous/Failed approaches:}
-\subsection{Replace with havoc and an assume is restrictive}
+\subsection{The restricitve-assume check:}
 \subsubsection{Approach}
 In this approach, we said that we replace an assignment with a havoc and if some assume in the trace is becoming restrictive then the assignment statement is becoming restrictive. What was the criteria for the havoc again ?
 \begin{mydef}[Restrictivness of a statement]
@@ -224,7 +226,7 @@ procedure main()
 }
 \end{lstlisting}
 Here replacing the assignment statement $y:=42$ with $havoc(y)$ have no effect on the restrictivness of an already restrictive error trace. Hence it should not be relevant here. However, clearly this statement have an effect on the rechability of the error.
-\subsection{Approach with blocking executions}
+\subsection{The blocking-executions check:}
 \subsubsection{Approach}
 We adopted this definition for relevance when we discovered that we should take into account the "amount" of restrictivness of an assume statement instead of just considering if it is getting restrictive or not. 
 \begin{mydef}[Execution]\label{mydef:execution_definition}

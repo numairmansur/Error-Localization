@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2016.8.10)  12 JUL 2017 22:10
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.7.3)  12 JUL 2017 23:07
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -677,15 +677,15 @@ Underfull \hbox (badness 10000) in paragraph at lines 223--226
  []
 
 [7] [8]
-Underfull \hbox (badness 10000) in paragraph at lines 276--279
+Underfull \hbox (badness 10000) in paragraph at lines 280--283
 
  []
 
 [9] [10] (./temporary.aux) ) 
 Here is how much of TeX's memory you used:
  5332 strings out of 493029
- 69747 string characters out of 6136234
- 157355 words of memory out of 5000000
+ 69747 string characters out of 6136235
+ 157357 words of memory out of 5000000
  8769 multiletter control sequences out of 15000+600000
  11601 words of font info for 44 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -707,7 +707,7 @@ m/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8
 .pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb><
 /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></
 usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on temporary.pdf (10 pages, 218205 bytes).
+Output written on temporary.pdf (10 pages, 218609 bytes).
 PDF statistics:
  109 PDF objects out of 1000 (max. 8388607)
  78 compressed objects within 1 object stream

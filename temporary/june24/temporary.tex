@@ -232,6 +232,11 @@ $$P \not \subseteq WP(Q;havoc(x))$$
 We know that $WP(Q;havoc(x))$ is the set of states from which all transitions end up in $Q$. The above non implication shows the existence of a state $s$ in $P$ such that $s \not \in WP(Q; havoc(x))$  from which there is a transition to $\neg Q$. This shows the existence of a value $v \in \mathcal{D}$ that we can assign to $x$ such that if we replace $\pi[i]$ with $x:=v$, then every execution is becoming blocking. Also, from our assumption, it is clear that there exits an execution till $P$, since $P$ is not empty.
 \end{proof}
 \newpage
+\section{Examples where our algorithm does not work}
+add the examples which expose some problems.\\
+i can think of atleast 2 at the moment.
+2 havoc problem. \\
+another one was that big one. can't remember the name at the moment. but definatley there.
 \section{Comparison with other approaches}
 \subsection{Error Invariants \cite{errorinvariants}}
 The biggest limitation with the error invariants approach is their inability to deal with havocs and the assert false problem.(Maybe explain in the appendix assert false problem). The error invariant approach require a big unsatisfiable forumla.  \\

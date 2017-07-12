@@ -43,144 +43,27 @@
 
 \lstset{style=mystyle}
 \usepackage[utf8]{inputenc}
-\title{Error Localization \& Relevance Analysis \\ }
-\author{Matthias Heizmann, Christian Schilling, Numair Mansur}
+\title{Static fault localization for simple bugs \\ \normalsize{(background work)}}
+\author{Numair Mansur}
 \affil{University of Freiburg, Germany}
 \date{\vspace{-5ex}}
 \begin{document}
+\maketitle
 % ******************************************** BEGIN DOCUMENT **************************************************************************
+\section{Introduction}
+This document contains behind the scenes work of our submission in POPL 2018, namely "Static fault localization for simple bugs". It contains the previous/failed approaches that lead us to the final version. The document also mention some examples that we came across that show why the previous approaches didn't work. The document should also serve the purpose of  a reference if we forget something or some stuff like that. i dont know \\
+This document will also serve as a submission for my master project. \\
+bla bla bla...some more stuff about the document.
 \section{Motivation}
-Identifying program statements that are the cause for the error is the most time consuming and tedious part of a programmer's debugging routine. This task can be made much simpler if it can be done automatically. The process of automatically finding program statements causing the error is called \textit{error localization}. There can be many techniques to help the user to narrow down his or her search for \textit{responsible} statements. We in this paper present a new such technique that analyze all the assigning statements in a failing program execution and return those that are playing a direct role in taking the program exeuction to the error state.\\
+\textbf{(Read the paper and write the motivation again)} \\
+Identifying program statements that are the cause for the error is the most time consuming and tedious part of a programmer's debugging routine. This task can be made much simpler if it can be done automatically. The process of automatically finding program statements causing the error is called \textit{fault localization}. There can be many techniques to help the user to narrow down his or her search for \textit{relevant} statements. We in this paper present a new such technique that analyze all the assigning statements in a failing program execution and return those that are playing a direct role in taking the program exeuction to the error state.\\
 Many such techniques already exist in the literature that return error-responsible statements based on different criterias and strategies. In this work we focus on program statements that change the state of the program and analyze if that change can have an effect on the reachabilty of the error. Let us look at a simple example that can help us see this a bit more clearly.\\
-\\ (add a simple but good example here that makes it for us to see the application of our approach)
-\section{Responsible}
-\subsection{Introduction:}
-An assignment statement ($x := t$ or $havoc(x)$) is responsible in an error trace if the assigned value matters for the reachability of the error. If the error state is reachable for any possible value of the variable $x$, then we say that the assignment to $x$ at this location in the error trace is not responsible.
-\subsection{Formal defintion:}
-\begin{mydef}[Execution]\label{mydef:execution}
-Let $\pi$ be an error trace of length $n$. An execution of $\pi$ is a sequence of states $s_0, s_1 ... s_n$ such that $s_i, s_{i+1} \vDash T$, where $T$ is the transition formula of $\pi[i]$.
-\end{mydef}
-\begin{mydef}[Blocking Execution]\label{mydef:blocked_execution}
-An execution of a trace $\pi$ of size $n$ is called a blocking execution, if there exists a sequence of states $s_0,s_1...s_j$ where $i<j \leq n$ such that $s_i, s_{i+1} \vDash T$ where $T$ is the transition formula of $\pi[i]$ and there exists an assume statement in the trace $\pi$ at position $j$ such that $s_j \not \limp guard(\pi[j])$
-\end{mydef}
-
-\begin{mydef}[Relevance of an assigning statement]\label{mydef:responsible}
-Let $\pi = \langle st_1,....,st_n \rangle$ be an error trace of length $n$ where $st_i$ is an assigning statement at position $i$ that assigns a new value to some variable $x$. The statement $st_i$ is relevant if there exists an execution $s_1,...s_{n+1}$ of $\pi$ and some value $v$ such that every execution of the trace $\langle x:=v; \pi[i+1,n] \rangle$ starting in $s_i$ has a blocking execution.
-\end{mydef}
-
-\newpage
-\begin{algorithm}
-\caption{Relavance of an assigning statement}\label{relevance}
-\begin{algorithmic}[1]
-\Procedure{Relevance}{}
-\State $trace \gets \text{Error trace } \pi \text{ of length } \textit{n}$
-\State $relevantStatements \gets \text{[ ]}$
-\For{$i = n$ to $1$}
-\State $Q \gets \neg wp(false;trace(i+1,n))$
-\State $P \gets wp(Q; trace(i)) \cap sp(true; trace(1;i-1))$
-\If{$P \not \subseteq wp(Q; havoc(x))$ }
-\State $relevantStatements.append(trace(i))$
-\EndIf
-\EndFor
-\Return $relevantStatements$
-\EndProcedure
-\end{algorithmic}
-\end{algorithm}
-In the algorithm , we check the relevance of a statement by checking if the triple ($P,\pi[i],\neg Q$) is unsatisfiable and $\pi[i]$ is in the unsatisfiable core. We can do this by checking if $P \not \subseteq WP(Q; havoc(x))$ .
-
-\newpage
-\subsection{Examples}
-Consider an error trace $x:=1, y:=2, z:=3, havoc(z), assume(z <=10)$ obtained from the following program:
-\begin{lstlisting}
-foo()
-{
-	x := 1;
-	y := 2;
-	z := 3;
-	havoc z;
-	assert(z > 10);
-}
-\end{lstlisting}
-In the example above only the havoc statement at line 6 is relevant. One might assume that the assignment statement involving $z$ might also be relevant. But if there exists an execition $\mathcal{E}$ of the trace, there is no assignemnt to $z$ at this point such that we have a blocked execution of the subtrace from this assignment onwards starting with a state taken from the execution $\mathcal{E}$ just before the assignment $z:=3$. \\
-Consider another example:
-\begin{lstlisting}
-foo()
-{
-  y := 7;
-  havoc x;
-  assert(x >= 0 && y >= 0);
-}
-\end{lstlisting}
-Only $havoc(x)$ is relevant since there is no assignment to $y$ in line 3 that can make an existing execution of the error trace blocking.\\
-\\
-(more examples to follow)
-\newpage
-% ******************************************** NEW P****************************************************************
-\begin{theorem}[Equivalence of relevance]\label{mydef:relevancytheorem}
-Let $\pi = \langle st_1,...,st_i,...,st_n \rangle$ be an error trace of length $n$ and $\pi[i]$ be an assigning statement at position $i$ , which assigns a new value to some variable $x$ . Let $P = \neg WP(False; \pi[i,n]) \cap SP(True; \pi[1,i-1])$ be a set of bireachable states at position $i$ and $Q =  \neg WP(False; \pi[i+1,n])$ be the coreachable states at position $i+1$. The statement $\pi[i]$ is relevant iff:
- $$P \not \subseteq WP(Q,havoc(x))$$
-\end{theorem}
-
-\begin{proof}
-Let $\mathcal{D}$ be the domain of the variable $x$. \\
-"$\Rightarrow$"\\
-If $\pi[i]$ is relevant, then\\
-$$P \not \subseteq WP(Q;havoc(x))$$
-Obviously all the transitions from the states in $WP(Q;havoc(x))$ ends up in $Q$. Relevancy of $\pi[i]$ implies that there is a state in $s \in P$ such that there is a transition from $s$ to $\neg Q$. That would mean:
-$$P \not \subseteq WP(Q;havoc(x))$$
-"$\Leftarrow$"\\
-$\pi[i]$ is relevant, if:
-$$P \not \subseteq WP(Q;havoc(x))$$
-We know that $WP(Q;havoc(x))$ is the set of states from which all transitions end up in $Q$. The above non implication shows the existence of a state $s$ in $P$ such that $s \not \in WP(Q; havoc(x))$  from which there is a transition to $\neg Q$. This shows the existence of a value $v \in \mathcal{D}$ that we can assign to $x$ such that if we replace $\pi[i]$ with $x:=v$, then every execution is becoming blocking. Also, from our assumption, it is clear that there exits an execution till $P$, since $P$ is not empty.
-\end{proof}
-\newpage
-\section{Comparison with other approaches}
-\subsection{Error Invariants \cite{errorinvariants}}
-Consider the following example:
-\begin{lstlisting}
-foo()
-{
-	x := 7;
-	x := 7;
-	assert(x > 10);
-}
-\end{lstlisting}
-According to our algorithm, only line number 4 is relevant since only at this location there exits an assignment to x such that the trace from here on is getting blocked. But at line 3, no such assignment exists.\
-According to the approach using error invariants, the assignment at line 4 is not relevant since this statement have no effect on the error invariant and the error invariant remains the same (inductive error invariant).\\
-Intuitively, it is not so helpful for the user if line 3 is marked relevant. Because even if that line is *fixed*, the program is still ending up in an error state. However, fixing line 4 also fixes the program.\\
-Consider another example:
-\begin{lstlisting}
-foo()
-{
-	x := x + y;
-	x := x + z;
-	y := y + z;
-	assert(x >= 0);
-}
-\end{lstlisting}
-According to our algorithm, only the second assignment to $x$ is relevant for the error, since an assignment to x at this point can make an existing execution for the rest of the trace blocking. On the first look it seems that the assignment at line 3 should also be relevant, because it can make an existing execution blocking for the rest of the trace but we can always assign $z$ such a value that it can overide the effect of the assignment at line 3 and make the execution unblocking again.\\
-The error invariant algorithm is not smart enough to recognize that and it says that both of the assigning statements to $x$ are relevant. Since it bases its judgement on changing error invariants which are changing after line 3 and 4 both. \\
-We however believe that our result is more helpful to the user since changing this one line can fix the error in the program.
-\subsection{Flow Sensitive Fault localization \cite{faultlocalization} } 
-In the paper flow sensitive fault localization, the authors try to take into account the control flow of the program and propose a flow senstive error localization technique which, they hope, not only explain the cause of the error but also explain why the statements leading to the error were executed. They do this by modifying the so called \textit{error trace formula} to something which they call a \textit{flow sensitive error trace formula}. An error trace formula is just a conjunction of the trace formula of the error trace together with the error precondition and the correctness assertion. Information about the relevant statements can be obtained from the proof of unsatisfiability of the error trace formula. There are however serious shortcomings with this approach of finding relevant statements to begin with.\\
-The flow sensitive error trace formula is a modification of the error trace forumla, such that it now keeps track of dependencies between statements and the branching conditions that are relevant for the reachability of these statements in the control flow graph of the program. \\
-The main focus of the authors here is on finding the relevant assume statements and the statements that cause the guard of the relevant assume statements to hold. We on the other hand only focus on the statements that cause the state of the program to change and do not analyse assume statements directly. However, we are still able to find the assignment statements that cause the guard of the relevant assume statemets to hold. Lets look at an example where the flow sensitive approach and our algorithm gives exactly the same result.
-\begin{lstlisting}
-foo()
-{
-	x := 1;
-	y := input - 42;
-	if (y < 0) {
-		x := 0;	
-	}
-	assert(x != 0);
-}
-\end{lstlisting}
-The flow sensitive approach and our algorithm both say that the statements $y := input - 42$ and $x := 0$ are relevant for the error. \\
-\\
-(Example where we give different results ?)
-\newpage
+\\ \textbf{(add a simple but good example here that makes it for us to see the application of our approach)}
+\\ \textbf{(Maybe also talk about how we developed the algorithm in the previous semester)}
+\\ \textbf{(anything more ?)}
 \section{Previous/Failed approaches:}
+\textbf{(Also tell here, how we treated the havoc relevancy and normal relevancy seperatlely)} \\
+The final version of relevancy that we put in the paper was a result of some iterations. 
 \subsection{The restricitve-assume check:}
 \subsubsection{Approach}
 In this approach, we said that we replace an assignment with a havoc and if some assume in the trace is becoming restrictive then the assignment statement is becoming restrictive. What was the criteria for the havoc again ?
@@ -253,7 +136,7 @@ procedure main()
 }
 \end{lstlisting}
 This definition now correctly says that $y:=42$ is relevant since changing it to havoc gives us more blocking executions then before.
-\subsubsection{Example where it fails}
+\subsection{Example where it fails}
 \begin{lstlisting}
 procedure main()
 {
@@ -263,6 +146,139 @@ procedure main()
 }
 \end{lstlisting}
 In this example, the statement $y:=10$ clearly have nothing to do with error. But changing it to havoc gives us more blocking executions then before and according to this defintion, it is wrongly marked as relevant too. 
+
+\subsection{SP Intersection check}
+bla bla
+
+\section{Final version of Relevance}
+\subsection{Introduction:}
+An assignment statement ($x := t$ or $havoc(x)$) is responsible in an error trace if the assigned value matters for the reachability of the error. If the error state is reachable for any possible value of the variable $x$, then we say that the assignment to $x$ at this location in the error trace is not responsible.
+\subsection{Formal defintion:}
+\begin{mydef}[Execution]\label{mydef:execution}
+Let $\pi$ be an error trace of length $n$. An execution of $\pi$ is a sequence of states $s_0, s_1 ... s_n$ such that $s_i, s_{i+1} \vDash T$, where $T$ is the transition formula of $\pi[i]$.
+\end{mydef}
+\begin{mydef}[Blocking Execution]\label{mydef:blocked_execution}
+An execution of a trace $\pi$ of size $n$ is called a blocking execution, if there exists a sequence of states $s_0,s_1...s_j$ where $i<j \leq n$ such that $s_i, s_{i+1} \vDash T$ where $T$ is the transition formula of $\pi[i]$ and there exists an assume statement in the trace $\pi$ at position $j$ such that $s_j \not \limp guard(\pi[j])$
+\end{mydef}
+
+\begin{mydef}[Relevance of an assigning statement]\label{mydef:responsible}
+Let $\pi = \langle st_1,....,st_n \rangle$ be an error trace of length $n$ where $st_i$ is an assigning statement at position $i$ that assigns a new value to some variable $x$. The statement $st_i$ is relevant if there exists an execution $s_1,...s_{n+1}$ of $\pi$ and some value $v$ such that every execution of the trace $\langle x:=v; \pi[i+1,n] \rangle$ starting in $s_i$ has a blocking execution.
+\end{mydef}
+
+\newpage
+\begin{algorithm}
+\caption{Relavance of an assigning statement}\label{relevance}
+\begin{algorithmic}[1]
+\Procedure{Relevance}{}
+\State $trace \gets \text{Error trace } \pi \text{ of length } \textit{n}$
+\State $relevantStatements \gets \text{[ ]}$
+\For{$i = n$ to $1$}
+\State $Q \gets \neg wp(false;trace(i+1,n))$
+\State $P \gets wp(Q; trace(i)) \cap sp(true; trace(1;i-1))$
+\If{$P \not \subseteq wp(Q; havoc(x))$ }
+\State $relevantStatements.append(trace(i))$
+\EndIf
+\EndFor
+\Return $relevantStatements$
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+In the algorithm , we check the relevance of a statement by checking if the triple ($P,\pi[i],\neg Q$) is unsatisfiable and $\pi[i]$ is in the unsatisfiable core. We can do this by checking if $P \not \subseteq WP(Q; havoc(x))$ .
+
+\newpage
+\subsection{Examples}
+I don't think there is a need to put examples here.
+Consider an error trace $x:=1, y:=2, z:=3, havoc(z), assume(z <=10)$ obtained from the following program:
+\begin{lstlisting}
+foo()
+{
+	x := 1;
+	y := 2;
+	z := 3;
+	havoc z;
+	assert(z > 10);
+}
+\end{lstlisting}
+In the example above only the havoc statement at line 6 is relevant. One might assume that the assignment statement involving $z$ might also be relevant. But if there exists an execition $\mathcal{E}$ of the trace, there is no assignemnt to $z$ at this point such that we have a blocked execution of the subtrace from this assignment onwards starting with a state taken from the execution $\mathcal{E}$ just before the assignment $z:=3$. \\
+Consider another example:
+\begin{lstlisting}
+foo()
+{
+  y := 7;
+  havoc x;
+  assert(x >= 0 && y >= 0);
+}
+\end{lstlisting}
+Only $havoc(x)$ is relevant since there is no assignment to $y$ in line 3 that can make an existing execution of the error trace blocking.\\
+\\
+(more examples to follow)
+\newpage
+% ******************************************** NEW P****************************************************************
+\begin{theorem}[Equivalence of relevance]\label{mydef:relevancytheorem}
+Let $\pi = \langle st_1,...,st_i,...,st_n \rangle$ be an error trace of length $n$ and $\pi[i]$ be an assigning statement at position $i$ , which assigns a new value to some variable $x$ . Let $P = \neg WP(False; \pi[i,n]) \cap SP(True; \pi[1,i-1])$ be a set of bireachable states at position $i$ and $Q =  \neg WP(False; \pi[i+1,n])$ be the coreachable states at position $i+1$. The statement $\pi[i]$ is relevant iff:
+ $$P \not \subseteq WP(Q,havoc(x))$$
+\end{theorem}
+
+\begin{proof}
+Let $\mathcal{D}$ be the domain of the variable $x$. \\
+"$\Rightarrow$"\\
+If $\pi[i]$ is relevant, then\\
+$$P \not \subseteq WP(Q;havoc(x))$$
+Obviously all the transitions from the states in $WP(Q;havoc(x))$ ends up in $Q$. Relevancy of $\pi[i]$ implies that there is a state in $s \in P$ such that there is a transition from $s$ to $\neg Q$. That would mean:
+$$P \not \subseteq WP(Q;havoc(x))$$
+"$\Leftarrow$"\\
+$\pi[i]$ is relevant, if:
+$$P \not \subseteq WP(Q;havoc(x))$$
+We know that $WP(Q;havoc(x))$ is the set of states from which all transitions end up in $Q$. The above non implication shows the existence of a state $s$ in $P$ such that $s \not \in WP(Q; havoc(x))$  from which there is a transition to $\neg Q$. This shows the existence of a value $v \in \mathcal{D}$ that we can assign to $x$ such that if we replace $\pi[i]$ with $x:=v$, then every execution is becoming blocking. Also, from our assumption, it is clear that there exits an execution till $P$, since $P$ is not empty.
+\end{proof}
+\newpage
+\section{Comparison with other approaches}
+\subsection{Error Invariants \cite{errorinvariants}}
+The biggest limitation with the error invariants approach is their inability to deal with havocs and the assert false problem.(Maybe explain in the appendix assert false problem). The error invariant approach require a big unsatisfiable forumla.  \\
+Generalization / Characterization of the assert false problem.\\
+Consider the following example:
+
+\begin{lstlisting}
+foo()
+{ 
+	p1 := -1;
+	p2 := -1;
+	i := 1; This is the problem here
+	while(i < 10){
+		if(i==0){
+			p1 := 0;
+			p2 := 0;		
+		}
+		assert( p1!= -1):
+		i++;	
+	}
+}
+\end{lstlisting}
+In the above program, the error invariant will say only havoc x is responsible for the error. But we say something differently. \\
+POTENTIAL BUG IN THE IMPLEMENTATION !!
+Check later
+\subsection{Flow Sensitive Fault localization \cite{faultlocalization} } 
+In the paper flow sensitive fault localization, the authors try to take into account the control flow of the program and propose a flow senstive error localization technique which, they hope, not only explain the cause of the error but also explain why the statements leading to the error were executed. They do this by modifying the so called \textit{error trace formula} to something which they call a \textit{flow sensitive error trace formula}. An error trace formula is just a conjunction of the trace formula of the error trace together with the error precondition and the correctness assertion. Information about the relevant statements can be obtained from the proof of unsatisfiability of the error trace formula. There are however serious shortcomings with this approach of finding relevant statements to begin with.\\
+The flow sensitive error trace formula is a modification of the error trace forumla, such that it now keeps track of dependencies between statements and the branching conditions that are relevant for the reachability of these statements in the control flow graph of the program. \\
+The main focus of the authors here is on finding the relevant assume statements and the statements that cause the guard of the relevant assume statements to hold. We on the other hand only focus on the statements that cause the state of the program to change and do not analyse assume statements directly. However, we are still able to find the assignment statements that cause the guard of the relevant assume statemets to hold. Lets look at an example where the flow sensitive approach and our algorithm gives exactly the same result.
+\begin{lstlisting}
+foo()
+{
+	x := 1;
+	y := input - 42;
+	if (y < 0) {
+		x := 0;	
+	}
+	assert(x != 0);
+}
+\end{lstlisting}
+The flow sensitive approach and our algorithm both say that the statements $y := input - 42$ and $x := 0$ are relevant for the error. \\
+\\
+(Example where we give different results ?)
+\section{Future work}
+\subsection{Call \ Return}
+\subsection{Security Analysis}
+\newpage
 
 \begin{thebibliography}{9}
 \bibitem{errorinvariants} 

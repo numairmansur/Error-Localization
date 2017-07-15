@@ -56,15 +56,15 @@ This document will also serve as a submission for my master project. \\
 bla bla bla...some more stuff about the document.
 \section{Motivation}
 \textbf{(Read the paper and write the motivation again)} \\
-Identifying program statements that are the cause for the error is the most time consuming and tedious part of a programmer's debugging routine. This task can be made much simpler if it can be done automatically. The process of automatically finding program statements causing the error is called \textit{fault localization}. There can be many techniques to help the user to narrow down his or her search for \textit{relevant} statements. We in this paper present a new such technique that analyze all the assigning statements in a failing program execution and return those that are playing a direct role in taking the program exeuction to the error state.\\
-Many such techniques already exist in the literature that return error-responsible statements based on different criterias and strategies. In this work we focus on program statements that change the state of the program and analyze if that change can have an effect on the reachabilty of the error. Let us look at a simple example that can help us see this a bit more clearly.\\
-\\ \textbf{(add a simple but good example here that makes it for us to see the application of our approach)}
-\\ \textbf{(Maybe also talk about how we developed the algorithm in the previous semester)}
+Identifying program statements that are the cause for the error is the most time consuming and tedious part of a programmer's debugging routine. This task can be made much simpler if it can be done automatically. The process of automatically finding program statements causing the error is called \textit{fault localization}. There can be many techniques to help the user to narrow down his or her search for \textit{relevant} statements. We in this work present a new such technique that statically analyze all the assigning statements in an error trace and return those that are playing a direct role in taking the program exeuction to the error state. Many such techniques already exist in the literature that return error-relevant statements based on different criterias and strategies. In this work we focus on program statements that change the state of the program and analyze if that change can have an effect on the reachabilty of the error. A program might be failing because of several reasons which are not necessarily simple(?) and easy to point out and there might be many ways to fix the error. We however in this work stick to what we call simple bugs. A bug in an error trace is called simple if the modification of a single statement can fix the error.\\
+Not only did we want to help user find simple bugs, we also wanted to formalize the notion of when an assigning statement is relevant in an error trace.
+Coming up with a precise formal definition took some iterations and the curent definition of relevancy was reached after some time and effort. All the previous definitions are also presented in this document along with the reasons of why they were wrong and the examples on which they failed. 
+\\ \textbf{(Maybe also talk about how we developed the algorithm in the previous semester).}
 \\ \textbf{(anything more ?)}
-\section{Previous/Failed approaches:}
-\textbf{(Also tell here, how we treated the havoc relevancy and normal relevancy seperatlely)} \\
-The final version of relevancy that we put in the paper was a result of some iterations. 
+\section{Discarded Definitions:}
+This section mentions the defintions for relevancy that are pre-versions(?) of the definition that is in the final POPL submission. These defintions have been discarded due to their inability to correctly and completely explain our notion of relevancy. They are in the document primarily for the reason of documenting failed/incorrect versions of our definition that might be useful in the future as we further develop our understanding of what it means that a statement is relevant in an error trace for a simple bug. 
 \subsection{The restricitve-assume check:}
+I think here we have to talk assignemtn and havoc relevancy seperately. and maybe also talk about the proofs.
 \subsubsection{Approach}
 In this approach, we said that we replace an assignment with a havoc and if some assume in the trace is becoming restrictive then the assignment statement is becoming restrictive. What was the criteria for the havoc again ?
 \begin{mydef}[Restrictivness of a statement]
@@ -147,8 +147,10 @@ procedure main()
 \end{lstlisting}
 In this example, the statement $y:=10$ clearly have nothing to do with error. But changing it to havoc gives us more blocking executions then before and according to this defintion, it is wrongly marked as relevant too. 
 
-\subsection{SP Intersection check}
-bla bla
+\subsection{SP Intersection check(Implementational detail)}
+bla bla\\
+\textbf{(Also tell here, how we treated the havoc relevancy and normal relevancy seperatlely)} \\
+
 
 \section{Final version of Relevance}
 \subsection{Introduction:}

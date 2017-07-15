@@ -61,21 +61,33 @@ Not only did we want to help user find simple bugs, we also wanted to formalize 
 Coming up with a precise formal definition took some iterations and the curent definition of relevancy was reached after some time and effort. All the previous definitions are also presented in this document along with the reasons of why they were wrong and the examples on which they failed. 
 \\ \textbf{(Maybe also talk about how we developed the algorithm in the previous semester).}
 \\ \textbf{(anything more ?)}
-\section{Discarded Definitions:}
-This section mentions the defintions for relevancy that are pre-versions(?) of the definition that is in the final POPL submission. These defintions have been discarded due to their inability to correctly and completely explain our notion of relevancy. They are in the document primarily for the reason of documenting failed/incorrect versions of our definition that might be useful in the future as we further develop our understanding of what it means that a statement is relevant in an error trace for a simple bug. 
+\section{Discarded definitions of relevance:}
+While developing a formal definition for relevance, we came across several versions that seemed correct at the time but in reality didn't accurately and completley explain our notion of relevance and hence were discarded. We discovered this by coming up with counter examples where these definitions didn't work. This section mentions those discarded definitions and the counter examples.\\ 
+They are in the document primarily for the reason of documenting failed/incorrect versions of our current definition that might be useful in the future as we further develop our understanding of what it means that a statement is relevant in an error trace for a simple bug. \\
+For future reference it is easier if we name these definitions. Since we declare a statemnet relavent if they satisfy a check, hence lets name these definitions with a check.
 \subsection{The restricitve-assume check:}
-I think here we have to talk assignemtn and havoc relevancy seperately. and maybe also talk about the proofs.
-\subsubsection{Approach}
-In this approach, we said that we replace an assignment with a havoc and if some assume in the trace is becoming restrictive then the assignment statement is becoming restrictive. What was the criteria for the havoc again ?
+We defined two seperate checks for checking the relevance of an assignment statement and a havoc statement. \textbf{\textit{Explain a bit more here why?}}
+\subsubsection{Assignment statement:}
+An assignment statement was marked relevant, if we replace that assginment with a havoc and some assume statement in the error trace was becoming restrictive.
 \begin{mydef}[Restrictivness of a statement]
 Let $pre$ be a state formula, $\pi$ a trace and $i$ a position such that $\pi[i]$ is an assume statement. We call the assume statement $\pi[i]$ \emph{restricitve} iff :
 $$SP(\pi[0,i-1], pre) \not \limp guard(\pi[i])$$
 \end{mydef}
 
-\begin{mydef}[Relevance of a statement]
+\begin{mydef}[Relevance of an assignment statement]
 Let $\pi$ be an error trace and $\pi[i]$ be an assignment statement at position $i$ having the form $x:=t$, where $x$ is a variable and $t$ is an expression. Let $\pi'$ be the trace which is obtained by replacing $\pi[i]$ by  $havoc(x)$. Let $\Psi$ be the error precondition of $\pi$. The assignment statement $\pi[i]$ is \emph{relevant} if there exists some assume statement at position $j > i$ in $\pi'$ such that $\pi'[j]$ is restrictive for $\pi'$ and $\Psi$. 
 \end{mydef}
-\subsubsection{Example where it works}
+
+\subsubsection{Havoc statement:}
+\begin{mydef}[Relevancy of a havoc statement]
+Let $\pi$ be a feasible error trace and $\pi[i]$ be a $Havoc$ statement at position $i$ having the form $havoc(x)$, where $x$ is a variable. Let $x:=t$ be an assignment statement where $x$ is the same variable as in $havoc(x)$ and $t$ is an expression. The $havoc$ statement $\pi[i]$ is relevant if there exists an assignemnt $x:=t$ such that if we replace the $havoc$ in $\pi$ with $x:=t$ to get a new trace $\pi'$, then the following implication holds:
+$$SP(true; \pi') \Rightarrow false$$
+\end{mydef}
+
+
+\subsubsection{Examples:}
+Here are some examples where the above approah works and some examples where it fails. \\
+\textbf{Where it works:}
 \begin{lstlisting}
 foo()
 {
@@ -85,8 +97,8 @@ foo()
 	assert(z > 10);
 }
 \end{lstlisting}
-lines 3 and 4 are not relevant as if we replace them with havoc, no assume in the error trace is becoming restrictive. But if we replace line 5 with $havoc(z)$, then the last assume statement ($assume(z<=10)$)is becoming restrictive. Hence the line with the assignment to $z$ is restrictive.
-\subsubsection{Example where it fails}
+lines 3 and 4 are not relevant as if we replace them with havoc, no assume in the error trace is becoming restrictive. But if we replace line 5 with $havoc(z)$, then the last assume statement ($assume(z<=10)$)is becoming restrictive. Hence the line with the assignment to $z$ is restrictive. \\
+\textbf{Where it fails:}
 \begin{lstlisting}
 foo()
 {
@@ -109,6 +121,8 @@ procedure main()
 }
 \end{lstlisting}
 Here replacing the assignment statement $y:=42$ with $havoc(y)$ have no effect on the restrictivness of an already restrictive error trace. Hence it should not be relevant here. However, clearly this statement have an effect on the rechability of the error.
+
+\textit{Also talk about the proofs. (maybe not ? chris did not like the idea)} \\
 \subsection{The blocking-executions check:}
 \subsubsection{Approach}
 We adopted this definition for relevance when we discovered that we should take into account the "amount" of restrictivness of an assume statement instead of just considering if it is getting restrictive or not. 
@@ -147,9 +161,9 @@ procedure main()
 \end{lstlisting}
 In this example, the statement $y:=10$ clearly have nothing to do with error. But changing it to havoc gives us more blocking executions then before and according to this defintion, it is wrongly marked as relevant too. 
 
-\subsection{SP Intersection check(Implementational detail)}
+\section{Error in implementation:}
 bla bla\\
-\textbf{(Also tell here, how we treated the havoc relevancy and normal relevancy seperatlely)} \\
+
 
 
 \section{Final version of Relevance}

@@ -249,7 +249,7 @@ According to our definition of relevance, $y:=7$ should not be relevant as no va
 
 But our previous algorithm marks it as relevant. Because in our previous algorithm, $P$ was computed as $pre(true, \pi[i,n])$, where $\pi[i]$ is the assignment statement under consideration. Hence $P$ would be $true$ and $Q$ would be $x=5 \vee y=7$. Obviously $P \not \subseteq wp(Q; havoc(y))$, where $wp(Q, havoc(y))$ is $x=5$. Therefore, the assignment is marked relevant. \\
 We fixed this error in the algorithm by computing $P$ not as $pre(true, \pi[i,n])$ but as the intersection of $pre(true, \pi[i,n])$ and $sp(true, \pi[1,i-1])$.
-\newpage
+
 \section{Limitations of our definition}
 This section mentions two known examples that reveal the weakness of our approach and we should keep them in mind as we further develop the notion of relevance. For furture reference, let us name these examples as follows.
 \subsection{Two-havocs problem:}

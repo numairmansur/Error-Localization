@@ -53,7 +53,7 @@
 \section{Introduction}
 This document contains behind the scenes work of our submission in POPL 2018, namely "Static fault localization for simple bugs". It contains the previous/failed definitions of relevance that lead us to the final version. The document also mention some examples that we came across that show why the previous definitions didn't work. It also reveals some limitations of our current defintion of relevance by showing some more examples. The document should also serve the purpose of a reference for future work in this area for us. This will also be the submission as my master project report.
 \section{Motivation}
-Identifying program statements that are the cause for the error is the most time consuming and tedious part of a programmer's debugging routine. This task can be made much simpler if it can be done automatically. The process of automatically finding program statements causing the error is called \textit{fault localization}. There can be many techniques to help the user to narrow down his or her search for \textit{relevant} statements. We in this work present a new such technique that statically analyze all the assigning statements in an error trace and return those that are playing a direct role in taking the program exeuction to the error state. Many such techniques already exist in the literature that return error-relevant statements based on different criterias and strategies. In this work we focus on program statements that change the state of the program and analyze if that change can have an effect on the reachabilty of the error. A program might be failing because of several reasons which are not necessarily simple(a term elaborated more clearly in the paper) and easy to point out and there might be many ways to fix the error. We however in this work stick to what we call simple bugs. A bug in an error trace is called simple if the modification of a single statement can fix the error.\\
+Identifying program statements that are the cause for the error is the most time consuming and tedious part of a programmer's debugging routine. This task can be made much simpler if it can be done automatically. The process of automatically finding program statements causing the error is called \textit{fault localization}. There can be many techniques to help the user to narrow down his or her search for \textit{relevant} statements. We in this work present a new such technique that statically analyze all the assigning statements in an error trace and return those that are playing a direct role in taking the program exeuction to the error state. Many such techniques already exist in the literature that return error-relevant statements based on different criterion and strategies. In this work we focus on program statements that change the state of the program and analyze if that change can have an effect on the reachabilty of the error. A program might be failing because of several reasons which are not necessarily simple(a term elaborated more clearly in the paper) and easy to point out and there might be many ways to fix the error. We however in this work stick to what we call simple bugs. A bug in an error trace is called simple if the modification of a single statement can fix the error.\\
 Not only did we want to help user find simple bugs, we also wanted to formalize the notion of when an assigning statement is relevant in an error trace.
 Coming up with a precise formal definition took some iterations and the curent definition of relevancy was reached after some time and effort. All the previous definitions are also presented in this document along with the reasons of why they were wrong and the examples on which they failed.
 \section{Discarded definitions of relevance:}
@@ -74,7 +74,7 @@ Let $\pi$ be an error trace and $\pi[i]$ be an assignment statement at position 
 \end{mydef}
 
 \subsubsection{Havoc statement:}
-\begin{mydef}[Relevancy of a havoc statement]
+\begin{mydef}[Relevance of a havoc statement]
 Let $\pi$ be a feasible error trace and $\pi[i]$ be a $Havoc$ statement at position $i$ having the form $havoc(x)$, where $x$ is a variable. Let $x:=t$ be an assignment statement where $x$ is the same variable as in $havoc(x)$ and $t$ is an expression. The $havoc$ statement $\pi[i]$ is relevant if there exists an assignemnt $x:=t$ such that if we replace the $havoc$ in $\pi$ with $x:=t$ to get a new trace $\pi'$, then the following implication holds:
 $$SP(true; \pi') \Rightarrow false$$
 \end{mydef}
@@ -324,7 +324,14 @@ Both the flow sensitive approach and our algorithm say that the assignment state
 \subsection{Call/Return statements}
 We yet have to see the behaviour of our algorithm during procedure calls and define when a call and return statement should be relevant in an error trace. This would require some deeper study and would therefore be considered in future work.
 \subsection{Security Analysis}
-[add text here]
+An interseting problem that we might be able to solve is to distinguish security bugs from non-security bugs. According to our initial understanding, a bug is a security bug iff an input (network/user) statement can cause the program execition to reach the error state. \\
+Following are the possible criterion for a bug to be called a security bug.
+\begin{itemize}
+  \item There  is some reachable location where a program reads an input.
+  \item There is some input value, such that continuing from this location we definately reach the error.
+  \item There is some input that continuing from this location we do not reach the error.
+\end{itemize}
+From condition 2 and 3, we can conclude that the input is somehow relevant for the error. This is ofcourse just our intial understanding on this topic, which may not be accurate and further work is needed to formally define a security bug which would involve analyzing in detail the examples that contain security bugs.
 \newpage
 
 \begin{thebibliography}{9}

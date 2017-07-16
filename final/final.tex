@@ -51,20 +51,17 @@
 \maketitle
 % ******************************************** BEGIN DOCUMENT **************************************************************************
 \section{Introduction}
-This document contains behind the scenes work of our submission in POPL 2018, namely "Static fault localization for simple bugs". It contains the previous/failed definitions of relevance that lead us to the final version. The document also mention some examples that we came across that show why the previous definitions didn't work. It also reveals some limitations of our defintion of relevance by showing some more examples. The document should also serve the purpose of a reference for our future work in this area. This will also be the submission as my master project report.
+This document contains behind the scenes work of our submission in POPL 2018, namely "Static fault localization for simple bugs". It contains the previous/failed definitions of relevance that lead us to the final version. The document also mention some examples that we came across that show why the previous definitions didn't work. It also reveals some limitations of our current defintion of relevance by showing some more examples. The document should also serve the purpose of a reference for future work in this area for us. This will also be the submission as my master project report.
 \section{Motivation}
-\textbf{(Read the paper and write the motivation again)} \\
-Identifying program statements that are the cause for the error is the most time consuming and tedious part of a programmer's debugging routine. This task can be made much simpler if it can be done automatically. The process of automatically finding program statements causing the error is called \textit{fault localization}. There can be many techniques to help the user to narrow down his or her search for \textit{relevant} statements. We in this work present a new such technique that statically analyze all the assigning statements in an error trace and return those that are playing a direct role in taking the program exeuction to the error state. Many such techniques already exist in the literature that return error-relevant statements based on different criterias and strategies. In this work we focus on program statements that change the state of the program and analyze if that change can have an effect on the reachabilty of the error. A program might be failing because of several reasons which are not necessarily simple(?) and easy to point out and there might be many ways to fix the error. We however in this work stick to what we call simple bugs. A bug in an error trace is called simple if the modification of a single statement can fix the error.\\
+Identifying program statements that are the cause for the error is the most time consuming and tedious part of a programmer's debugging routine. This task can be made much simpler if it can be done automatically. The process of automatically finding program statements causing the error is called \textit{fault localization}. There can be many techniques to help the user to narrow down his or her search for \textit{relevant} statements. We in this work present a new such technique that statically analyze all the assigning statements in an error trace and return those that are playing a direct role in taking the program exeuction to the error state. Many such techniques already exist in the literature that return error-relevant statements based on different criterias and strategies. In this work we focus on program statements that change the state of the program and analyze if that change can have an effect on the reachabilty of the error. A program might be failing because of several reasons which are not necessarily simple(a term elaborated more clearly in the paper) and easy to point out and there might be many ways to fix the error. We however in this work stick to what we call simple bugs. A bug in an error trace is called simple if the modification of a single statement can fix the error.\\
 Not only did we want to help user find simple bugs, we also wanted to formalize the notion of when an assigning statement is relevant in an error trace.
-Coming up with a precise formal definition took some iterations and the curent definition of relevancy was reached after some time and effort. All the previous definitions are also presented in this document along with the reasons of why they were wrong and the examples on which they failed. 
-\\ \textbf{(Maybe also talk about how we developed the algorithm in the previous semester).}
-\\ \textbf{(anything more ?)}
+Coming up with a precise formal definition took some iterations and the curent definition of relevancy was reached after some time and effort. All the previous definitions are also presented in this document along with the reasons of why they were wrong and the examples on which they failed.
 \section{Discarded definitions of relevance:}
 While developing a formal definition for relevance, we came across several versions that seemed correct at the time but in reality didn't accurately and completley explain our notion of relevance and hence were discarded. We discovered this by coming up with counter examples where these definitions didn't work. This section mentions those discarded definitions and the counter examples.\\ 
 They are in the document primarily for the reason of documenting failed/incorrect versions of our current definition that might be useful in the future as we further develop our understanding of what it means that a statement is relevant in an error trace for a simple bug. \\
-For future reference it is easier if we name these definitions. Since we declare a statemnet relavent if they satisfy a check, hence lets name these definitions with a check.
+For future reference it is easier if we name these definitions. Lets name these approaches with "check" in the end since we declare a statement relevant if they satisfy a localized check. 
 \subsection{The restricitve-assume check:}
-We defined two seperate checks for checking the relevance of an assignment statement and a havoc statement. \textbf{\textit{Explain a bit more here why?}}
+Since this was our first attempt to formally define a relevant assigning statement and we were still developing our understanding of relevancy, we had two seperate checks for relevancy of an assignment statement and a havoc.
 \subsubsection{Assignment statement:}
 An assignment statement was marked relevant, if we replace that assginment with a havoc and some assume statement in the error trace was becoming restrictive.
 \begin{mydef}[Restrictivness of a statement]
@@ -95,7 +92,7 @@ foo()
 	assert(z > 10);
 }
 \end{lstlisting}
-Lines 3 and 4 are not relevant as if we replace them with havoc, no assume in the error trace is becoming restrictive. But if we replace line 5 with $havoc(z)$, then the last assume statement ($assume(z<=10)$)is becoming restrictive. Hence the line with the assignment to $z$ is relevant. \\
+Lines 3 and 4 are not relevant as if we replace them with havoc, no assume in the error trace is becoming restrictive. But if we replace line 5 with $havoc(z)$, then the last assume statement in the error trace ($assume(z<=10)$) is becoming restrictive. Hence the line with the assignment to $z$ is relevant. \\
 \textbf{Where it fails:}
 \begin{lstlisting}
 foo()
@@ -181,18 +178,16 @@ Let $\pi = \langle st_1,....,st_n \rangle$ be an error trace of length $n$ where
 \State $trace \gets \text{Error trace } \pi \text{ of length } \textit{n}$
 \State $relevantStatements \gets \text{[ ]}$
 \For{$i = n$ to $1$}
-\State $Q \gets \neg wp(false;trace(i+1,n))$
-\State $P \gets wp(Q; trace(i)) \cap sp(true; trace(1;i-1))$
-\If{$P \not \subseteq wp(Q; havoc(x))$ }
-\State $relevantStatements.append(trace(i))$
+\State $Q \gets \neg wp(false;trace[i+1,n])$
+\State $P \gets wp(Q; trace[i]) \cap sp(true; trace[1;i-1])$
+\If{$trace[i]$ is an assigning statement and $P \not \subseteq wp(Q; havoc(x))$ }
+\State $relevantStatements.append(trace[i])$
 \EndIf
 \EndFor
 \Return $relevantStatements$
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
-\textbf{????CHECK THE ALOG AGAIN????} \\
-In the algorithm , we check the relevance of a statement by checking if the triple ($P,\pi[i],\neg Q$) is unsatisfiable and $\pi[i]$ is in the unsatisfiable core. We can do this by checking if $P \not \subseteq WP(Q; havoc(x))$ .
 % ******************************************** NEW Page****************************************************************
 \begin{theorem}[Equivalence of relevance]\label{mydef:relevancytheorem}
 Let $\pi = \langle st_1,...,st_i,...,st_n \rangle$ be an error trace of length $n$ and $\pi[i]$ be an assigning statement at position $i$ , which assigns a new value to some variable $x$ . Let $P = \neg WP(False; \pi[i,n]) \cap SP(True; \pi[1,i-1])$ be a set of bireachable states at position $i$ and $Q =  \neg WP(False; \pi[i+1,n])$ be the coreachable states at position $i+1$. The statement $\pi[i]$ is relevant iff:
@@ -253,9 +248,7 @@ with an error trace:
 According to our definition of relevance, $y:=7$ should not be relevant as no value $v$ exists such that if we replace $y:=7$ with $y:=v$, the rest of the trace is becoming restrictive. 
 
 But our previous algorithm marks it as relevant. Because in our previous algorithm, $P$ was computed as $pre(true, \pi[i,n])$, where $\pi[i]$ is the assignment statement under consideration. Hence $P$ would be $true$ and $Q$ would be $x=5 \vee y=7$. Obviously $P \not \subseteq wp(Q; havoc(y))$, where $wp(Q, havoc(y))$ is $x=5$. Therefore, the assignment is marked relevant. \\
-We fixed this error in the algorithm by computing $P$ not as $pre(true, \pi[i,n])$ but as the intersection of $pre(true, \pi[i,n])$ and $sp(true, \pi[1,i-1])$. The complete algorithm can ofcourse be found in our POPL submission. \\
-
-\textit{[Check it again with the paper. maybe some error in the formula]}
+We fixed this error in the algorithm by computing $P$ not as $pre(true, \pi[i,n])$ but as the intersection of $pre(true, \pi[i,n])$ and $sp(true, \pi[1,i-1])$.
 \newpage
 \section{Limitations of our definition}
 This section mentions two known examples that reveal the weakness of our approach and we should keep them in mind as we further develop the notion of relevance. For furture reference, let us name these examples as follows.

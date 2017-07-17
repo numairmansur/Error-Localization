@@ -80,7 +80,7 @@
 \end{titlepage}
 % ******************************************** BEGIN DOCUMENT **************************************************************************
 \section{Introduction}
-This document contains behind the scenes work of our submission in POPL 2018, namely "Static fault localization for simple bugs". It contains the previous/failed definitions of relevance that lead us to the final version. The document also mention some examples that we came across that show why the previous definitions didn't work. It also reveals some limitations of our current definition of relevance by showing some more examples. The document should also serve the purpose of a reference for future work in this area for us. This will also be the submission as my master project report.
+This document contains behind the scenes work of our submission in \textit{POPL 2018}, namely "Static fault localization for simple bugs". It contains the previous/failed definitions of relevance that lead us to the final version. The document also mention some examples that we came across that show why the previous definitions didn't work. It also reveals some limitations of our current definition of relevance by showing some more examples. The document should also serve the purpose of a reference for future work in this area for us. This will also be the submission as my master project report.
 \section{Motivation}
 Identifying program statements that are the cause for the error is the most time consuming and tedious part of a programmer's debugging routine. This task can be made much simpler if it can be done automatically. The process of automatically finding program statements causing the error is called \textit{fault localization}. There can be many techniques to help the user to narrow down his or her search for \textit{relevant} statements. We in this work present a new such technique that statically analyze all the assigning statements in an error trace and return those that are playing a direct role in taking the program execution to the error state. Many such techniques already exist in the literature that return error-relevant statements based on different criterion and strategies. In this work we focus on program statements that change the state of the program and analyze if that change can have an effect on the reachabilty of the error. A program might be failing because of several reasons which are not necessarily simple(a term elaborated more clearly in the paper) and easy to point out and there might be many ways to fix the error. We however in this work stick to what we call simple bugs. A bug in an error trace is called simple if the modification of a single statement can fix the error.\\
 Not only did we want to help user find simple bugs, we also wanted to formalize the notion of when an assigning statement is relevant in an error trace.
@@ -284,7 +284,7 @@ Only $havoc(x)$ is now relevant since there is no assignment to $y$ in line 3 th
 
 
 \section{Possibly counterintuitive cases}
-This section mentions two examples with a counterintuitive behaviour when analyzed by our algorithm. For future reference, let us name these examples as follows:
+This section mentions two examples with a counterintuitive results when analyzed by our algorithm. For future reference, let us name these examples as follows:
 \subsection{Two-havoc case:}
 Consider the following program:
 \begin{lstlisting}
@@ -332,7 +332,18 @@ The implementation marks both the assignment statements modifying the array elem
 
 \section{Comparison with other approaches}
 \subsection{Error Invariants}
-The biggest weakness of the error invariants approach \cite{errorinvariants} is it's inability to deal with havocs and the assert-false problem \textbf{[Explain assert false problem}]. In order to generate the error invariants, we require an unsatisfiable trace formula.  The assert-false problem refers to the limitation when there is an assert false at the end of that unsatisfiable trace formula. In that case all the interpolants can be chosen as true and none of the statements would be considered relevant. Following example is a characterization of the assert false problem.
+One weakness of the error invariants approach \cite{errorinvariants} is it's inability to deal with havoc statements. The other weakeness is related to the fact that generating error invariants require an unsatisfiable trace formula. This leads to a limitiation in the case when there is an assert false at the end of that unsatisfiable trace formula. In this case, all the interpolants can be chosen as true and none of the statements would be considered relevant. We call this the \textit{assert-false problem}. Following is a very example where this problem becomes easy to see:
+\begin{lstlisting}
+foo()
+{ 
+	x := 1;
+	if(x < 10)
+	{
+		assert false;	
+	}	
+}
+\end{lstlisting}
+All the interpolants can be chosen as true and $x:=1$ would not be considered relevant in this case. Following example is a characterization of the assert-false problem.
 \begin{lstlisting}
 foo()
 { 
@@ -347,7 +358,7 @@ foo()
 	}
 }
 \end{lstlisting}
-In this example, only line 3 would be considered relevant according to the error invariants approach. Where as the bug is that the user actually forgot to initialize $i$ with 0. Our algorithm was however able to catch this problem. This is also the example we used in the POPL submission but with an extra variable p2.
+In this example, only line 3 would be considered relevant according to the error invariants approach. Where as the bug is that the user actually forgot to initialize $i$ with 0. Our algorithm was however able to catch this problem. This is also the example we used in the \textit{POPL} submission but with an extra variable p2.
 
 \subsection{Flow Sensitive Fault localization} 
 In the paper flow sensitive fault localization\cite{faultlocalization}, the authors try to take into account the control flow of the program and propose a flow sensitive error localization technique which, they hope, not only explain the cause of the error but also explain why the statements leading to the error were executed. They do this by modifying the so called \textit{error trace formula} to something which they call a \textit{flow sensitive error trace formula}. An error trace formula is just a conjunction of the trace formula of the error trace together with the error precondition and the correctness assertion. Information about the relevant statements can be obtained from the proof of unsatisfiability of the error trace formula.

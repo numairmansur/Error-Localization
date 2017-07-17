@@ -283,8 +283,8 @@ foo()
 Only $havoc(x)$ is now relevant since there is no assignment to $y$ in line 3 that can make an existing execution of the error trace blocking.
 
 
-\section{Possibly counterintuitive cases}
-This section mentions two examples with a counterintuitive results when analyzed by our algorithm. For future reference, let us name these examples as follows:
+\section{Possibly counter-intuitive cases}
+This section mentions two examples with a counter-intuitive results when analyzed by our algorithm. For future reference, let us name these examples as follows:
 \subsection{Two-havoc case:}
 Consider the following program:
 \begin{lstlisting}
@@ -318,7 +318,7 @@ procedure foo(a,b)
 Our algorithm considers havoc x relevant even tough fixing this statement will not fix the error.
 
 \section{Known problems:}
-Currently, our implementation in \ultimate fails to give expected results when array modification is involved in the program. This is due to the fact that we can havoc the whole array at the moment and not one element. Due to this problem, if any assignment to an array element is relevant according to our algorithm, all the assignments that modify any element of the same array will be returned as relevant aswell. The following example will make this problem more clear:
+Currently, our implementation in \ultimate fails to give expected results when array modification is involved in the program. This is due to the fact that we can havoc the whole array at the moment and not one element. Due to this problem, if any assignment to an array element is relevant according to our algorithm, all the assignments that modify any element of the same array will be returned as relevant as well. The following example will make this problem more clear:
 \begin{lstlisting}
 foo()
 { 
@@ -332,7 +332,7 @@ The implementation marks both the assignment statements modifying the array elem
 
 \section{Comparison with other approaches}
 \subsection{Error Invariants}
-One weakness of the error invariants approach \cite{errorinvariants} is it's inability to deal with havoc statements. The other weakeness is related to the fact that generating error invariants require an unsatisfiable trace formula. This leads to a limitiation in the case when there is an assert false at the end of that unsatisfiable trace formula. In this case, all the interpolants can be chosen as true and none of the statements would be considered relevant. We call this the \textit{assert-false problem}. Following is a very example where this problem becomes easy to see:
+One weakness of the error invariants approach \cite{errorinvariants} is it's inability to deal with havoc statements. The other weakness is related to the fact that generating error invariants require an unsatisfiable trace formula. This leads to a limitation in the case when there is an assert false at the end of that unsatisfiable trace formula. In this case, all the interpolants can be chosen as true and none of the statements would be considered relevant. We call this the \textit{assert-false problem}. Following is a very example where this problem becomes easy to see:
 \begin{lstlisting}
 foo()
 { 

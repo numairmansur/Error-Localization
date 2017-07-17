@@ -282,9 +282,9 @@ foo()
 Only $havoc(x)$ is now relevant since there is no assignment to $y$ in line 3 that can make an existing execution of the error trace blocking.
 
 
-\section{Limitations of our definition}
-This section mentions two known examples that reveal the weakness of our approach and we should keep them in mind as we further develop the notion of relevance. For future reference, let us name these examples as follows.
-\subsection{Two-havocs problem:}
+\section{Possibly counterintuitive cases}
+This section mentions two examples with a counterintuitive behaviour when analyzed by our algorithm. For future reference, let us name these examples as follows:
+\subsection{Two-havoc case:}
 Consider the following program:
 \begin{lstlisting}
 procedure foo()
@@ -299,7 +299,7 @@ procedure foo()
 \end{lstlisting}
 Our algorithm only considers second havoc as relevant. The example can be found in ultimate repository's toy examples for Error localization.
 
-\subsection{Relevant-havoc problem:}
+\subsection{Relevant-havoc case:}
 Consider the following program:
 \begin{lstlisting}
 procedure foo(a,b)

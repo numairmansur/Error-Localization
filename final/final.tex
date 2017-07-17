@@ -40,6 +40,7 @@
 \newtheorem{theorem}{Theorem}
 \newtheorem{lemma}{Lemma}
 \renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\newcommand{\ultimate}{\textsc{Ultimate}\xspace} % Ultimate
 
 \lstset{style=mystyle}
 \usepackage[utf8]{inputenc}
@@ -316,9 +317,22 @@ procedure foo(a,b)
 \end{lstlisting}
 Our algorithm considers havoc x relevant even tough fixing this statement will not fix the error.
 
+\section{Known problems:}
+Currently, our implementation in \ultimate fails to give expected results when array modification is involved in the program. This is due to the fact that we can havoc the whole array at the moment and not one element. Due to this problem, if any assignment to an array element is relevant according to our algorithm, all the assignments that modify any element of the same array will be returned as relevant aswell. The following example will make this problem more clear:
+\begin{lstlisting}
+foo()
+{ 
+  i := j + 1;
+  a[i] := 5;
+  a[j] := 7;
+  assert(a[i] == 8);
+}
+\end{lstlisting}
+The implementation marks both the assignment statements modifying the array elements as relevant.
+
 \section{Comparison with other approaches}
 \subsection{Error Invariants}
-The biggest weakness of the error invariants approach \cite{errorinvariants} is it's inability to deal with havocs and the assert-false problem. In order to generate the error invariants, we require an unsatisfiable trace formula.  The assert-false problem refers to the limitation when there is an assert false at the end of that unsatisfiable trace formula. In that case all the interpolants can be chosen as true and none of the statements would be considered relevant. Following example is a characterization of the assert false problem.
+The biggest weakness of the error invariants approach \cite{errorinvariants} is it's inability to deal with havocs and the assert-false problem \textbf{[Explain assert false problem}]. In order to generate the error invariants, we require an unsatisfiable trace formula.  The assert-false problem refers to the limitation when there is an assert false at the end of that unsatisfiable trace formula. In that case all the interpolants can be chosen as true and none of the statements would be considered relevant. Following example is a characterization of the assert false problem.
 \begin{lstlisting}
 foo()
 { 

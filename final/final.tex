@@ -185,6 +185,7 @@ procedure foo()
 \end{lstlisting}
 In this example, the statement $y:=10$ clearly have nothing to do with error. But changing it to havoc gives us more blocking executions than before and according to the blocking-executions check, it is wrongly marked as relevant too. 
 
+\newpage
 \section{Algorithmic modification:}
 We also noticed an error in our algorithm. Consider the following example:
 \begin{lstlisting}
@@ -206,7 +207,7 @@ We fixed this error in the algorithm by computing $P$ not as $pre(true, \pi[i,n]
 
 
 
-\newpage
+
 \section{Final version of Relevance}
 \subsection{Introduction:}
 An assigning statement ($x := t$ or $havoc(x)$) is responsible in an error trace if the assigned value matters for the reachabilty of the error. If the error state is reachable for any possible value of the variable $x$, then we say that the assignment to $x$ at this location in the error trace is not relevant. Also, in the final version, we have one definition for both the assignment statement and havoc. 
@@ -298,7 +299,7 @@ procedure foo()
 	assert(x>0 && y>0)
 }
 \end{lstlisting}
-Our algorithm only considers second havoc as relevant. The example can be found in ultimate repository's toy examples for Error localization.
+Our algorithm only considers second havoc as relevant. The example can be found in \ultimate repository's toy examples for Error localization.
 
 \subsection{Relevant-havoc case:}
 Consider the following program:
@@ -332,7 +333,7 @@ The implementation marks both the assignment statements modifying the array elem
 
 \section{Comparison with other approaches}
 \subsection{Error Invariants}
-One weakness of the error invariants approach \cite{errorinvariants} is it's inability to deal with havoc statements. The other weakness is related to the fact that generating error invariants require an unsatisfiable trace formula. This leads to a limitation in the case when there is an assert false at the end of that unsatisfiable trace formula. In this case, all the interpolants can be chosen as true and none of the statements would be considered relevant. We call this the \textit{assert-false problem}. Following is a very example where this problem becomes easy to see:
+One weakness of the error invariants approach \cite{errorinvariants} is it's inability to deal with havoc statements. The other weakness is related to the fact that generating error invariants require an unsatisfiable trace formula. This leads to a limitation in the case when there is an assert false at the end of that unsatisfiable trace formula. In this case, all the interpolants can be chosen as true and none of the statements would be considered relevant. We call this the \textit{assert-false problem}. Following is a very simple example where this problem becomes easy to see:
 \begin{lstlisting}
 foo()
 { 
@@ -383,11 +384,11 @@ We yet have to see the behaviour of our algorithm during procedure calls and def
 \subsection{Security Analysis}
 An interesting problem that we might be able to solve is to distinguish security bugs from non-security bugs. According to our initial understanding, a bug is a security bug iff an input (network/user) statement can cause the program execution to reach the error state. \\
 Following are the possible criterion for a bug to be called a security bug.
-\begin{itemize}
+\begin{enumerate}
   \item There  is some reachable location where a program reads an input.
   \item There is some input value, such that continuing from this location we definitely reach the error.
   \item There is some input that continuing from this location we do not reach the error.
-\end{itemize}
+\end{enumerate}
 From condition 2 and 3, we can conclude that the input is somehow relevant for the error. This is of course just our initial understanding on this topic, which may not be accurate and further work is needed to formally define a security bug which would involve analyzing in detail the examples that contain security bugs.
 \newpage
 

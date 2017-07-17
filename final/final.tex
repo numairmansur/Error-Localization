@@ -318,6 +318,17 @@ procedure foo(a,b)
 \end{lstlisting}
 Our algorithm considers havoc x relevant even tough fixing this statement will not fix the error.
 
+\subsection{Two-assignment case:}
+Consider the following example:
+\begin{lstlisting}
+procedure foo()
+{
+    x := 10;
+    y := 10;
+    assert x < 10 && y < 10;
+}
+\end{lstlisting}
+In this case none of the assignment statements are relevant since the assume statement in the end would have a disjunction and none of the assignemnt statements can make the assume blocking. 
 \section{Known problems:}
 Currently, our implementation in \ultimate fails to give expected results when array modification is involved in the program. This is due to the fact that we can havoc the whole array at the moment and not one element. Due to this problem, if any assignment to an array element is relevant according to our algorithm, all the assignments that modify any element of the same array will be returned as relevant as well. The following example will make this problem more clear:
 \begin{lstlisting}

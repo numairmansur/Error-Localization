@@ -79,21 +79,21 @@
 \end{titlepage}
 % ******************************************** BEGIN DOCUMENT **************************************************************************
 \section{Introduction}
-This document contains behind the scenes work of our submission in POPL 2018, namely "Static fault localization for simple bugs". It contains the previous/failed definitions of relevance that lead us to the final version. The document also mention some examples that we came across that show why the previous definitions didn't work. It also reveals some limitations of our current defintion of relevance by showing some more examples. The document should also serve the purpose of a reference for future work in this area for us. This will also be the submission as my master project report.
+This document contains behind the scenes work of our submission in POPL 2018, namely "Static fault localization for simple bugs". It contains the previous/failed definitions of relevance that lead us to the final version. The document also mention some examples that we came across that show why the previous definitions didn't work. It also reveals some limitations of our current definition of relevance by showing some more examples. The document should also serve the purpose of a reference for future work in this area for us. This will also be the submission as my master project report.
 \section{Motivation}
-Identifying program statements that are the cause for the error is the most time consuming and tedious part of a programmer's debugging routine. This task can be made much simpler if it can be done automatically. The process of automatically finding program statements causing the error is called \textit{fault localization}. There can be many techniques to help the user to narrow down his or her search for \textit{relevant} statements. We in this work present a new such technique that statically analyze all the assigning statements in an error trace and return those that are playing a direct role in taking the program exeuction to the error state. Many such techniques already exist in the literature that return error-relevant statements based on different criterion and strategies. In this work we focus on program statements that change the state of the program and analyze if that change can have an effect on the reachabilty of the error. A program might be failing because of several reasons which are not necessarily simple(a term elaborated more clearly in the paper) and easy to point out and there might be many ways to fix the error. We however in this work stick to what we call simple bugs. A bug in an error trace is called simple if the modification of a single statement can fix the error.\\
+Identifying program statements that are the cause for the error is the most time consuming and tedious part of a programmer's debugging routine. This task can be made much simpler if it can be done automatically. The process of automatically finding program statements causing the error is called \textit{fault localization}. There can be many techniques to help the user to narrow down his or her search for \textit{relevant} statements. We in this work present a new such technique that statically analyze all the assigning statements in an error trace and return those that are playing a direct role in taking the program execution to the error state. Many such techniques already exist in the literature that return error-relevant statements based on different criterion and strategies. In this work we focus on program statements that change the state of the program and analyze if that change can have an effect on the reachabilty of the error. A program might be failing because of several reasons which are not necessarily simple(a term elaborated more clearly in the paper) and easy to point out and there might be many ways to fix the error. We however in this work stick to what we call simple bugs. A bug in an error trace is called simple if the modification of a single statement can fix the error.\\
 Not only did we want to help user find simple bugs, we also wanted to formalize the notion of when an assigning statement is relevant in an error trace.
-Coming up with a precise formal definition took some iterations and the curent definition of relevancy was reached after some time and effort. All the previous definitions are also presented in this document along with the reasons of why they were wrong and the examples on which they failed.
+Coming up with a precise formal definition took some iterations and the current definition of relevancy was reached after some time and effort. All the previous definitions are also presented in this document along with the reasons of why they were wrong and the examples on which they failed.
 \section{Discarded definitions of relevance:}
-While developing a formal definition for relevance, we came across several versions that seemed correct at the time but in reality didn't accurately and completley explain our notion of relevance and hence were discarded. We discovered this by coming up with counter examples where these definitions didn't work. This section mentions those discarded definitions and the counter examples.\\ 
+While developing a formal definition for relevance, we came across several versions that seemed correct at the time but in reality didn't accurately and completely explain our notion of relevance and hence were discarded. We discovered this by coming up with counter examples where these definitions didn't work. This section mentions those discarded definitions and the counter examples.\\ 
 They are in the document primarily for the reason of documenting failed/incorrect versions of our current definition that might be useful in the future as we further develop our understanding of what it means that a statement is relevant in an error trace for a simple bug. \\
 For future reference it is easier if we name these definitions. Lets name these approaches with "check" in the end since we declare a statement relevant if they satisfy a localized check. 
-\subsection{The restricitve-assume check:}
-Since this was our first attempt to formally define a relevant assigning statement and we were still developing our understanding of relevancy, we had two seperate checks for relevancy of an assignment statement and a havoc.
+\subsection{The restrictive-assume check:}
+Since this was our first attempt to formally define a relevant assigning statement and we were still developing our understanding of relevancy, we had two separate checks for relevancy of an assignment statement and a havoc.
 \subsubsection{Assignment statement:}
-An assignment statement was marked relevant, if we replace that assginment with a havoc and some assume statement in the error trace was becoming restrictive.
-\begin{mydef}[Restrictivness of a statement]
-Let $pre$ be a state formula, $\pi$ a trace and $i$ a position such that $\pi[i]$ is an assume statement. We call the assume statement $\pi[i]$ \emph{restricitve} iff :
+An assignment statement was marked relevant, if we replace that assignment with a havoc and some assume statement in the error trace was becoming restrictive.
+\begin{mydef}[Restrictiveness of a statement]
+Let $pre$ be a state formula, $\pi$ a trace and $i$ a position such that $\pi[i]$ is an assume statement. We call the assume statement $\pi[i]$ \emph{restrictive} iff :
 $$SP(\pi[0,i-1], pre) \not \limp guard(\pi[i])$$
 \end{mydef}
 
@@ -103,7 +103,7 @@ Let $\pi$ be an error trace and $\pi[i]$ be an assignment statement at position 
 
 \subsubsection{Havoc statement:}
 \begin{mydef}[Relevance of a havoc statement]
-Let $\pi$ be a feasible error trace and $\pi[i]$ be a $Havoc$ statement at position $i$ having the form $havoc(x)$, where $x$ is a variable. Let $x:=t$ be an assignment statement where $x$ is the same variable as in $havoc(x)$ and $t$ is an expression. The $havoc$ statement $\pi[i]$ is relevant if there exists an assignemnt $x:=t$ such that if we replace the $havoc$ in $\pi$ with $x:=t$ to get a new trace $\pi'$, then the following implication holds:
+Let $\pi$ be a feasible error trace and $\pi[i]$ be a $Havoc$ statement at position $i$ having the form $havoc(x)$, where $x$ is a variable. Let $x:=t$ be an assignment statement where $x$ is the same variable as in $havoc(x)$ and $t$ is an expression. The $havoc$ statement $\pi[i]$ is relevant if there exists an assignment $x:=t$ such that if we replace the $havoc$ in $\pi$ with $x:=t$ to get a new trace $\pi'$, then the following implication holds:
 $$SP(true; \pi') \Rightarrow false$$
 \end{mydef}
 
@@ -143,10 +143,10 @@ procedure main()
   assert(false);
 }
 \end{lstlisting}
-Here replacing the assignment statement $y:=42$ with $havoc(y)$ have no effect on the restrictivness of an already restrictive error trace. Hence it should not be relevant here. However, clearly this statement have an effect on the rechability of the error.
+Here replacing the assignment statement $y:=42$ with $havoc(y)$ have no effect on the restrictiveness of an already restrictive error trace. Hence it should not be relevant here. However, clearly this statement have an effect on the reachabilty of the error.
 
 \subsection{The blocking-executions check:}
-We adopted this definition for relevance when we realized that we should take into account the "amount" of restrictivness of an assume statement instead of just considering if it is getting restrictive or not in a binary fashion.
+We adopted this definition for relevance when we realized that we should take into account the "amount" of restrictiveness of an assume statement instead of just considering if it is getting restrictive or not in a binary fashion.
 \begin{mydef}[Execution]\label{mydef:execution_definition}
 Let $\pi$ be an error trace of length $n$. An execution of $\pi$ is a sequence of states $s_0, s_1...s_n$ such that $s_i, s_{i+1} \models T$, where $T$ is the transition formula of $\pi[i]$. \\
 Let $\epsilon$ represent the set of all possible executions of the error trace.
@@ -183,11 +183,33 @@ procedure foo()
 }
 \end{lstlisting}
 In this example, the statement $y:=10$ clearly have nothing to do with error. But changing it to havoc gives us more blocking executions than before and according to the blocking-executions check, it is wrongly marked as relevant too. 
+
+\section{Algorithmic modification:}
+We also noticed an error in our algorithm. Consider the following example:
+\begin{lstlisting}
+procedure foo()
+{
+	x := 5;
+	y := 7;
+	assume(x!=5 && y!=7)
+}
+\end{lstlisting}
+with an error trace:
+\begin{lstlisting}
+	x := 5		y := 7		assume (x==5 || y==7) 
+\end{lstlisting}
+According to our definition of relevance, $y:=7$ should not be relevant as no value $v$ exists such that if we replace $y:=7$ with $y:=v$, the rest of the trace is becoming restrictive. 
+
+But our previous algorithm marks it as relevant. Because in our previous algorithm, $P$ was computed as $pre(true, \pi[i,n])$, where $\pi[i]$ is the assignment statement under consideration. Hence $P$ would be $true$ and $Q$ would be $x=5 \vee y=7$. Obviously $P \not \subseteq wp(Q; havoc(y))$, where $wp(Q, havoc(y))$ is $x=5$. Therefore, the assignment is marked relevant. \\
+We fixed this error in the algorithm by computing $P$ not as $pre(true, \pi[i,n])$ but as the intersection of $pre(true, \pi[i,n])$ and $sp(true, \pi[1,i-1])$.
+
+
+
 \newpage
 \section{Final version of Relevance}
 \subsection{Introduction:}
-An assigning statement ($x := t$ or $havoc(x)$) is responsible in an error trace if the assigned value matters for the reachability of the error. If the error state is reachable for any possible value of the variable $x$, then we say that the assignment to $x$ at this location in the error trace is not relevant. Also, in the final version, we have one definition for both the assignment statement and havoc. 
-\subsection{Formal defintion:}
+An assigning statement ($x := t$ or $havoc(x)$) is responsible in an error trace if the assigned value matters for the reachabilty of the error. If the error state is reachable for any possible value of the variable $x$, then we say that the assignment to $x$ at this location in the error trace is not relevant. Also, in the final version, we have one definition for both the assignment statement and havoc. 
+\subsection{Formal definition:}
 \begin{mydef}[Execution]\label{mydef:execution}
 Let $\pi$ be an error trace of length $n$. An execution of $\pi$ is a sequence of states $s_0, s_1 ... s_n$ such that $s_i, s_{i+1} \vDash T$, where $T$ is the transition formula of $\pi[i]$.
 \end{mydef}
@@ -200,7 +222,7 @@ Let $\pi = \langle st_1,....,st_n \rangle$ be an error trace of length $n$ where
 \end{mydef}
 
 \begin{algorithm}
-\caption{Relavance of an assigning statement}\label{relevance}
+\caption{Relevance of an assigning statement}\label{relevance}
 \begin{algorithmic}[1]
 \Procedure{Relevance}{}
 \State $trace \gets \text{Error trace } \pi \text{ of length } \textit{n}$
@@ -218,7 +240,7 @@ Let $\pi = \langle st_1,....,st_n \rangle$ be an error trace of length $n$ where
 \end{algorithm}
 % ******************************************** NEW Page****************************************************************
 \begin{theorem}[Equivalence of relevance]\label{mydef:relevancytheorem}
-Let $\pi = \langle st_1,...,st_i,...,st_n \rangle$ be an error trace of length $n$ and $\pi[i]$ be an assigning statement at position $i$ , which assigns a new value to some variable $x$ . Let $P = \neg WP(False; \pi[i,n]) \cap SP(True; \pi[1,i-1])$ be a set of bireachable states at position $i$ and $Q =  \neg WP(False; \pi[i+1,n])$ be the coreachable states at position $i+1$. The statement $\pi[i]$ is relevant iff:
+Let $\pi = \langle st_1,...,st_i,...,st_n \rangle$ be an error trace of length $n$ and $\pi[i]$ be an assigning statement at position $i$ , which assigns a new value to some variable $x$ . Let $P = \neg WP(False; \pi[i,n]) \cap SP(True; \pi[1,i-1])$ be a set of bi-reachable states at position $i$ and $Q =  \neg WP(False; \pi[i+1,n])$ be the co-reachable states at position $i+1$. The statement $\pi[i]$ is relevant iff:
  $$P \not \subseteq WP(Q,havoc(x))$$
 \end{theorem}
 
@@ -259,29 +281,11 @@ foo()
 \end{lstlisting}
 Only $havoc(x)$ is now relevant since there is no assignment to $y$ in line 3 that can make an existing execution of the error trace blocking.
 
-\section{Algorithmic modification:}
-We also noticed an error in our algorithm. Consider the following example:
-\begin{lstlisting}
-procedure foo()
-{
-	x := 5;
-	y := 7;
-	assume(x!=5 && y!=7)
-}
-\end{lstlisting}
-with an error trace:
-\begin{lstlisting}
-	x := 5		y := 7		assume (x==5 || y==7) 
-\end{lstlisting}
-According to our definition of relevance, $y:=7$ should not be relevant as no value $v$ exists such that if we replace $y:=7$ with $y:=v$, the rest of the trace is becoming restrictive. 
-
-But our previous algorithm marks it as relevant. Because in our previous algorithm, $P$ was computed as $pre(true, \pi[i,n])$, where $\pi[i]$ is the assignment statement under consideration. Hence $P$ would be $true$ and $Q$ would be $x=5 \vee y=7$. Obviously $P \not \subseteq wp(Q; havoc(y))$, where $wp(Q, havoc(y))$ is $x=5$. Therefore, the assignment is marked relevant. \\
-We fixed this error in the algorithm by computing $P$ not as $pre(true, \pi[i,n])$ but as the intersection of $pre(true, \pi[i,n])$ and $sp(true, \pi[1,i-1])$.
 
 \section{Limitations of our definition}
-This section mentions two known examples that reveal the weakness of our approach and we should keep them in mind as we further develop the notion of relevance. For furture reference, let us name these examples as follows.
+This section mentions two known examples that reveal the weakness of our approach and we should keep them in mind as we further develop the notion of relevance. For future reference, let us name these examples as follows.
 \subsection{Two-havocs problem:}
-Conside the following program:
+Consider the following program:
 \begin{lstlisting}
 procedure foo()
 {
@@ -314,7 +318,7 @@ Our algorithm considers havoc x relevant even tough fixing this statement will n
 
 \section{Comparison with other approaches}
 \subsection{Error Invariants}
-The biggest weakness of the error invariants approach \cite{errorinvariants} is it's inability to deal with havocs and the assert-false problem. In order to generate the error invariants, we require an unsatisfiable trace forumla.  The assert-false problem refers to the limitation when there is an assert false at the end of that unsatisfiable trace formula. In that case all the interpolants can be chosen as true and none of the satements would be considered relevant. Following example is a characterization of the assert false problem.
+The biggest weakness of the error invariants approach \cite{errorinvariants} is it's inability to deal with havocs and the assert-false problem. In order to generate the error invariants, we require an unsatisfiable trace formula.  The assert-false problem refers to the limitation when there is an assert false at the end of that unsatisfiable trace formula. In that case all the interpolants can be chosen as true and none of the statements would be considered relevant. Following example is a characterization of the assert false problem.
 \begin{lstlisting}
 foo()
 { 
@@ -329,13 +333,13 @@ foo()
 	}
 }
 \end{lstlisting}
-In this example, only line 3 would be considered relevant according to the error invariants approach. Where as the bug is that the user actually forgot to initialize $i$ with 0. Our algorithm was however able to catch this problem. This is also the example we used in the popl submission but with an extra variable p2.
+In this example, only line 3 would be considered relevant according to the error invariants approach. Where as the bug is that the user actually forgot to initialize $i$ with 0. Our algorithm was however able to catch this problem. This is also the example we used in the POPL submission but with an extra variable p2.
 
 \subsection{Flow Sensitive Fault localization} 
-In the paper flow sensitive fault localization\cite{faultlocalization}, the authors try to take into account the control flow of the program and propose a flow senstive error localization technique which, they hope, not only explain the cause of the error but also explain why the statements leading to the error were executed. They do this by modifying the so called \textit{error trace formula} to something which they call a \textit{flow sensitive error trace formula}. An error trace formula is just a conjunction of the trace formula of the error trace together with the error precondition and the correctness assertion. Information about the relevant statements can be obtained from the proof of unsatisfiability of the error trace formula.
+In the paper flow sensitive fault localization\cite{faultlocalization}, the authors try to take into account the control flow of the program and propose a flow sensitive error localization technique which, they hope, not only explain the cause of the error but also explain why the statements leading to the error were executed. They do this by modifying the so called \textit{error trace formula} to something which they call a \textit{flow sensitive error trace formula}. An error trace formula is just a conjunction of the trace formula of the error trace together with the error precondition and the correctness assertion. Information about the relevant statements can be obtained from the proof of unsatisfiability of the error trace formula.
 
-The flow sensitive error trace formula is a modification of the error trace forumla, such that it now keeps track of dependencies between statements and the branching conditions that are relevant for the reachability of these statements in the control flow graph of the program. \\
-The main focus of the authors here is on finding the relevant assume statements and the statements that cause the guard of the relevant assume statements to hold. We on the other hand only focus on the statements that cause the state of the program to change and do not analyse assume statements directly. However, we are still able to find the assignment statements that cause the guard of the relevant assume statemets to hold. Let us look at an example where our algorithm can already find the statements which the authors can find only after modifying there formula. 
+The flow sensitive error trace formula is a modification of the error trace formula, such that it now keeps track of dependencies between statements and the branching conditions that are relevant for the reachability of these statements in the control flow graph of the program. \\
+The main focus of the authors here is on finding the relevant assume statements and the statements that cause the guard of the relevant assume statements to hold. We on the other hand only focus on the statements that cause the state of the program to change and do not analyze assume statements directly. However, we are still able to find the assignment statements that cause the guard of the relevant assume statements to hold. Let us look at an example where our algorithm can already find the statements which the authors can find only after modifying there formula. 
 \begin{lstlisting}
 foo()
 {
@@ -352,14 +356,14 @@ Both the flow sensitive approach and our algorithm say that the assignment state
 \subsection{Call/Return statements}
 We yet have to see the behaviour of our algorithm during procedure calls and define when a call and return statement should be relevant in an error trace. This would require some deeper study and would therefore be considered in future work.
 \subsection{Security Analysis}
-An interseting problem that we might be able to solve is to distinguish security bugs from non-security bugs. According to our initial understanding, a bug is a security bug iff an input (network/user) statement can cause the program execition to reach the error state. \\
+An interesting problem that we might be able to solve is to distinguish security bugs from non-security bugs. According to our initial understanding, a bug is a security bug iff an input (network/user) statement can cause the program execution to reach the error state. \\
 Following are the possible criterion for a bug to be called a security bug.
 \begin{itemize}
   \item There  is some reachable location where a program reads an input.
-  \item There is some input value, such that continuing from this location we definately reach the error.
+  \item There is some input value, such that continuing from this location we definitely reach the error.
   \item There is some input that continuing from this location we do not reach the error.
 \end{itemize}
-From condition 2 and 3, we can conclude that the input is somehow relevant for the error. This is ofcourse just our intial understanding on this topic, which may not be accurate and further work is needed to formally define a security bug which would involve analyzing in detail the examples that contain security bugs.
+From condition 2 and 3, we can conclude that the input is somehow relevant for the error. This is of course just our initial understanding on this topic, which may not be accurate and further work is needed to formally define a security bug which would involve analyzing in detail the examples that contain security bugs.
 \newpage
 
 \begin{thebibliography}{9}

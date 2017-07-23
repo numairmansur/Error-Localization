@@ -1,0 +1,15 @@
+\begin{thebibliography}{1}
+
+\bibitem{vmcai/ChristESW13}
+J{\"{u}}rgen Christ, Evren Ermis, Martin Sch{\"{a}}f, and Thomas Wies.
+\newblock Flow-sensitive fault localization.
+\newblock In {\em {VMCAI}}, volume 7737 of {\em LNCS}, pages 189--208.
+  Springer, 2013.
+
+\bibitem{fm/ErmisSW12}
+Evren Ermis, Martin Sch{\"{a}}f, and Thomas Wies.
+\newblock Error invariants.
+\newblock In Dimitra Giannakopoulou and Dominique M{\'{e}}ry, editors, {\em
+  {FM}}, volume 7436 of {\em LNCS}, pages 187--201. Springer, 2012.
+
+\end{thebibliography}

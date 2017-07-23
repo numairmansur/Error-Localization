@@ -82,16 +82,16 @@
 \section{Introduction}
 This document contains behind the scenes work of our submission in \textit{POPL 2018}, namely "Static fault localization for simple bugs". It contains the previous/failed definitions of relevance that lead us to the final version together with examples that show why the previous definitions did not work. It also shows some examples for which the output of our algorithm is counterintuitive. The document should also serve as  a reference for future work for us. This will also be the submission as my master project report.
 \section{Motivation}
-Identifying program statements that are the cause for the error is the most time consuming and tedious part of a programmer's debugging routine. This task can be made much simpler if it can be done automatically. The process of automatically finding program statements causing the error is called \textit{fault localization}. There can be many techniques to help the user narrow down his or her search for the statements  causing the error or \textit{relevant} statements, as we call them in the paper. In this work, we present a new such technique that statically analyzes all the assigning statements in an error trace and returns those that are playing a direct role in taking the program execution to the error state.We focus on program statements that change the state of the program and analyze if that change can have an effect on the reachability of the error. A program might be failing because of several reasons which are not necessarily simple(a term elaborated more clearly in the paper) and easy to point out and there might be many ways to fix the bug. We, however, stick to what we call simple bugs. A bug in an error trace is called simple if the modification of a single statement can fix the error.\\
-Not only did we want to help the 1user find simple bugs, we also wanted to formalize the notion of when an assigning statement is relevant in an error trace.
-Coming up with a precise formal definition took some iterations. All the previous definitions are also presented in this document along with the reasons of why they were discarded and the examples on which the inconsistency between them and our algorithm became clear.
-\section{Discarded definitions of relevance:}
+Identifying program statements that are the cause for the error is the most time consuming and tedious part of a programmer's debugging routine. This task can be made much simpler if it can be done automatically. The process of automatically finding program statements causing the error is called \textit{fault localization}. A program might be failing because of several reasons which are not necessarily simple (a term elaborated more clearly in the paper) and easy to point out and there might be many ways to fix the bug. We, however, stick to what we call simple bugs. A bug in an error trace is called simple if the modification of a single statement can fix the error. There can be many techniques to help the user narrow down his or her search for the statements  causing the error or \textit{relevant} statements, as we call them in the paper. In this work, we present a new such technique that statically analyzes all the assigning statements in an error trace containting a simple bug and returns those, which when modified can fix this bug.\\
+Not only did we want to help the user find simple bugs, we also wanted to formalize the notion of when an assigning statement is relevant in an error trace.
+Coming up with a precise formal definition took some iterations. All the previous definitions are also presented in this document along with the reasons of why they were discarded and the examples on which the inconsistency between them and our algorithm became clear.\\
+\section{Discarded definitions of relevance}
 We developed several definitions of relavance while trying to formally characterize the behaviour of our algorithm. We came across several versions that seemed correct at the time but in reality did not accurately and completely explain our notion of relevance and hence were discarded. We discovered this by coming up with counterexamples where these definitions did not work. This section mentions those discarded definitions and the counterexamples.\\ 
 They are in the document primarily for the reason of documenting failed/incorrect versions of our current definition that might be useful in the future as we further develop our understanding of what it means that a statement is relevant in an error trace for a simple bug. \\
 For future reference it is easier if we name these definitions. Let us name these approaches with "check" in the end since we declare a statement relevant if they satisfy a localized check. 
-\subsection{The restrictive-assume check:}
+\subsection{The restrictive-assume check}
 This was our first attempt to formally define a relevant assigning statement. At the time, we had two separate checks for relevance of an assignment statement and a havoc.
-\subsubsection{Assignment statement:}
+\subsubsection{Assignment statement}
 An assignment statement was marked relevant, if after replacing that assignment with a havoc, some assume statement in the error trace was becoming restrictive.
 \begin{mydef}[Restrictiveness of a statement]
 Let \emph{pre} be a state formula, $\pi$ a trace and $i$ a position such that $\pi[i]$ is an assume statement. We call the assume statement $\pi[i]$ \emph{restrictive} iff :
@@ -99,19 +99,19 @@ $$sp(pre, \pi[0,i-1]) \not \limp guard(\pi[i])$$
 \end{mydef}
 
 \begin{mydef}[Relevance of an assignment statement]
-Let $\pi$ be an error trace and $\pi[i]$ be an assignment statement at position $i$ having the form $x:=t$, where $x$ is a variable and $t$ is an expression. Let $\pi'$ be the trace which is obtained by replacing $\pi[i]$ by  $havoc(x)$. Let $\Psi$ be the error precondition of $\pi$. The assignment statement $\pi[i]$ is \emph{relevant} if there exists some assume statement at position $j > i$ in $\pi'$ such that $\pi'[j]$ is restrictive for $\pi'$ and $\Psi$. 
+Let $\pi$ be an error trace and $\pi[i]$ be an assignment statement at position $i$ having the form $x:=t$, where $x$ is a variable and $t$ is an expression. Let $\pi'$ be the trace which is obtained by replacing $\pi[i]$ by  $havoc(x)$. Let $pre$ be the error precondition of $\pi$. The assignment statement $\pi[i]$ is \emph{relevant} if there exists some assume statement at position $j > i$ in $\pi'$ such that $\pi'[j]$ is restrictive. 
 \end{mydef}
 
-\subsubsection{Havoc statement:}
+\subsubsection{Havoc statement}
 \begin{mydef}[Relevance of a havoc statement]
-Let $\pi$ be a feasible error trace and $\pi[i]$ be a $Havoc$ statement at position $i$ having the form $havoc(x)$, where $x$ is a variable. Let $x:=t$ be an assignment statement where $x$ is the same variable as in $havoc(x)$ and $t$ is an expression. The $havoc$ statement $\pi[i]$ is \emph{relevant} if there exists an assignment $x:=t$ such that if we replace the $havoc$ in $\pi$ with $x:=t$ to get a new trace $\pi'$, then the following implication holds:
-$$SP(true; \pi') \Rightarrow false$$
+Let $\pi$ be a feasible error trace and $\pi[i]$ be a $Havoc$ statement at position $i$ having the form $havoc(x)$, where $x$ is a variable. Let $\pi'$ be the trace which is obtained by replacing $\pi[i]$ by an assignment statement $x:=t$, where $x$ is the same variable as in havoc(x) and t is an expression. The havoc statement is \emph{relevant} iff there exists an assignment x:=t such that $\pi'$ is infeasible. That is:
+$$sp(true; \pi') \Rightarrow false$$
 \end{mydef}
 
 
-\subsubsection{Examples:}
-\textbf{Where it works:} \\
-Below is an example where the above check for relevancy correctly marks a statement relevant.
+\subsubsection{Examples}
+\textbf{Where it works} \\
+Below is an example where the above check for relevance correctly marks a statement relevant.
 \begin{lstlisting}
 foo()
 {
@@ -121,8 +121,8 @@ foo()
 	assert(z > 10);
 }
 \end{lstlisting}
-Lines 3 and 4 are not relevant as if we replace them with havoc, no assume in the error trace is becoming restrictive. But if we replace line 5 with $havoc(z)$, then the last assume statement in the error trace ($assume(z<=10)$) is becoming restrictive. Hence the line with the assignment to $z$ is relevant. \\
-\textbf{Where it fails:}
+Lines 3 and 4 are not relevant as if we replace them with havoc, no assume in the error trace is becoming restrictive. But if we replace line 5 with $havoc(z)$, then the last (and only) assume statement in the error trace ($assume(z<=10)$) is becoming restrictive. Hence the line with the assignment to $z$ is relevant. \\
+\textbf{Where it fails}
 \begin{lstlisting}
 foo()
 {
@@ -133,7 +133,7 @@ foo()
 	assert(z > 10);
 }
 \end{lstlisting}
-In the above example, every statement is now relevant. If we replace any of the assigning statements with $havoc$, the trace is restrictive and not necessarily because of the replacement with havoc but because of the last $havoc(z)$ statement in the program. Hence in this program line 3 and 4 are also relevant.\\
+In the above example, every statement is now relevant. If we replace any of the assigning statements with $havoc$, the assume statement in the end is restrictive and not necessarily because of the replacement with havoc but because of the last $havoc(z)$ statement in the program. Hence in this program line 3 and 4 are also relevant.\\
 Another example where this approach fails is:
 \begin{lstlisting}
 procedure main()
@@ -144,26 +144,26 @@ procedure main()
   assert(false);
 }
 \end{lstlisting}
-Here replacing the assignment statement $y:=42$ with $havoc(y)$ have no effect on the restrictiveness of an already restrictive error trace. Hence it should not be relevant here. However, clearly this statement have an effect on the reachabilty of the error.
+Here replacing the assignment statement $y:=42$ with $havoc(y)$ has no effect on the restrictiveness of an already restrictive error trace. Hence it should not be relevant here. However, clearly this statement is also responsible for the bug.
 
-\subsection{The blocking-executions check:}
+\subsection{The blocking-executions check}
 We adopted this definition for relevance when we realized that we should take into account the "amount" of restrictiveness of an assume statement instead of just considering if it is getting restrictive or not in a binary fashion.
 \begin{mydef}[Execution]\label{mydef:execution_definition}
-Let $\pi$ be an error trace of length $n$. An execution of $\pi$ is a sequence of states $s_0, s_1...s_n$ such that $s_i, s_{i+1} \models T$, where $T$ is the transition formula of $\pi[i]$. \\
-Let $\epsilon$ represent the set of all possible executions of the error trace.
+Let $\pi$ be an error trace of length $n$. An \emph{execution} of $\pi$ is a sequence of states $s_0, s_1, ..., s_n$ such that $(s_i, s_{i+1}) \models T$, where $T$ is the transition formula of $\pi[i]$. \\
+Let $\xi$ represent the set of all possible executions of the error trace.
 \end{mydef}
 
 \begin{mydef}[Blocking Execution]\label{mydef:blockingexecution_definition}
-An execution of a trace $\pi$ of size $n$ is called a blocking execution if there exists a sequence of states $s_0, s_1...s_j$ where $i<j \leq n$ such that $s_i, s_{i+1} \models T[i]$, where $T[i]$ is the transition formula of $\pi[i]$ and there exits an assume statement in the trace $\pi$ at position $j$ such that $s_{j} \not \limp guard(\pi[j])$.
+An execution of a trace $\pi$ of size $n$ is called a \emph{blocking execution} if there exists a sequence of states $s_0, s_1,..., s_j$ where $i<j \leq n$ such that $(s_i, s_{i+1}) \models T[i]$, where $T[i]$ is the transition formula of $\pi[i]$ and there exists an assume statement in the trace $\pi$ at position $j$ such that $s_{j} \not \limp guard(\pi[j])$.
 \end{mydef}
 
 \begin{mydef}[Relevance]\label{mydef:relevancy_definition}
-Let $\beta$ represent the set of all blocking executions of a trace $\pi$. Let there be an assignment statement of the form $x:=t$ at position $i$. Let $\pi'$ represent the trace that we get after replacing $\pi[i]$ with a havoc statement of the form $havoc(x)$ and let $\beta'$ represent the set of all blocking executions for $\pi'$.\\
-We say that the assignment statement $\pi[i]$ is relevant if the trace after the replacement has strictly more blocked executions than the trace before the replacement, i.e if $\beta \subsetneq \beta'$. 
+Let $\mathcal{B}$ represent the set of all blocking executions of a trace $\pi$. Let there be an assignment statement of the form $x:=t$ at position $i$. Let $\pi'$ represent the trace that we get after replacing $\pi[i]$ with a havoc statement of the form $havoc(x)$ and let $\mathcal{B}'$ represent the set of all blocking executions for $\pi'$.\\
+We say that the assignment statement $\pi[i]$ is relevant if the trace after the replacement has strictly more blocking executions than the trace before the replacement in the following sense $$\mathcal{B} \subsetneq \mathcal{B}'$$. 
 \end{mydef}
-\subsubsection{Examples:}
-\textbf{Where it works:}\\
-Consider now the failed example from the restrictive-assume check. 
+\subsubsection{Examples}
+\textbf{Where it works}\\
+Consider the failed example from the restrictive-assume check. 
 \begin{lstlisting}
 procedure foo()
 {
@@ -173,8 +173,8 @@ procedure foo()
   assert(false);
 }
 \end{lstlisting}
-The blocking-executions check now correctly says that $y:=42$ is relevant since changing it to havoc gives us more blocking executions then before.\\
-\textbf{Where it fails:}
+The blocking-executions check now correctly says that $y:=42$ is relevant since changing it to havoc gives us more blocking executions than before.\\
+\textbf{Where it fails}
 \begin{lstlisting}
 procedure foo()
 {
@@ -183,44 +183,44 @@ procedure foo()
   assume(x > 0);
 }
 \end{lstlisting}
-In this example, the statement $y:=10$ clearly have nothing to do with error. But changing it to havoc gives us more blocking executions than before and according to the blocking-executions check, it is wrongly marked as relevant too. 
+In this example, the statement $y:=10$ clearly has nothing to do with the error. But changing it to havoc gives us more blocking executions than before and according to the blocking-executions check, it is wrongly marked as relevant, too. 
 
 \newpage
-\section{Algorithmic modification:}
-We also noticed an error in our algorithm. Consider the following example:
+\section{Algorithmic modification}
+We also noticed that we need a slight modification in the algorithm if we want to make it completley consistent with our notion of relevance. Consider the following example:
 \begin{lstlisting}
 procedure foo()
 {
 	x := 5;
 	y := 7;
-	assume(x!=5 && y!=7)
+	assume(x != 5 && y != 7)
 }
 \end{lstlisting}
 with an error trace:
 \begin{lstlisting}
-	x := 5		y := 7		assume (x==5 || y==7) 
+	x := 5		y := 7		assume (x == 5 || y == 7) 
 \end{lstlisting}
-According to our definition of relevance, $y:=7$ should not be relevant as no value $v$ exists such that if we replace $y:=7$ with $y:=v$, the rest of the trace is becoming restrictive. 
+According to our final definition of relevance, $y:=7$ should not be relevant as no value $v$ exists such that if we replace $y:=7$ with $y:=v$, the rest of the trace (starting in the state $x=5$) has a blocking execution. 
 
-But our previous algorithm marks it as relevant. Because in our previous algorithm, $P$ was computed as $pre(true, \pi[i,n])$, where $\pi[i]$ is the assignment statement under consideration. Hence $P$ would be $true$ and $Q$ would be $x=5 \vee y=7$. Obviously $P \not \subseteq wp(Q; havoc(y))$, where $wp(Q, havoc(y))$ is $x=5$. Therefore, the assignment is marked relevant. \\
-We fixed this error in the algorithm by computing $P$ not as $pre(true, \pi[i,n])$ but as the intersection of $pre(true, \pi[i,n])$ and $sp(true, \pi[1,i-1])$.
+But our previous algorithm marked the statement as relevant because $P$ was computed as $pre(true, \pi[i,n])$, where $\pi[i]$ is the assignment statement under consideration. Hence $P$ would be $true$ and $Q$ would be $x=5 \vee y=7$. Obviously $P \not \subseteq wp(Q; havoc(y))$, where $wp(Q, havoc(y))$ is $x=5$. Therefore, the assignment is marked relevant. \\
+We fixed this error in the algorithm by computing $P$ not as $pre(true, \pi[i,n])$ but as the intersection of $pre(true, \pi[i,n])$ and $sp(true, \pi[0,i-1])$.
 
 
 
 
 \section{Final version of Relevance}
-\subsection{Introduction:}
+\subsection{Introduction}
 An assigning statement ($x := t$ or $havoc(x)$) is responsible in an error trace if the assigned value matters for the reachabilty of the error. If the error state is reachable for any possible value of the variable $x$, then we say that the assignment to $x$ at this location in the error trace is not relevant. Also, in the final version, we have one definition for both the assignment statement and havoc. 
-\subsection{Formal definition:}
+\subsection{Formal definition}
 \begin{mydef}[Execution]\label{mydef:execution}
-Let $\pi$ be an error trace of length $n$. An execution of $\pi$ is a sequence of states $s_0, s_1 ... s_n$ such that $s_i, s_{i+1} \vDash T$, where $T$ is the transition formula of $\pi[i]$.
+Let $\pi$ be an error trace of length $n$. An execution of $\pi$ is a sequence of states $s_0, s_1,...,s_n$ such that $(s_i, s_{i+1}) \vDash T$, where $T$ is the transition formula of $\pi[i]$.
 \end{mydef}
 \begin{mydef}[Blocking Execution]\label{mydef:blocked_execution}
-An execution of a trace $\pi$ of size $n$ is called a blocking execution, if there exists a sequence of states $s_0,s_1...s_j$ where $i<j \leq n$ such that $s_i, s_{i+1} \vDash T$ where $T$ is the transition formula of $\pi[i]$ and there exists an assume statement in the trace $\pi$ at position $j$ such that $s_j \not \limp guard(\pi[j])$
+An execution of a trace $\pi$ of size $n$ is called a \emph{blocking execution} if there exists a sequence of states $s_0,s_1,...,s_j$ where $i<j \leq n$ such that $(s_i, s_{i+1}) \vDash T$ where $T$ is the transition formula of $\pi[i]$ and there exists an assume statement in the trace $\pi$ at position $j$ such that $s_j \not \limp guard(\pi[j])$
 \end{mydef}
 
 \begin{mydef}[Relevance of an assigning statement]\label{mydef:responsible}
-Let $\pi = \langle st_1,....,st_n \rangle$ be an error trace of length $n$ where $st_i$ is an assigning statement at position $i$ that assigns a new value to some variable $x$. The statement $st_i$ is relevant if there exists an execution $s_1,...s_{n+1}$ of $\pi$ and some value $v$ such that every execution of the trace $\langle x:=v; \pi[i+1,n] \rangle$ starting in $s_i$ has a blocking execution.
+Let $\pi = \langle st_1,....,st_n \rangle$ be an error trace of length $n$ where $st_i$ is an assigning statement at position $i$ that assigns a new value to some variable $x$. The statement $st_i$ is relevant if there exists an execution $s_1,...,s_{n+1}$ of $\pi$ and some value $v$ such that every execution of the trace $\langle x:=v; \pi[i+1,n] \rangle$ starting in $s_i$ is blocking.
 \end{mydef}
 
 \begin{algorithm}
@@ -231,7 +231,7 @@ Let $\pi = \langle st_1,....,st_n \rangle$ be an error trace of length $n$ where
 \State $relevantStatements \gets \text{[ ]}$
 \For{$i = n$ to $1$}
 \State $Q \gets \neg wp(false;trace[i+1,n])$
-\State $P \gets wp(Q; trace[i]) \cap sp(true; trace[1;i-1])$
+\State $P \gets wp(Q; trace[i]) \cap sp(true; trace[0;i-1])$
 \If{$trace[i]$ is an assigning statement and $P \not \subseteq wp(Q; havoc(x))$ }
 \State $relevantStatements.append(trace[i])$
 \EndIf
@@ -242,25 +242,25 @@ Let $\pi = \langle st_1,....,st_n \rangle$ be an error trace of length $n$ where
 \end{algorithm}
 % ******************************************** NEW Page****************************************************************
 \begin{theorem}[Equivalence of relevance]\label{mydef:relevancytheorem}
-Let $\pi = \langle st_1,...,st_i,...,st_n \rangle$ be an error trace of length $n$ and $\pi[i]$ be an assigning statement at position $i$ , which assigns a new value to some variable $x$ . Let $P = \neg WP(False; \pi[i,n]) \cap SP(True; \pi[1,i-1])$ be a set of bi-reachable states at position $i$ and $Q =  \neg WP(False; \pi[i+1,n])$ be the co-reachable states at position $i+1$. The statement $\pi[i]$ is relevant iff:
+Let $\pi = \langle st_1,...,st_i,...,st_n \rangle$ be an error trace of length $n$ and $\pi[i]$ be an assigning statement at position $i$ that assigns a new value to some variable $x$. Let $P = \neg WP(false; \pi[i,n]) \cap SP(true; \pi[0,i-1])$ be a set of bi-reachable states at position $i$ and $Q =  \neg WP(false; \pi[i+1,n])$ be the co-reachable states at position $i+1$. The statement $\pi[i]$ is relevant iff:
  $$P \not \subseteq WP(Q,havoc(x))$$
 \end{theorem}
 
 \begin{proof}
 Let $\mathcal{D}$ be the domain of the variable $x$. \\
 "$\Rightarrow$"\\
-If $\pi[i]$ is relevant, then\\
+If $\pi[i]$ is relevant, then we have to show that\\
 $$P \not \subseteq WP(Q;havoc(x))$$
-Obviously all the transitions from the states in $WP(Q;havoc(x))$ ends up in $Q$. Relevancy of $\pi[i]$ implies that there is a state in $s \in P$ such that there is a transition from $s$ to $\neg Q$. That would mean:
+Obviously all the transitions from the states in $WP(Q;havoc(x))$ end up in $Q$. Relevance of $\pi[i]$ implies that there is a state $s$ in $P$ such that there is a transition from $s$ to $\neg Q$. That would mean:
 $$P \not \subseteq WP(Q;havoc(x))$$
 "$\Leftarrow$"\\
 $\pi[i]$ is relevant, if:
 $$P \not \subseteq WP(Q;havoc(x))$$
-We know that $WP(Q;havoc(x))$ is the set of states from which all transitions end up in $Q$. The above non implication shows the existence of a state $s$ in $P$ such that $s \not \in WP(Q; havoc(x))$  from which there is a transition to $\neg Q$. This shows the existence of a value $v \in \mathcal{D}$ that we can assign to $x$ such that if we replace $\pi[i]$ with $x:=v$, then every execution is becoming blocking. Also, from our assumption, it is clear that there exits an execution till $P$, since $P$ is not empty.
+We know that $WP(Q;havoc(x))$ is the set of states from which all transitions end up in $Q$. The above non-implication shows the existence of a state $s$ in $P$ such that $s \not \in WP(Q; havoc(x))$  from which there is a transition to $\neg Q$. This shows the existence of a value $v \in \mathcal{D}$ that we can assign to $x$ such that if we replace $\pi[i]$ with $x:=v$, then every execution starting from $s$ is becoming blocking. Also, from our assumption, it is clear that there exists an execution till $s$, since $P$ is not empty.
 \end{proof}
 
 \subsection{Examples}
-Consider the failed examples from previous definitions and let's analyze them again under our new definition.
+Consider the failed examples from previous definitions and let us analyze them again under our new definition.
 \begin{lstlisting}
 foo()
 {
@@ -272,7 +272,8 @@ foo()
 }
 \end{lstlisting}
 In the example above which contains only one error trace and where the restrictive-assume check fails, only the havoc statement at line 6 is now relevant according to our new definition. \\
-Consider the example where the blocking-executions check failed :
+\\
+Consider the example where the blocking-executions check failed:
 \begin{lstlisting}
 foo()
 {
@@ -285,23 +286,20 @@ Only $havoc(x)$ is now relevant since there is no assignment to $y$ in line 3 th
 
 
 \section{Possibly counter-intuitive cases}
-This section mentions two examples with a counter-intuitive results when analyzed by our algorithm. For future reference, let us name these examples as follows:
-\subsection{Two-havoc case:}
+This section mentions three examples with  counter-intuitive results when analyzed by our algorithm. All the examples can be found in \ultimate repository's examples folder for Error localization. For future reference, let us name these examples as follows:
+\subsection{Two-havoc case}
 Consider the following program:
 \begin{lstlisting}
 procedure foo()
 {
 	havoc x;
-	
-	// some other code	
-	
 	havoc y;
 	assert(x>0 && y>0)
 }
 \end{lstlisting}
-Our algorithm only considers second havoc as relevant. The example can be found in \ultimate repository's toy examples for Error localization.
+Our algorithm only consider the second havoc as relevant.
 
-\subsection{Relevant-havoc case:}
+\subsection{Relevant-havoc case}
 Consider the following program:
 \begin{lstlisting}
 procedure foo(a,b)
@@ -318,7 +316,7 @@ procedure foo(a,b)
 \end{lstlisting}
 Our algorithm considers havoc x relevant even tough fixing this statement will not fix the error.
 
-\subsection{Two-assignment case:}
+\subsection{Two-assignment case}
 Consider the following example:
 \begin{lstlisting}
 procedure foo()
@@ -329,11 +327,12 @@ procedure foo()
 }
 \end{lstlisting}
 In this case none of the assignment statements are relevant since the assume statement in the end would have a disjunction and none of the assignment statements can make the assume blocking. 
-\section{Known problems:}
+\section{Known problems}
 Currently, our implementation in \ultimate fails to give expected results when array modification is involved in the program. This is due to the fact that we can havoc the whole array at the moment and not one element. Due to this problem, if any assignment to an array element is relevant according to our algorithm, all the assignments that modify any element of the same array will be returned as relevant as well. The following example will make this problem more clear:
 \begin{lstlisting}
 foo()
 { 
+  havoc j;
   i := j + 1;
   a[i] := 5;
   a[j] := 7;

@@ -89,7 +89,7 @@
 \section{Introduction}
 This document contains behind the scenes work of our submission in \textit{POPL 2018}, namely "Static fault localization for simple bugs". It contains the previous/failed definitions of relevance that lead us to the final version together with examples that show why the previous definitions did not work. It also shows some examples for which the output of our algorithm is counterintuitive. The document should also serve as  a reference for future work for us. This will also be the submission as my master project report.
 \section{Motivation}
-Identifying program statements that are the cause for the error is the most time consuming and tedious part of a programmer's debugging routine. This task can be made much simpler if it can be done automatically. The process of automatically finding program statements causing the error is called \textit{fault localization}. A program might be failing because of several reasons which are not necessarily simple (a term elaborated more clearly in the paper) and easy to point out and there might be many ways to fix the bug. We, however, stick to what we call simple bugs. A bug in an error trace is called simple if the modification of a single statement can fix the error. There can be many techniques to help the user narrow down his or her search for the statements  causing the error or \textit{relevant} statements, as we call them in the paper. In this work, we present a new such technique that statically analyzes all the assigning statements in an error trace containing a simple bug and returns those, which when modified can fix this bug.\\
+The total time and effort spent in a programmer's overall debugging routine can be substantially reduced if the program statements that are the cause of the error can be identified automatically. The process of automatically finding program statements causing the error is called \textit{fault localization}. A program might be failing because of several reasons which are not necessarily simple (a term elaborated more clearly in the paper) and easy to point out and there might be many ways to fix the bug. We, however, stick to what we call simple bugs. A bug in an error trace is called simple if the modification of a single statement can fix the error. There can be many techniques to help the user narrow down his or her search for the statements  causing the error or \textit{relevant} statements, as we call them in the paper. In this work, we present a new such technique that statically analyzes all the assigning statements in an error trace containing a simple bug and returns those, which when modified can fix this bug.\\
 Not only did we want to help the user find simple bugs, we also wanted to formalize the notion of when an assigning statement is relevant in an error trace.
 Coming up with a precise formal definition took some iterations. All the previous definitions are also presented in this document along with the reasons of why they were discarded and the examples on which the inconsistency between them and our algorithm became clear.\\
 \section{Discarded definitions of relevance}
@@ -101,7 +101,7 @@ This was our first attempt to formally define a relevant assigning statement. At
 \subsubsection{Assignment statement}
 An assignment statement was marked relevant, if after replacing that assignment with a havoc, some assume statement in the error trace was becoming restrictive.
 \begin{mydef}[Restrictiveness of a statement]
-Let \emph{pre} be a state formula, $\pi$ a trace and $i$ a position such that $\pi[i]$ is an assume statement. We call the assume statement $\pi[i]$ \emph{restrictive} iff :
+Let pre be a state formula, $\pi$ a trace and $i$ a position such that $\pi[i]$ is an assume statement. We call the assume statement $\pi[i]$ \emph{restrictive} iff :
 $$sp(pre, \pi[0,i-1]) \not \limp guard(\pi[i])$$
 \end{mydef}
 
@@ -223,7 +223,8 @@ An assigning statement ($x := t$ or $havoc(x)$) is responsible in an error trace
 Let $\pi$ be an error trace of length $n$. An execution of $\pi$ is a sequence of states $s_0, s_1,...,s_n$ such that $(s_i, s_{i+1}) \vDash T$, where $T$ is the transition formula of $\pi[i]$.
 \end{mydef}
 \begin{mydef}[Blocking Execution]\label{mydef:blocked_execution}
-An execution of a trace $\pi$ of size $n$ is called a \emph{blocking execution} if there exists a sequence of states $s_0,s_1,...,s_j$ where $i<j \leq n$ such that $(s_i, s_{i+1}) \vDash T$ where $T$ is the transition formula of $\pi[i]$ and there exists an assume statement in the trace $\pi$ at position $j$ such that $s_j \not \limp guard(\pi[j])$
+An execution of a trace $\pi$ of size $n$ is called a \emph{blocking execution} if there exists a sequence of states $s_0,s_1,...,s_j$ where $i<j \leq n$ such that $(s_i, s_{i+1}) \vDash T$ where $T$ is the transition formula of $\pi[i]$ and there exists an assume statement in the trace $\pi$ at position $j$ such that $s_j \not \limp guard(\pi[j])$. 
+\\ Note that this definition is the same as definition 5.
 \end{mydef}
 
 \begin{mydef}[Relevance of an assigning statement]\label{mydef:responsible}
@@ -258,7 +259,7 @@ Let $\mathcal{D}$ be the domain of the variable $x$. \\
 "$\Rightarrow$"\\
 If $\pi[i]$ is relevant, then we have to show that\\
 $$P \not \subseteq WP(Q;havoc(x))$$
-Obviously all the transitions from the states in $WP(Q;havoc(x))$ end up in $Q$. Relevance of $\pi[i]$ implies that there is a state $s$ in $P$ such that there is a transition from $s$ to $\neg Q$. That would mean:
+Obviously all the havoc transitions from the states in $WP(Q;havoc(x))$ end up in $Q$. Relevance of $\pi[i]$ implies that there is a state $s$ in $P$ such that there is a transition from $s$ to $\neg Q$. That would mean:
 $$P \not \subseteq WP(Q;havoc(x))$$
 "$\Leftarrow$"\\
 $\pi[i]$ is relevant, if:

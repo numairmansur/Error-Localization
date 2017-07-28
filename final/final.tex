@@ -166,7 +166,7 @@ An execution of a trace $\pi$ of size $n$ is called a \emph{blocking execution} 
 
 \begin{mydef}[Relevance]\label{mydef:relevancy_definition}
 Let $\mathcal{B}$ represent the set of all blocking executions of a trace $\pi$. Let there be an assignment statement of the form $x:=t$ at position $i$. Let $\pi'$ represent the trace that we get after replacing $\pi[i]$ with a havoc statement of the form $havoc(x)$ and let $\mathcal{B}'$ represent the set of all blocking executions for $\pi'$.\\
-We say that the assignment statement $\pi[i]$ is relevant if the trace after the replacement has strictly more blocking executions than the trace before the replacement in the following sense $$\mathcal{B} \subsetneq \mathcal{B}'$$. 
+We say that the assignment statement $\pi[i]$ is relevant if the trace after the replacement has strictly more blocking executions than the trace before the replacement in the following sense $$\mathcal{B} \subsetneq \mathcal{B}'$$
 \end{mydef}
 \subsubsection{Examples}
 \textbf{Where it works}\\
@@ -410,7 +410,7 @@ In this example, only line 3 would be considered relevant according to the error
 In the paper \textit{Flow Sensitive Fault Localization}~\cite{vmcai/ChristESW13}, the authors try to take into account the control flow of the program and propose a flow sensitive error localization technique which, they hope, not only explains the cause of the error but also explains why the statements leading to the error were executed. They do this by modifying the so called \textit{error trace formula} to something which they call a \textit{flow sensitive error trace formula}. An error trace formula is just a conjunction of the trace formula of the error trace together with the error precondition and the correctness assertion. Information about the relevant statements can be obtained from the proof of unsatisfiability of the error trace formula.
 
 The flow sensitive error trace formula is a modification of the error trace formula, in a sense that it now keeps track of dependencies between statements and the branching conditions that are relevant for the reachability of these statements in the control flow graph of the program. \\
-The main focus of the authors here is on finding the relevant assume statements and the statements that cause the guard of the relevant assume statements to hold. We on the other hand only focus on the statements that cause the state of the program to change and do not analyze assume statements directly. However, we are still able to find the assignment statements that cause the guard of the relevant assume statements to hold. Let us look at an example where our algorithm can already find the statements which the authors can find only after modifying there formula. 
+The main focus of the authors here is on finding the relevant assume statements and the statements that cause the guard of the relevant assume statements to hold. We on the other hand only focus on the statements that cause the state of the program to change and do not analyze assume statements directly. However, we are still able to find the assignment statements that cause the guard of the relevant assume statements to hold. Let us look at an example where our algorithm can already find the statements which the authors can find only after modifying their formula. 
 \begin{lstlisting}
 foo()
 {

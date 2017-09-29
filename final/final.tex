@@ -86,16 +86,15 @@
     \textbf{Supervision}: Matthias Heizmann, Christian Schilling
 \end{titlepage}
 % ******************************************** BEGIN DOCUMENT **************************************************************************
-\section{Introduction}
-This document contains behind the scenes work of our submission in \textit{POPL 2018}, namely "Static fault localization for simple bugs". It contains the previous/failed definitions of relevance that lead us to the final version together with examples that show why the previous definitions did not work. It also shows some examples for which the output of our algorithm is counterintuitive. The document should also serve as  a reference for future work for us. This will also be the submission as my master project report.
+\section{About document}
+This document contains background work of our submission in \textit{POPL 2018}, namely "Static fault localization for simple bugs". It contains the previous/failed definitions of relevance that lead us to the final version together with examples that show why the previous definitions did not work. It also shows some examples for which the output of our algorithm is counterintuitive. The document should also serve as  a reference for future work for us. This will also be the submission as my master project report.
 \section{Motivation}
-The total time and effort spent in a programmer's overall debugging routine can be substantially reduced if the program statements that are the cause of the error can be identified automatically. The process of automatically finding program statements causing the error is called \textit{fault localization}. A program might be failing because of several reasons which are not necessarily simple (a term elaborated more clearly in the paper) and easy to point out and there might be many ways to fix the bug. We, however, stick to what we call simple bugs. A bug in an error trace is called simple if the modification of a single statement can fix the error. There can be many techniques to help the user narrow down his or her search for the statements  causing the error or \textit{relevant} statements, as we call them in the paper. In this work, we present a new such technique that statically analyzes all the assigning statements in an error trace containing a simple bug and returns those, which when modified can fix this bug.\\
-Not only did we want to help the user find simple bugs, we also wanted to formalize the notion of when an assigning statement is relevant in an error trace.
-Coming up with a precise formal definition took some iterations. All the previous definitions are also presented in this document along with the reasons of why they were discarded and the examples on which the inconsistency between them and our algorithm became clear.\\
+The total time and effort spent in a programmer's overall debugging routine can be substantially reduced if the program statements that are the cause of the error can be identified automatically. The process of automatically finding program statements causing the error is called \textit{fault localization}. A program might be failing because of several reasons which are not necessarily simple (a term elaborated more clearly in the paper) and easy to point out and there might be many ways to fix the bug. We, however, stick to what we call simple bugs. A bug in an error trace is called \emph{simple} if the modification of a single statement can fix the error. There can be many techniques to help the user narrow down his or her search for the statements  causing the error or \textit{relevant} statements, as we call them in the paper. In this work, we present a new such technique that statically analyzes all the assigning statements in an error trace containing a simple bug and returns those, which when modified can fix this bug.\\
+We wanted to formalize the notion of when an assigning statement is relevant in an error trace with respect to a simple bug along with coming up with an actual algorithm to help the user find them. Coming up with a precise formal definition took some iterations. All the previous definitions are also presented in this document along with the reasons of why they were discarded and the examples on which the inconsistency between them and our algorithm became clear.\\
 \section{Discarded definitions of relevance}
-We developed several definitions of relavance while trying to formally characterize the behaviour of our algorithm. We came across several versions that seemed correct at the time but in reality did not accurately and completely explain our notion of relevance and hence were discarded. We discovered this by coming up with counterexamples where these definitions did not work. This section mentions those discarded definitions and the counterexamples.\\ 
+We developed several definitions of \emph{relavance} while trying to formally characterize the behaviour of our algorithm. We came across several versions that seemed correct at the time but in reality did not accurately and completely explain our notion of relevance and hence were discarded. We discovered this by coming up with counterexamples where these definitions did not work. This section mentions those discarded definitions and the counterexamples.\\ 
 They are in the document primarily for the reason of documenting failed/incorrect versions of our current definition that might be useful in the future as we further develop our understanding of what it means that a statement is relevant in an error trace for a simple bug. \\
-For future reference it is easier if we name these definitions. Let us name these approaches with "check" in the end since we declare a statement relevant if they satisfy a localized check. 
+For future reference we will name these definitions. Let us name these approaches with the suffix "check" in the end since we declare a statement relevant if they satisfy a localized check. 
 \subsection{The restrictive-assume check}
 This was our first attempt to formally define a relevant assigning statement. At the time, we had two separate checks for relevance of an assignment statement and a havoc.
 \subsubsection{Assignment statement}
@@ -117,7 +116,7 @@ $$sp(true; \pi') \Rightarrow false$$
 
 
 \subsubsection{Examples}
-\textbf{Where it works} \\
+\textbf{Positive:} \\
 Below is an example where the above check for relevance correctly marks a statement relevant.
 \newpage
 \begin{lstlisting}
@@ -130,7 +129,7 @@ foo()
 }
 \end{lstlisting}
 Lines 3 and 4 are not relevant as if we replace them with havoc, no assume in the error trace is becoming restrictive. But if we replace line 5 with $havoc(z)$, then the last (and only) assume statement in the error trace ($assume(z<=10)$) is becoming restrictive. Hence the line with the assignment to $z$ is relevant. \\
-\textbf{Where it fails}
+\textbf{Negative:}
 \begin{lstlisting}
 foo()
 {
@@ -141,7 +140,7 @@ foo()
 	assert(z > 10);
 }
 \end{lstlisting}
-In the above example, every statement is now relevant. If we replace any of the assigning statements with $havoc$, the assume statement in the end is restrictive and not necessarily because of the replacement with havoc but because of the last $havoc(z)$ statement in the program. Hence in this program line 3 and 4 are also relevant.\\
+In the above example, every statement is relevant. If we replace any of the assignment statements with $havoc$, the assume statement in the end is restrictive and not necessarily because of the replacement with havoc but because of the last $havoc(z)$ statement in the program. Hence in this program line 3 and 4 are also relevant.\\
 Another example where this approach fails is:
 \begin{lstlisting}
 procedure main()
@@ -170,7 +169,7 @@ Let $\mathcal{B}$ represent the set of all blocking executions of a trace $\pi$.
 We say that the assignment statement $\pi[i]$ is relevant if the trace after the replacement has strictly more blocking executions than the trace before the replacement in the following sense $$\mathcal{B} \subsetneq \mathcal{B}'$$
 \end{mydef}
 \subsubsection{Examples}
-\textbf{Where it works}\\
+\textbf{Positive}\\
 Consider the failed example from the restrictive-assume check. 
 \begin{lstlisting}
 procedure foo()
@@ -182,7 +181,7 @@ procedure foo()
 }
 \end{lstlisting}
 The blocking-executions check now correctly says that $y:=42$ is relevant since changing it to havoc gives us more blocking executions than before.\\
-\textbf{Where it fails}
+\textbf{Negative}
 \begin{lstlisting}
 procedure foo()
 {
@@ -220,14 +219,12 @@ An assigning statement ($x := t$ or $havoc(x)$) is relevant in an error trace if
 \begin{mydef}[Execution]\label{mydef:execution}
 Let $\pi$ be an error trace of length $n$. An execution of $\pi$ is a sequence of states $s_0, s_1,...,s_n$ such that $(s_i, s_{i+1}) \vDash T$, where $T$ is the transition formula of $\pi[i]$.
 \end{mydef}
-\begin{mydef}[Blocking Execution]\label{mydef:blocked_execution}
-An execution of a trace $\pi$ of size $n$ is called a \emph{blocking execution} if there exists a sequence of states $s_0,s_1,...,s_j$ where $i<j \leq n$ such that $(s_i, s_{i+1}) \vDash T$ where $T$ is the transition formula of $\pi[i]$ and there exists an assume statement in the trace $\pi$ at position $j$ such that $s_j \not \limp guard(\pi[j])$. 
-\end{mydef}
+
 \begin{mydef}[Relevance of an assigning statement]\label{mydef:responsible}
-Let $\pi = \langle st_1,....,st_n \rangle$ be an error trace of length $n$ where $st_i$ is an assigning statement at position $i$ that assigns a new value to some variable $x$. The statement $st_i$ is relevant if there exists an execution $s_1,...,s_{n+1}$ of $\pi$ and some value $v$ such that every execution of the trace $\langle x:=v; \pi[i+1,n] \rangle$ starting in $s_i$ is blocking.
+Let $\pi = \langle st_1,....,st_n \rangle$ be an error trace of length $n$ where $st_i$ is an assigning statement at position $i$ that assigns a new value to some variable $x$. The statement $st_i$ is relevant if there exists an execution $s_1,...,s_{n+1}$ of $\pi$ and some value $v$ such that every execution of the trace $\langle x:=v; \pi[i+1,n] \rangle$ starting in $s_i$ is blocking*.
 \end{mydef}
 
-Note that definition 8 is the same as definition 5.
+*As defined in Defintion 5.
 \begin{algorithm}
 \caption{Relevance of an assigning statement}\label{relevance}
 \begin{algorithmic}[1]
@@ -301,7 +298,7 @@ procedure foo()
 	assert(x>0 && y>0)
 }
 \end{lstlisting}
-Our algorithm only considers the second havoc as relevant. This seems rather surprising at first, but consider an execution of the error trace which starts from $true$.\\
+Our algorithm considers only the second havoc as relevant. This seems rather surprising at first, but consider an execution of the error trace which starts from $true$.\\
 \begin{tikzpicture} [->,>=stealth',shorten >=1pt,auto,node distance=3.6cm, semithick]
 	\tikzstyle{every state}=[fill=white,draw=black,text=black, font=\bf]
   \node[state, fill=lightgray] 		(A)              {$true$};
@@ -346,7 +343,7 @@ procedure foo(a,b)
     assert a > b;
 }
 \end{lstlisting}
-Our algorithm considers $havoc(x)$ as relevant. The program have two error traces with both of them having an assume statement with the guard involving the variable $x$. Therefore, there exists a value $v$, such that if we replace $havoc(x)$ with $x:=v$, all the executions for the rest of each trace are becoming blocking. 
+Our algorithm considers $havoc(x)$ as relevant. The program has two error traces with both of them having an assume statement with the guard involving the variable $x$. Therefore, there exists a value $v$, such that if we replace $havoc(x)$ with $x:=v$, all the executions for the rest of each trace are becoming blocking. 
 
 \subsection{Two-assignment case}
 Consider the following example:
@@ -358,7 +355,7 @@ procedure foo()
     assert x < 10 && y < 10;
 }
 \end{lstlisting}
-In this case none of the assignment statements are relevant since the assume statement in the end would have a disjunction and changing only one assignment statement does not make the execution blocking. 
+In this case none of the assignment statements are relevant since the assume statement leading to the error location has a disjunction and changing only one assignment statement does not make the execution blocking. 
 \section{Known problems}
 Currently, our implementation in \ultimate fails to give expected results when array modification is involved in the program. This is due to the fact that we havoc the whole array at the moment and not one element. Due to this problem, if any assignment to an array element is relevant according to our algorithm, all the assignments that modify any element of the same array will also be relevant. The following example will make this problem clearer:
 \begin{lstlisting}
